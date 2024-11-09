@@ -25,3 +25,48 @@ A Rule
    1. Raptor
    2. Mammals
 
+```
+╭─────────────────╮
+│ MONOSPACE ROCKS │
+╰─────────────────╯
+```
+
+```
+┌───────┐ ┌───────┐ ┌───────┐
+│Actor 1│ │Actor 2│ │Actor 3│
+└───┬───┘ └───┬───┘ └───┬───┘
+    │         │         │    
+    │         │  msg 1  │    
+    │         │────────►│    
+    │         │         │    
+    │  msg 2  │         │    
+    │────────►│         │    
+┌───┴───┐ ┌───┴───┐ ┌───┴───┐
+│Actor 1│ │Actor 2│ │Actor 3│
+└───────┘ └───────┘ └───────┘
+```
+
+```
+                      Things I Have
+                                              
+    │                                     ████ Usable
+15  │
+    │                                     ░░░░ Broken
+    │
+12  │             ░            
+    │             ░            
+    │   ░         ░              
+ 9  │   ░         ░              
+    │   ░         ░              
+    │   ░         ░                    ░
+ 6  │   █         ░         ░          ░
+    │   █         ░         ░          ░
+    │   █         ░         █          ░
+ 3  │   █         █         █          ░
+    │   █         █         █          ░
+    │   █         █         █          ░
+ 0  └───▀─────────▀─────────▀──────────▀─────────────
+      Socks     Jeans     Shirts   USB Drives
+```
+
+Take a look [here](https://owickstrom.github.io/the-monospace-web/) for more capabilities if needed.
