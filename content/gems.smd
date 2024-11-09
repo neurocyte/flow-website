@@ -1,0 +1,27 @@
+---
+.title = "Flow Control - a programmer's text editor",
+.date = @date("2020-07-06T00:00:00"),
+.author = "Igor Támara",
+.layout = "gems.shtml",
+.draft = false,
+--- 
+
+## We have hidden gems here
+
+A Rule
+
+---
+
+### Lists
+
+* Flow
+* Zig
+* Zat
+
+### Numbered
+
+1. Egg
+2. Chicken
+   1. Raptor
+   2. Mammals
+

@@ -1,0 +1,16 @@
+---
+.title = "FAQ",
+.date = @date("2020-07-06T00:00:00"),
+.author = "Igor Támara",
+.layout = "home.shtml",
+.draft = false,
+--- 
+
+## What are the next steps?
+Join Discord or Download
+## Can I have pane or windows?
+Not at the moment
+## Can I suspend?
+Ctrl-z is reserved to Undo
+## Can I run a shell command or do a pipe?
+In the future
