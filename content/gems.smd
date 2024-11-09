@@ -25,6 +25,11 @@ A Rule
    1. Raptor
    2. Mammals
 
+### An Image
+
+[This is the caption]($image.siteAsset('img/flow-control.png'))
+
+### Some ASCII
 ```
 ╭─────────────────╮
 │ MONOSPACE ROCKS │
