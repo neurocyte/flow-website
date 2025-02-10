@@ -3,7 +3,7 @@ const zine = @import("zine");
 
 pub fn build(b: *std.Build) !void {
     _ = zine.website(b, .{
-        .title = "flow editor",
+        .title = "Flow Editor",
         .host_url = "https://flow-editor.dev",
         .content_dir_path = "content",
         .layouts_dir_path = "layouts",
