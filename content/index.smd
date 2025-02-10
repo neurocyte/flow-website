@@ -1,27 +1,153 @@
 ---
 .title = "Flow Control - a programmer's text editor",
 .date = @date("2020-07-06T00:00:00"),
-.author = "Igor Támara",
+.author = "CJ van den Berg",
 .layout = "home.shtml",
 .draft = false,
---- 
+---
 
-The terminal Editor that came to reallity
-[Worths more than 1000 words]($video.siteAsset('video/flow-control.mp4').controls(true))
-## Features
-We have keybindings
+This is a programmer's text editor. It is under active development, but usually stable.
 
-We have modes
+[Demo]($video.siteAsset('video/flow-control.mp4').controls(false))
 
-We have syntax highlighting
+# Requirements
+- A modern terminal with 24bit color and, ideally, kitty keyboard protocol support. Kitty,
+    Foot and Ghostty are the only recommended terminals at this time. Most other terminals
+    will work, but with reduced functionality.
+- NerdFont support. Either via terminal font fallback or a patched font.
+- Linux, MacOS, Windows, Android (Termux) or FreeBSD.
+- A UTF-8 locale
 
-We have multiple cursors
+# Download
 
-## Differential
+Binary release builds are found here: [neurocyte/flow/releases](https://github.com/neurocyte/flow/releases)
 
-## What we have
+Nightly binary builds are found here: [neurocyte/flow-nightly/releases](https://github.com/neurocyte/flow-nightly/releases)
 
-## Friendly Projects
-* [Zig](https://ziglang.org/)
-* [Zine](https://zine-ssg.io/)
-* [Monospace Web](https://owickstrom.github.io/the-monospace-web/)
+Or check your favorite local system package repository.
+
+# Building from source
+
+See the github page [neurocyte/flow](https://github.com/neurocyte/flow) for instructions.
+
+# Running Flow Control
+
+The binary is:
+
+```
+zig-out/bin/flow
+```
+
+Place it in your path for convenient access:
+
+```
+sudo cp zig-out/bin/flow /usr/local/bin
+```
+
+Or if you prefer, let zig install it in your home directory:
+
+```
+zig build -Doptimize=ReleaseSafe --prefix ~/.local
+```
+
+Flow Control is a single statically linked binary. No further runtime files are required.
+You may install it on another system by simply copying the binary.
+
+```
+scp zig-out/bin/flow root@otherhost:/usr/local/bin
+```
+
+Configuration is mostly dynamically maintained with various commands in the UI.
+It is stored under the standard user configuration path. Usually `~/.config/flow`
+on Linux. %APPDATA%\Roaming\flow on Windows. Somewhere magical on MacOS
+
+Logs, traces and per-project most recently used file lists are stored in the
+standard user application state directory. Usually `~/.local/state/flow` on
+Linux and %APPDATA%\Roaming\flow on Windows.
+
+Files to load may be specifed on the command line:
+
+```
+flow fileA.zig fileB.zig
+```
+
+The last file will be opened and the previous files will be placed in reverse
+order at the top of the recent files list. Switch to recent files with Ctrl-e.
+
+Common target line specifiers are supported too:
+
+```
+flow file.txt:123
+```
+
+Or Vim style:
+
+```
+flow file.txt +123
+```
+
+Use the --language option to force the file type of a file:
+
+```
+flow --language bash ~/.bash_profile
+```
+
+Show supported language names with `--list-languages`.
+
+See `flow --help` for the full list of command line options.
+
+# Key bindings and commands
+
+Press `F2` to switch the current keybinding mode. (flow, vim, emacs, etc.)
+Press `ctrl+shift+p` or `alt+x` to show the command palette.
+Press `ctrl+F2` to see a full list of all current keybindings and commands.
+
+Run the `Edit keybindings` command to save the current keybinding mode to a
+file and open it for editing. Save your customized keybinds under a new name
+in the same directory to create an entirely new keybinding mode. Keybinding
+changes will take effect on restart.
+
+# Terminal configuration
+
+Kitty, Ghostty and most other terminals have default keybindings that conflict
+with common editor commands. I highly recommend rebinding them to keys that are
+not generally used anywhere else.
+
+For Kitty rebinding `kitty_mod` is usually enough:
+```
+kitty_mod ctrl+alt
+```
+
+For Ghostty each conflicting binding has to be reconfigured individually.
+
+# Features
+- fast TUI interface. no user interaction should take longer than one frame (6ms) (even debug builds)
+- tree sitter based syntax highlighting
+- linting (diagnostics) and code navigation (goto definition) via language server
+- multi cursor editing support
+- first class mouse support (yes, even with a scrollbar that actually works properly!) (Windows included)
+- vscode compatible keybindings (thanks to kitty keyboard protocol)
+- vim compatible keybindings (the standard vimtutor bindings, more on request)
+- user configurable keybindings
+- excellent unicode support including 2027 mode
+- hybrid rope/piece-table buffer for fast loading, saving and editing with hundreds of cursors
+- theme support (compatible with vscode themes via the flow-themes project)
+- infinite undo/redo (at least until you run out of ram)
+- find in files
+- command palette
+- stuff I've forgotten to mention...
+
+# Features in progress (aka, the road to 1.0)
+- completion UI/LSP support for completion
+- persistent undo/redo
+- file watcher for auto reload
+
+# Features planned for the future
+- multi tty support (shared editor sessions across multiple ttys)
+- multi user editing
+- multi host editing
+
+# Community
+
+Join our [Discord](https://discord.com/invite/4wvteUPphx) server or use the discussions section on GitHub
+to meet with other Flow users!

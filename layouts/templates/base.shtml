@@ -4,7 +4,7 @@
     <meta charset="UTF-8" >
     <meta name="generator" content="pandoc" >
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" >
-    <meta name="author" content="Igor Támara" >
+    <meta name="author" content="CJ van den Berg" >
     <link rel="icon" type="image/png" href="$site.asset('img/flow-control.png').link()">
     <link rel="stylesheet" type="text/css" href="$site.asset('css/reset.css').link()">
     <link rel="stylesheet" type="text/css" href="$site.asset('css/index.css').link()">
@@ -16,15 +16,11 @@
         <a href="$ctx.about.link()" text="$ctx.about.title">Home</a>
       </ctx>
       •
-      <a href="https://github.com/neurocyte/flow">Download</a>
+      <a href="https://github.com/neurocyte/flow/releases">Downloads</a>
       •
-      <a >Documentation</a>
+      <a href="https://github.com/neurocyte/flow-nightly/releases">Nightly Builds</a>
       •
       <a href="https://discord.com/invite/4wvteUPphx">Discord</a>
-      •
-      <ctx about="$site.page('faq')">
-        <a href="$ctx.about.link()" text="$ctx.about.title">FAQ</a>
-      </ctx>
       •
       <a href="https://github.com/neurocyte/flow">Github</a>
     </nav>
