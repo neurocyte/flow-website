@@ -18,6 +18,9 @@
 
 ## 📦 Installation
 
+### Installer
+``` curl -fsSL https://www.flow-editor.dev/install | sh ```
+
 ### Prebuilt Binaries
 - Stable: [Releases](https://github.com/neurocyte/flow/releases)
 - Nightly: [Nightly Builds](https://github.com/neurocyte/flow-nightly/releases)
