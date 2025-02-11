@@ -12,4 +12,7 @@ pub fn build(b: *std.Build) !void {
 
     const install_step = b.addInstallFile(b.path("install"), "install");
     b.getInstallStep().dependOn(&install_step.step);
+
+    const install_key = b.addInstallFile(b.path("public.gpg"), "public.gpg");
+    b.getInstallStep().dependOn(&install_key.step);
 }
