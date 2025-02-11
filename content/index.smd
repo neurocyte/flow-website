@@ -30,7 +30,7 @@ This is a programmer's text editor. It is under active development, but usually 
 ## 📦 Installation
 
 ### Installer
-``` curl -fsSL https://www.flow-control.dev/install | sh ```
+``` curl -fsSL https://flow-control.dev/install | sh ```
 
 ### Prebuilt Binaries
 - Stable: [Releases](https://github.com/neurocyte/flow/releases)
