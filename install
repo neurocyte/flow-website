@@ -1,42 +1,104 @@
 #!/bin/sh
-
 set -e
 
-REPO="neurocyte/flow"
-INSTALL_DIR="/usr/local/bin"
+install_dir="/usr/local/bin"
+add_alias=0
+nightly=0
 
-# detect os and architecture
-OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
-if [ "$OS" = "darwin" ]; then
-  OS="macos"
+# parse command-line arguments for alias option only
+for arg in "$@"; do
+  case "$arg" in
+    --alias|-a)
+      add_alias=1
+      ;;
+    *)
+      ;;
+  esac
+done
+
+# prompt for nightly build option if interactive
+if [ -t 0 ]; then
+  printf "do you want to install a Nightly build? [y/N]: "
+  read answer_nightly
+  if [ "$answer_nightly" = "y" ] || [ "$answer_nightly" = "Y" ]; then
+    nightly=1
+  fi
 fi
 
-ARCH="$(uname -m)"
-case "$ARCH" in
-  x86_64) ARCH="x86_64" ;;
-  arm64) ARCH="aarch64" ;;
+if [ "$nightly" -eq 1 ]; then
+  repo="neurocyte/flow-nightly"
+else
+  repo="neurocyte/flow"
+fi
+
+# detect os and architecture
+os="$(uname -s | tr '[:upper:]' '[:lower:]')"
+if [ "$os" = "darwin" ]; then
+  os="macos"
+fi
+
+arch="$(uname -m)"
+case "$arch" in
+  x86_64) arch="x86_64" ;;
+  arm64) arch="aarch64" ;;
+  i686) arch="x86" ;;
+  i386) arch="x86" ;;
 esac
 
 # get latest version tag from github releases api
-VERSION=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" | grep '"tag_name":' | cut -d'"' -f4)
-[ -z "$VERSION" ] && { echo "failed to fetch latest version"; exit 1; }
+version=$(curl -s "https://api.github.com/repos/$repo/releases/latest" | grep '"tag_name":' | cut -d'"' -f4)
+[ -z "$version" ] && { echo "failed to fetch latest version"; exit 1; }
 
 # construct download url
-FILENAME="flow-$VERSION-$OS-$ARCH"
-EXT="tar.gz"
-[ "$OS" = "windows" ] && EXT="zip"
-URL="https://github.com/$REPO/releases/download/$VERSION/$FILENAME.$EXT"
+# note: nightly assets are named like "flow-<version>-<os>-<arch>.<ext>"
+filename="flow-$version-$os-$arch"
+ext="tar.gz"
+if [ "$os" = "windows" ]; then
+  ext="zip"
+fi
+url="https://github.com/$repo/releases/download/$version/$filename.$ext"
 
-echo "downloading flow $VERSION..."
-curl -L "$URL" -o "/tmp/$FILENAME.$EXT"
-
-echo "installing flow..."
-if [ "$EXT" = "tar.gz" ]; then
-  tar -xzf "/tmp/$FILENAME.$EXT" -C "$INSTALL_DIR"
+if [ "$nightly" -eq 1 ]; then
+  echo "downloading NIGHTLY build $version..."
 else
-  unzip -o "/tmp/$FILENAME.$EXT" -d "$INSTALL_DIR"
+  echo "downloading flow $version..."
 fi
 
-chmod +x "$INSTALL_DIR/flow"
-rm "/tmp/$FILENAME.$EXT"
-echo "flow installed successfully!"
+curl -fL "$url" -o "/tmp/$filename.$ext"
+
+# simple file size check (adjust threshold if needed)
+filesize=$(stat -c%s "/tmp/$filename.$ext" 2>/dev/null || stat -f%z "/tmp/$filename.$ext")
+if [ "$filesize" -lt 100 ]; then
+  echo "downloaded file appears to be invalid (size: ${filesize} bytes)"
+  exit 1
+fi
+
+echo "installing $( [ "$nightly" -eq 1 ] && echo 'NIGHTLY build' || echo 'flow')..."
+if [ "$ext" = "tar.gz" ]; then
+  tar -xzf "/tmp/$filename.$ext" -C "$install_dir"
+else
+  unzip -o "/tmp/$filename.$ext" -d "$install_dir"
+fi
+
+chmod +x "$install_dir/flow"
+rm "/tmp/$filename.$ext"
+echo "$( [ "$nightly" -eq 1 ] && echo 'NIGHTLY build' || echo 'flow') installed successfully!"
+
+create_alias() {
+  if [ -e "$install_dir/f" ]; then
+    echo "warning: existing file or alias detected at $install_dir/f, overwriting..."
+    rm -f "$install_dir/f"
+  fi
+  ln -s "$install_dir/flow" "$install_dir/f"
+  echo "alias 'f' created successfully!"
+}
+
+if [ "$add_alias" -eq 1 ]; then
+  create_alias
+elif [ -t 0 ]; then
+  printf "do you want to create an alias 'f' for 'flow'? [y/N]: "
+  read answer_alias
+  if [ "$answer_alias" = "y" ] || [ "$answer_alias" = "Y" ]; then
+    create_alias
+  fi
+fi
