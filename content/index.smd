@@ -6,22 +6,56 @@
 .draft = false,
 --- 
 
-The terminal Editor that came to reallity
-[Worths more than 1000 words]($video.siteAsset('video/flow-control.mp4').controls(true))
-## Features
-We have keybindings
+[]($video.siteAsset('video/flow-control.mp4').controls(true))
 
-We have modes
+## 🚀 Features
+- **Lightning Fast** TUI with ≤6ms response times
+- **Tree-sitter** powered syntax highlighting
+- Multi-cursor editing & mouse support
+- Cross-platform (Linux/macOS/Windows/Android)
+- VSCode/Vim keybindings + custom schemes
+- Hybrid rope/piece-table buffer system
 
-We have syntax highlighting
+## 📦 Installation
 
-We have multiple cursors
+### Prebuilt Binaries
+- Stable: [Releases](https://github.com/neurocyte/flow/releases)
+- Nightly: [Nightly Builds](https://github.com/neurocyte/flow-nightly/releases)
 
-## Differential
+### Build from Source
+```bash
+# Basic build
+zig build -Doptimize=ReleaseSafe
 
-## What we have
+# Cross-compile examples
+zig build -Dtarget=x86_64-windows --prefix zig-out/win64
+zig build -Dtarget=aarch64-linux-musl --prefix zig-out/arm-linux
+```
 
-## Friendly Projects
-* [Zig](https://ziglang.org/)
-* [Zine](https://zine-ssg.io/)
-* [Monospace Web](https://owickstrom.github.io/the-monospace-web/)
+## 🛠️ Basic Usage
+```bash
+flow file.zig:42       # Open at line 42
+flow --language zig CMakeLists.txt  # Force file type
+```
+
+## ⌨️ Key Controls
+| Command            | Action               |
+|--------------------|----------------------|
+| `F2`               | Switch input mode    |
+| `Ctrl+Shift+P`     | Command palette      |
+| `Ctrl+F2`          | View all keybindings |
+
+## 🛣️ Roadmap
+**In Development**:
+- LSP completion support
+- Persistent undo/redo
+- File watcher integration
+
+**Future**:
+- Collaborative editing
+- Plugin system
+- Multi-terminal sessions
+
+## 💬 Community
+Join our [Discord server](https://discord.com/invite/4wvteUPphx) or discuss on [GitHub Discussions](https://github.com/neurocyte/flow/discussions)
+
