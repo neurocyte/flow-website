@@ -5,22 +5,19 @@ install_dir="/usr/local/bin"
 add_alias=0
 nightly=0
 
-# parse command-line arguments for alias option only
-for arg in "$@"; do
-  case "$arg" in
-    --alias|-a)
-      add_alias=1
-      ;;
-    --nightly|-n)
-      nightly=1
-      ;;
-    *)
-      ;;
-  esac
+while true
+do
+    case "${1}" in
+        -a|--alias)       add_alias=1; shift 1;;
+        -n|--nightly)     nightly=1; shift 1;;
+        -p|--prefix)      install_dir=/$2; shift 2;;
+        --)               shift 1; break ;;
+        *)                break ;;
+    esac
 done
 
 # prompt for nightly build option if interactive
-if [ -t 0 ]; then
+if [ "$nightly" -eq 0 ] && [ -t 0 ]; then
   printf "do you want to install a Nightly build? [y/N]: "
   read -r answer_nightly
   if [ "$answer_nightly" = "y" ] || [ "$answer_nightly" = "Y" ]; then

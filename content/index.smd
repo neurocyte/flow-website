@@ -33,14 +33,13 @@ Flow Control is under active development, but usually very stable.
 
 ### Installer
 
-Install latest release:
+Install the latest release to `/usr/local/bin`:
 
 ``` curl -fsSL https://flow-control.dev/install | sh ```
 
-Install latest nightly build:
+Install latest nightly build and specify the install prefix:
 
-``` curl -fsSL https://flow-control.dev/install | sh -s -- --nightly ```
-
+``` curl -fsSL https://flow-control.dev/install | sh -s -- --nightly --prefix ~/.local/bin ```
 
 ### Prebuilt Binaries
 - Stable: [Releases](https://github.com/neurocyte/flow/releases)
