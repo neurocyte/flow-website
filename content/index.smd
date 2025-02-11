@@ -41,6 +41,11 @@ Install latest nightly build and specify the install prefix:
 
 ``` curl -fsSL https://flow-control.dev/install | sh -s -- --nightly --prefix ~/.local/bin ```
 
+Install latest nightly build and verify against gpg signature:
+
+``` curl -fsSL https://flow-control.dev/install | sh -s -- --nightly --verify ```
+
+
 ### Prebuilt Binaries
 - Stable: [Releases](https://github.com/neurocyte/flow/releases)
 - Nightly: [Nightly Builds](https://github.com/neurocyte/flow-nightly/releases)

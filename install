@@ -4,6 +4,8 @@ set -e
 install_dir="/usr/local/bin"
 add_alias=0
 nightly=0
+verify=0
+local=0
 
 while true; do
     case "${1}" in
@@ -18,6 +20,14 @@ while true; do
     -p | --prefix)
         install_dir=/$2
         shift 2
+        ;;
+    -V | --verify)
+        verify=1
+        shift 1
+        ;;
+    -l | --local)
+        local=1
+        shift 1
         ;;
     --)
         shift 1
@@ -85,6 +95,27 @@ filesize=$(stat -c%s "/tmp/$filename.$ext" 2>/dev/null || stat -f%z "/tmp/$filen
 if [ "$filesize" -lt 100 ]; then
     echo "downloaded file appears to be invalid (size: ${filesize} bytes)"
     exit 1
+fi
+
+if [ "$verify" -eq 0 ] && [ -t 0 ]; then
+    printf "do you want to download and verify the gpg signature? [y/N]: "
+    read -r answer_verify
+    if [ "$answer_verify" = "y" ] || [ "$answer_verify" = "Y" ]; then
+        verify=1
+    fi
+fi
+
+if [ "$verify" -eq 1 ]; then
+    curl -fL "$url.sig" -o "/tmp/$filename.$ext.sig"
+    curl -fL 'https://flow-control.dev/public.gpg' -o /tmp/flow-control-public.gpg
+    gpg --no-default-keyring --keyring /tmp/flow-control-public.gpg --verify "/tmp/$filename.$ext.sig" "/tmp/$filename.$ext"
+
+    if [ "$local" -eq 1 ]; then
+        gpg --verify "/tmp/$filename.$ext.sig" "/tmp/$filename.$ext"
+    fi
+
+    rm /tmp/flow-control-public.gpg
+    rm "/tmp/$filename.$ext.sig"
 fi
 
 echo "installing $([ "$nightly" -eq 1 ] && echo 'NIGHTLY build' || echo 'flow')..."
