@@ -11,6 +11,9 @@ for arg in "$@"; do
     --alias|-a)
       add_alias=1
       ;;
+    --nightly|-n)
+      nightly=1
+      ;;
     *)
       ;;
   esac
@@ -19,7 +22,7 @@ done
 # prompt for nightly build option if interactive
 if [ -t 0 ]; then
   printf "do you want to install a Nightly build? [y/N]: "
-  read answer_nightly
+  read -r answer_nightly
   if [ "$answer_nightly" = "y" ] || [ "$answer_nightly" = "Y" ]; then
     nightly=1
   fi
@@ -97,7 +100,7 @@ if [ "$add_alias" -eq 1 ]; then
   create_alias
 elif [ -t 0 ]; then
   printf "do you want to create an alias 'f' for 'flow'? [y/N]: "
-  read answer_alias
+  read -r answer_alias
   if [ "$answer_alias" = "y" ] || [ "$answer_alias" = "Y" ]; then
     create_alias
   fi
