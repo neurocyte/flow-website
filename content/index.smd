@@ -1,12 +1,14 @@
 ---
-.title = "Flow Control - a programmer's text editor",
+.title = "Flow Control",
 .date = @date("2020-07-06T00:00:00"),
 .author = "CJ van den Berg",
 .layout = "home.shtml",
 .draft = false,
 ---
 
-This is a programmer's text editor. It is under active development, but usually stable.
+## a programmer's text editor
+
+Flow Control is under active development, but usually very stable.
 
 []($video.siteAsset('video/flow-control.mp4').controls(true))
 
