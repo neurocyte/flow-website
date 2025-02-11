@@ -5,63 +5,77 @@ install_dir="/usr/local/bin"
 add_alias=0
 nightly=0
 
-while true
-do
+while true; do
     case "${1}" in
-        -a|--alias)       add_alias=1; shift 1;;
-        -n|--nightly)     nightly=1; shift 1;;
-        -p|--prefix)      install_dir=/$2; shift 2;;
-        --)               shift 1; break ;;
-        *)                break ;;
+    -a | --alias)
+        add_alias=1
+        shift 1
+        ;;
+    -n | --nightly)
+        nightly=1
+        shift 1
+        ;;
+    -p | --prefix)
+        install_dir=/$2
+        shift 2
+        ;;
+    --)
+        shift 1
+        break
+        ;;
+    *) break ;;
     esac
 done
 
 # prompt for nightly build option if interactive
 if [ "$nightly" -eq 0 ] && [ -t 0 ]; then
-  printf "do you want to install a Nightly build? [y/N]: "
-  read -r answer_nightly
-  if [ "$answer_nightly" = "y" ] || [ "$answer_nightly" = "Y" ]; then
-    nightly=1
-  fi
+    printf "do you want to install a Nightly build? [y/N]: "
+    read -r answer_nightly
+    if [ "$answer_nightly" = "y" ] || [ "$answer_nightly" = "Y" ]; then
+        nightly=1
+    fi
 fi
 
 if [ "$nightly" -eq 1 ]; then
-  repo="neurocyte/flow-nightly"
+    repo="neurocyte/flow-nightly"
 else
-  repo="neurocyte/flow"
+    repo="neurocyte/flow"
 fi
 
 # detect os and architecture
 os="$(uname -s | tr '[:upper:]' '[:lower:]')"
 if [ "$os" = "darwin" ]; then
-  os="macos"
+    os="macos"
 fi
 
 arch="$(uname -m)"
 case "$arch" in
-  x86_64) arch="x86_64" ;;
-  arm64) arch="aarch64" ;;
-  i686) arch="x86" ;;
-  i386) arch="x86" ;;
+x86_64) arch="x86_64" ;;
+arm64) arch="aarch64" ;;
+i686) arch="x86" ;;
+i386) arch="x86" ;;
 esac
 
 # get latest version tag from github releases api
 version=$(curl -s "https://api.github.com/repos/$repo/releases/latest" | grep '"tag_name":' | cut -d'"' -f4)
-[ -z "$version" ] && { echo "failed to fetch latest version"; exit 1; }
+[ -z "$version" ] && {
+    echo "failed to fetch latest version"
+    exit 1
+}
 
 # construct download url
 # note: nightly assets are named like "flow-<version>-<os>-<arch>.<ext>"
 filename="flow-$version-$os-$arch"
 ext="tar.gz"
 if [ "$os" = "windows" ]; then
-  ext="zip"
+    ext="zip"
 fi
 url="https://github.com/$repo/releases/download/$version/$filename.$ext"
 
 if [ "$nightly" -eq 1 ]; then
-  echo "downloading NIGHTLY build $version..."
+    echo "downloading NIGHTLY build $version..."
 else
-  echo "downloading flow $version..."
+    echo "downloading flow $version..."
 fi
 
 curl -fL "$url" -o "/tmp/$filename.$ext"
@@ -69,36 +83,36 @@ curl -fL "$url" -o "/tmp/$filename.$ext"
 # simple file size check (adjust threshold if needed)
 filesize=$(stat -c%s "/tmp/$filename.$ext" 2>/dev/null || stat -f%z "/tmp/$filename.$ext")
 if [ "$filesize" -lt 100 ]; then
-  echo "downloaded file appears to be invalid (size: ${filesize} bytes)"
-  exit 1
+    echo "downloaded file appears to be invalid (size: ${filesize} bytes)"
+    exit 1
 fi
 
-echo "installing $( [ "$nightly" -eq 1 ] && echo 'NIGHTLY build' || echo 'flow')..."
+echo "installing $([ "$nightly" -eq 1 ] && echo 'NIGHTLY build' || echo 'flow')..."
 if [ "$ext" = "tar.gz" ]; then
-  tar -xzf "/tmp/$filename.$ext" -C "$install_dir"
+    tar -xzf "/tmp/$filename.$ext" -C "$install_dir"
 else
-  unzip -o "/tmp/$filename.$ext" -d "$install_dir"
+    unzip -o "/tmp/$filename.$ext" -d "$install_dir"
 fi
 
 chmod +x "$install_dir/flow"
 rm "/tmp/$filename.$ext"
-echo "$( [ "$nightly" -eq 1 ] && echo 'NIGHTLY build' || echo 'flow') installed successfully!"
+echo "$([ "$nightly" -eq 1 ] && echo 'NIGHTLY build' || echo 'flow') installed successfully!"
 
 create_alias() {
-  if [ -e "$install_dir/f" ]; then
-    echo "warning: existing file or alias detected at $install_dir/f, overwriting..."
-    rm -f "$install_dir/f"
-  fi
-  ln -s "$install_dir/flow" "$install_dir/f"
-  echo "alias 'f' created successfully!"
+    if [ -e "$install_dir/f" ]; then
+        echo "warning: existing file or alias detected at $install_dir/f, overwriting..."
+        rm -f "$install_dir/f"
+    fi
+    ln -s "$install_dir/flow" "$install_dir/f"
+    echo "alias 'f' created successfully!"
 }
 
 if [ "$add_alias" -eq 1 ]; then
-  create_alias
-elif [ -t 0 ]; then
-  printf "do you want to create an alias 'f' for 'flow'? [y/N]: "
-  read -r answer_alias
-  if [ "$answer_alias" = "y" ] || [ "$answer_alias" = "Y" ]; then
     create_alias
-  fi
+elif [ -t 0 ]; then
+    printf "do you want to create an alias 'f' for 'flow'? [y/N]: "
+    read -r answer_alias
+    if [ "$answer_alias" = "y" ] || [ "$answer_alias" = "Y" ]; then
+        create_alias
+    fi
 fi
