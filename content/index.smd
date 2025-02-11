@@ -8,9 +8,18 @@
 
 This is a programmer's text editor. It is under active development, but usually stable.
 
-[Demo]($video.siteAsset('video/flow-control.mp4').controls(false))
+[]($video.siteAsset('video/flow-control.mp4').controls(true))
 
-# Requirements
+## 🚀 Features
+- **Lightning Fast** TUI with ≤6ms response times
+- **Tree-sitter** powered syntax highlighting
+- **Language Server Protocol** pre configured support for most language servers
+- Multi-cursor editing & mouse support
+- Cross-platform (Linux/macOS/Windows/Android)
+- VSCode/Vim keybindings + custom schemes
+- Hybrid rope/piece-table buffer system
+
+## Requirements
 - A modern terminal with 24bit color and, ideally, kitty keyboard protocol support. Kitty,
     Foot and Ghostty are the only recommended terminals at this time. Most other terminals
     will work, but with reduced functionality.
@@ -18,19 +27,26 @@ This is a programmer's text editor. It is under active development, but usually 
 - Linux, MacOS, Windows, Android (Termux) or FreeBSD.
 - A UTF-8 locale
 
-# Download
+## 📦 Installation
 
-Binary release builds are found here: [neurocyte/flow/releases](https://github.com/neurocyte/flow/releases)
+### Installer
+``` curl -fsSL https://www.flow-editor.dev/install | sh ```
 
-Nightly binary builds are found here: [neurocyte/flow-nightly/releases](https://github.com/neurocyte/flow-nightly/releases)
+### Prebuilt Binaries
+- Stable: [Releases](https://github.com/neurocyte/flow/releases)
+- Nightly: [Nightly Builds](https://github.com/neurocyte/flow-nightly/releases)
 
 Or check your favorite local system package repository.
 
-# Building from source
+### Build from Source
+```bash
+# Basic build
+zig build -Doptimize=ReleaseSafe
 
-See the github page [neurocyte/flow](https://github.com/neurocyte/flow) for instructions.
-
-# Running Flow Control
+# Cross-compile examples
+zig build -Dtarget=x86_64-windows --prefix zig-out/win64
+zig build -Dtarget=aarch64-linux-musl --prefix zig-out/arm-linux
+```
 
 The binary is:
 
@@ -38,116 +54,60 @@ The binary is:
 zig-out/bin/flow
 ```
 
-Place it in your path for convenient access:
+It is statically built (by default) and contains all the required tree-sitter parsers
+and queries. No additional runtime files are required. Place it in your path for convenient
+access.
 
-```
-sudo cp zig-out/bin/flow /usr/local/bin
-```
-
-Or if you prefer, let zig install it in your home directory:
-
-```
-zig build -Doptimize=ReleaseSafe --prefix ~/.local
-```
-
-Flow Control is a single statically linked binary. No further runtime files are required.
-You may install it on another system by simply copying the binary.
-
-```
-scp zig-out/bin/flow root@otherhost:/usr/local/bin
-```
+## Configuration
 
 Configuration is mostly dynamically maintained with various commands in the UI.
 It is stored under the standard user configuration path. Usually `~/.config/flow`
-on Linux. %APPDATA%\Roaming\flow on Windows. Somewhere magical on MacOS
+on Linux. %APPDATA%\Roaming\flow on Windows.
 
 Logs, traces and per-project most recently used file lists are stored in the
 standard user application state directory. Usually `~/.local/state/flow` on
 Linux and %APPDATA%\Roaming\flow on Windows.
 
-Files to load may be specifed on the command line:
-
-```
-flow fileA.zig fileB.zig
-```
-
-The last file will be opened and the previous files will be placed in reverse
-order at the top of the recent files list. Switch to recent files with Ctrl-e.
-
-Common target line specifiers are supported too:
-
-```
-flow file.txt:123
-```
-
-Or Vim style:
-
-```
-flow file.txt +123
-```
-
-Use the --language option to force the file type of a file:
-
-```
-flow --language bash ~/.bash_profile
-```
-
-Show supported language names with `--list-languages`.
-
-See `flow --help` for the full list of command line options.
-
-# Key bindings and commands
-
-Press `F2` to switch the current keybinding mode. (flow, vim, emacs, etc.)
-Press `ctrl+shift+p` or `alt+x` to show the command palette.
-Press `ctrl+F2` to see a full list of all current keybindings and commands.
-
-Run the `Edit keybindings` command to save the current keybinding mode to a
-file and open it for editing. Save your customized keybinds under a new name
-in the same directory to create an entirely new keybinding mode. Keybinding
-changes will take effect on restart.
-
-# Terminal configuration
-
 Kitty, Ghostty and most other terminals have default keybindings that conflict
-with common editor commands. I highly recommend rebinding them to keys that are
-not generally used anywhere else.
+with common editor commands. We highly recommend rebinding them to keys that are
+not generally used inside TUI applications.
 
 For Kitty rebinding `kitty_mod` is usually enough:
 ```
 kitty_mod ctrl+alt
 ```
 
-For Ghostty each conflicting binding has to be reconfigured individually.
+## 🛠️ Basic Usage
+```bash
+flow file.zig:42                    # Open at line 42
+flow --language zig CMakeLists.txt  # Force file type
+flow --list-languages               # Show all supported languages
+flow --help                         # Full list of command line options
+```
 
-# Features
-- fast TUI interface. no user interaction should take longer than one frame (6ms) (even debug builds)
-- tree sitter based syntax highlighting
-- linting (diagnostics) and code navigation (goto definition) via language server
-- multi cursor editing support
-- first class mouse support (yes, even with a scrollbar that actually works properly!) (Windows included)
-- vscode compatible keybindings (thanks to kitty keyboard protocol)
-- vim compatible keybindings (the standard vimtutor bindings, more on request)
-- user configurable keybindings
-- excellent unicode support including 2027 mode
-- hybrid rope/piece-table buffer for fast loading, saving and editing with hundreds of cursors
-- theme support (compatible with vscode themes via the flow-themes project)
-- infinite undo/redo (at least until you run out of ram)
-- find in files
-- command palette
-- stuff I've forgotten to mention...
+## ⌨️ Key Controls
+| Command            | Action               |
+|--------------------|----------------------|
+| `F4`               | Switch input mode    |
+| `Ctrl+Shift+P`     | Command palette      |
+| `Ctrl+F2`          | View all keybindings |
 
-# Features in progress (aka, the road to 1.0)
-- completion UI/LSP support for completion
-- persistent undo/redo
-- file watcher for auto reload
+Run the `Edit keybindings` command to save the current keybinding mode to a
+file and open it for editing. Save your customized keybinds under a new name
+in the same directory to create an entirely new keybinding mode. Keybinding
+changes will take effect on restart.
 
-# Features planned for the future
-- multi tty support (shared editor sessions across multiple ttys)
-- multi user editing
-- multi host editing
 
-# Community
+## 🛣️ Roadmap
+**In Development**:
+- LSP completion support
+- Persistent undo/redo
+- File watcher integration
 
-Join our [Discord](https://discord.com/invite/4wvteUPphx) server or use the discussions section on GitHub
-to meet with other Flow users!
+**Future**:
+- Collaborative editing
+- Plugin system
+- Multi-terminal sessions
+
+## 💬 Community
+Join our [Discord server](https://discord.com/invite/4wvteUPphx) or discuss on [GitHub Discussions](https://github.com/neurocyte/flow/discussions)
