@@ -32,7 +32,15 @@ Flow Control is under active development, but usually very stable.
 ## 📦 Installation
 
 ### Installer
+
+Install latest release:
+
 ``` curl -fsSL https://flow-control.dev/install | sh ```
+
+Install latest nightly build:
+
+``` curl -fsSL https://flow-control.dev/install | sh -s -- --nightly ```
+
 
 ### Prebuilt Binaries
 - Stable: [Releases](https://github.com/neurocyte/flow/releases)
