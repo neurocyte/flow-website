@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title :text="$page.title"></title>
+    <link rel="icon" type="image/png" href="$site.asset('img/flow-control.png').link()">
+    <link rel="stylesheet" href="$site.asset('css/reset.css').link()">
+    <link rel="stylesheet" href="$site.asset('css/index.css').link()">
+
+    <style>
+      /* Docs-specific layout styling */
+      .docs-container {
+        display: flex;
+        /* Increase top margin for space under nav, reduce side padding. */
+        margin: calc(var(--line-height) * 2) auto 0;
+        padding-right: 1ch;
+        width: 100%;
+        max-width: 80ch;
+      }
+      .docs-sidebar {
+        flex: 0 0 20%;
+        padding: var(--line-height);
+        border-right: 1px solid var(--text-color);
+      }
+      .docs-sidebar ul {
+        list-style: none;
+        padding: 0;
+      }
+      .docs-sidebar li {
+        margin-bottom: var(--line-height);
+      }
+      .docs-sidebar a {
+        color: var(--text-color);
+        text-decoration: none;
+      }
+      .docs-sidebar a:hover {
+        text-decoration: underline;
+      }
+      .docs-content {
+        flex: 1;
+        padding: var(--line-height);
+      }
+      footer {
+        margin-top: calc(var(--line-height) * 2);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Navigation Bar (from base.shtml) -->
+    <nav id="menu" class="centered">
+      <ctx about="$site.page('index')">
+        <a href="$ctx.about.link()" text="$ctx.about.title">Home</a>
+      </ctx>
+      •
+      <a href="/docs">Docs</a>
+      •
+      <a href="https://github.com/neurocyte/flow/releases">Downloads</a>
+      •
+      <a href="https://github.com/neurocyte/flow-nightly/releases">Nightly Builds</a>
+      •
+      <a href="https://github.com/neurocyte/flow">Github</a>
+      •
+      <a href="https://discord.com/invite/4wvteUPphx">Discord</a>
+    </nav>
+
+    <!-- Two-column docs layout -->
+    <div class="docs-container">
+      <aside class="docs-sidebar">
+        <ul>
+          <li><a href="$site.page('docs/index').link()">Docs Home</a></li>
+          <li><a href="$site.page('docs/introduction').link()">Introduction</a></li>
+          <li><a href="$site.page('docs/features').link()">Features</a></li>
+          <li><a href="$site.page('docs/configuration').link()">Configuration</a></li>
+          <li><a href="$site.page('docs/usage').link()">Usage</a></li>
+          <li><a href="$site.page('docs/roadmap').link()">Roadmap</a></li>
+          <li><a href="$site.page('docs/community').link()">Community</a></li>
+          <li><a href="$site.page('docs/license').link()">License</a></li>
+        </ul>
+      </aside>
+
+      <main class="docs-content">
+        <h1 :text="$page.title"></h1>
+        <div :html="$page.content()"></div>
+      </main>
+    </div>
+
+    <footer>
+      <p>&copy; <span :text="$build.generated.format('2006')"></span> <span :text="$site.title"></span></p>
+    </footer>
+
+    <script src="$site.asset('js/index.js').link()"></script>
+  </body>
+</html>

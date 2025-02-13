@@ -2,16 +2,8 @@
 .title = "Flow Control Documentation",
 .date = @date("2025-02-13T15:25:45.313Z"),
 .author = "CJ van den Berg",
-.layout = "home.shtml",
+.layout = "docs.shtml",
 .draft = false,
 ---
 
-Welcome to the Flow Control documentation hub. Select a topic below:
-
-- [Introduction]($link.page('docs/introduction'))
-- [Features]($link.page('docs/features'))
-- [Configuration]($link.page('docs/configuration'))
-- [Usage]($link.page('docs/usage'))
-- [Roadmap]($link.page('docs/roadmap'))
-- [Community]($link.page('docs/community'))
-- [License]($link.page('docs/license'))
+Welcome to the Flow Control documentation.
