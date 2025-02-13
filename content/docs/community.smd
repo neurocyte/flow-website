@@ -1,0 +1,9 @@
+---
+.title = "Community",
+.date = @date("2025-02-13T15:25:45.313Z"),
+.author = "CJ van den Berg",
+.layout = "home.shtml",
+.draft = false,
+---
+
+*Information on community channels and support can be found here.*

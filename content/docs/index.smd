@@ -1,27 +1,17 @@
 ---
-.title = "Flow Control - a programmer's text editor",
-.date = @date("2020-07-06T00:00:00"),
+.title = "Flow Control Documentation",
+.date = @date("2025-02-13T15:25:45.313Z"),
 .author = "CJ van den Berg",
 .layout = "home.shtml",
 .draft = false,
---- 
+---
 
-The terminal Editor that came to reallity
+Welcome to the Flow Control documentation hub. Select a topic below:
 
-## Features
-We have keybindings
-
-We have modes
-
-We have syntax highlighting
-
-We have multiple cursors
-
-## Differential
-
-## What we have
-
-## Friendly Projects
-* [Zig](https://ziglang.org/)
-* [Zine](https://zine-ssg.io/)
-* [Monospace Web](https://owickstrom.github.io/the-monospace-web/)
+- [Introduction]($link.page('docs/introduction'))
+- [Features]($link.page('docs/features'))
+- [Configuration]($link.page('docs/configuration'))
+- [Usage]($link.page('docs/usage'))
+- [Roadmap]($link.page('docs/roadmap'))
+- [Community]($link.page('docs/community'))
+- [License]($link.page('docs/license'))
