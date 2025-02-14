@@ -44,6 +44,35 @@
       footer {
         margin-top: calc(var(--line-height) * 2);
       }
+
+      /* Responsive layout fix: stack columns on smaller screens */
+      @media screen and (max-width: 600px) {
+        .docs-container {
+          flex-direction: column;
+          padding-right: 0;
+        }
+        .docs-sidebar {
+          flex: none;
+          width: 100%;
+          border-right: none;
+          border-bottom: 1px solid var(--text-color);
+          margin-bottom: var(--line-height);
+        }
+        .docs-content {
+          width: 100%;
+          padding: var(--line-height);
+        }
+
+        /* Reduce h1 size & wrap long words */
+        .docs-content h1 {
+          font-size: clamp(2rem, 10vw, 6rem);
+          line-height: 1.2;
+          overflow-wrap: break-word;
+          word-wrap: break-word;
+          word-break: break-word;
+          hyphens: auto;
+        }
+      }
     </style>
   </head>
   <body>
