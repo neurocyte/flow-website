@@ -6,4 +6,12 @@
 .draft = false,
 ---
 
+```=html
+<style>
+  /* Adjust line-height just for H1 elements. 
+     Increase as needed to avoid overlap. */
+  h1 {
+    line-height: 1.01;
+  }
+</style>
 Welcome to the Flow Control documentation.
