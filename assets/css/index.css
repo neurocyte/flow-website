@@ -1,4 +1,12 @@
-@import url('https://fonts.cdnfonts.com/css/jetbrains-mono-2');
+@font-face {
+    font-family: 'Iosevka';
+    src: url('../fonts/Iosevka-Regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'AcPlus IBM VGA 9x16';
+    src: url('../fonts/AcPlus_IBM_VGA_9x16.ttf') format('truetype');
+}
 
 :root {
   // --font-family: "Pixel Code", monospace;

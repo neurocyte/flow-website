@@ -15,4 +15,10 @@ pub fn build(b: *std.Build) !void {
 
     const install_key = b.addInstallFile(b.path("public.gpg"), "public.gpg");
     b.getInstallStep().dependOn(&install_key.step);
+
+    const install_font = b.addInstallFile(b.path("assets/fonts/AcPlus_IBM_VGA_9x16.ttf"), "fonts/AcPlus_IBM_VGA_9x16.ttf");
+    b.getInstallStep().dependOn(&install_font.step);
+
+    const install_font2 = b.addInstallFile(b.path("assets/fonts/Iosevka-Regular.woff2"), "fonts/Iosevka-Regular.woff2");
+    b.getInstallStep().dependOn(&install_font2.step);
 }
