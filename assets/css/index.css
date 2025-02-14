@@ -6,6 +6,7 @@
 @font-face {
     font-family: 'AcPlus IBM VGA 9x16';
     src: url('../fonts/AcPlus_IBM_VGA_9x16.ttf') format('truetype');
+    font-weight: 600;
 }
 
 :root {
@@ -37,7 +38,7 @@
   font-weight: var(--font-weight-normal);
   font-style: normal;
   font-variant-numeric: tabular-nums lining-nums;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 @media (prefers-color-scheme: dark) {
