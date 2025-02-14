@@ -35,15 +35,21 @@ Flow Control is under active development, but usually very stable.
 
 Install the latest release to `/usr/local/bin`:
 
-``` curl -fsSL https://flow-control.dev/install | sh ```
+```
+curl -fsSL https://flow-control.dev/install | sh
+```
 
 Install latest nightly build and specify the install prefix:
 
-``` curl -fsSL https://flow-control.dev/install | sh -s -- --nightly --prefix ~/.local/bin ```
+```
+curl -fsSL https://flow-control.dev/install | sh -s -- --nightly --prefix ~/.local/bin
+```
 
 Install latest nightly build and verify against gpg signature:
 
-``` curl -fsSL https://flow-control.dev/install | sh -s -- --nightly --verify ```
+```
+curl -fsSL https://flow-control.dev/install | sh -s -- --nightly --verify
+```
 
 
 ### Prebuilt Binaries
@@ -96,7 +102,7 @@ kitty_mod ctrl+alt
 flow file.zig:42                    # Open at line 42
 flow --language zig CMakeLists.txt  # Force file type
 flow --list-languages               # Show all supported languages
-flow --help                         # Full list of command line options
+flow --help                         # List of command line options
 ```
 
 ## ⌨️ Key Controls

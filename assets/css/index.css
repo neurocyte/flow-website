@@ -1,31 +1,43 @@
 @import url('https://fonts.cdnfonts.com/css/jetbrains-mono-2');
 
 :root {
-  --font-family: "JetBrains Mono", monospace;
-  --line-height: 1.20rem;
+  // --font-family: "Pixel Code", monospace;
+  // --font-family: "Maple Mono", monospace;
+  // --font-family: "JetBrains Mono", monospace;
+  --font-family: "Iosevka", monospace;
+  // --font-family-alt: "Pixel Code", monospace;
+  // --font-family-alt: "AcPlus IBM VGA 9x16", monospace;
+  --font-family-titles: "AcPlus IBM VGA 9x16", monospace;
+  // --font-family-titles: "Maple Mono", monospace;
+  // --font-family-titles: "Pixel Code", monospace;
+  --line-height: 1.40rem;
   --border-thickness: 2px;
-  --text-color: #000;
+  --text-color: #333;
   --text-color-alt: #666;
+  --text-color-accent: #000;
   --background-color: #fff;
   --background-color-alt: #eee;
+  // --transform: uppercase;
 
   --font-weight-normal: 500;
   --font-weight-medium: 600;
   --font-weight-bold: 800;
+  --font-weight-titles: 600;
 
   font-family: var(--font-family);
   font-optical-sizing: auto;
   font-weight: var(--font-weight-normal);
   font-style: normal;
   font-variant-numeric: tabular-nums lining-nums;
-  font-size: 16px;
+  font-size: 13px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text-color: #fff;
-    --text-color-alt: #aaa;
-    --background-color: #000;
+    --text-color: #aaa;
+    --text-color-alt: #898;
+    --text-color-accent: #ddd;
+    --background-color: #222;
     --background-color-alt: #111;
   }
 }
@@ -55,7 +67,7 @@ body {
   width: 100%;
   margin: 0;
   padding: var(--line-height) 2ch;
-  max-width: calc(min(80ch, round(down, 100%, 1ch)));
+  max-width: calc(min(100ch, round(down, 100%, 1ch)));
   line-height: var(--line-height);
   overflow-x: hidden;
 }
@@ -73,19 +85,25 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: var(--font-weight-bold);
   margin: calc(var(--line-height) * 2) 0 var(--line-height);
   line-height: var(--line-height);
+  color: var(--text-color-accent);
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 6rem;
   line-height: calc(2 * var(--line-height));
   margin-bottom: calc(var(--line-height) * 2);
-  text-transform: uppercase;
+  text-transform: var(--transform);
+  font-family: var(--font-family-titles);
+  font-weight: var(--font-weight-titles);
 }
 h2 {
-  font-size: 1rem;
-  text-transform: uppercase;
+  font-size: 2rem;
+  font-family: var(--font-family-titles);
+  font-weight: var(--font-weight-titles);
+  text-transform: var(--transform);
+  // margin-left: calc(var(--line-height) * 1);
 }
-
+  text-transform: var(--transform)
 hr {
   position: relative;
   display: block;
@@ -225,15 +243,18 @@ details :last-child {
 pre {
   white-space: pre;
   overflow-x: auto;
-  margin: var(--line-height) 0;
+  margin: 10px;
+  padding: 10px;
+  background: var(--background-color-alt);
   overflow-y: hidden;
+  color: var(--text-color-alt);
 }
 figure pre {
   margin: 0;
 }
 
 pre, code {
-  font-family: var(--font-family);
+  font-family: var(--font-family-alt);
 }
 
 code {
@@ -347,7 +368,7 @@ button::-moz-focus-inner {
 }
 
 button {
-  text-transform: uppercase;
+  text-transform: var(--transform);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
 }
