@@ -1,11 +1,12 @@
 #!/bin/sh
 set -e
 
-install_dir="/usr/local/bin"
-add_alias=0
-nightly=0
-verify=0
-local=0
+install_dir="${PREFIX:-/usr/local}/bin"
+tmp_path="${TMPDIR:-/tmp}"
+add_alias=${ALIAS:-0}
+nightly=${NIGHTLY:-0}
+verify=${VERIFY:-0}
+local=${LOCAL:-0}
 
 while true; do
     case "${1}" in
@@ -88,10 +89,10 @@ else
     echo "downloading flow $version..."
 fi
 
-curl -fL "$url" -o "/tmp/$filename.$ext"
+curl -fL "$url" -o "$tmp_path/$filename.$ext"
 
 # simple file size check (adjust threshold if needed)
-filesize=$(stat -c%s "/tmp/$filename.$ext" 2>/dev/null || stat -f%z "/tmp/$filename.$ext")
+filesize=$(stat -c%s "$tmp_path/$filename.$ext" 2>/dev/null || stat -f%z "$tmp_path/$filename.$ext")
 if [ "$filesize" -lt 100 ]; then
     echo "downloaded file appears to be invalid (size: ${filesize} bytes)"
     exit 1
@@ -106,27 +107,27 @@ if [ "$verify" -eq 0 ] && [ -t 0 ]; then
 fi
 
 if [ "$verify" -eq 1 ]; then
-    curl -fL "$url.sig" -o "/tmp/$filename.$ext.sig"
-    curl -fL 'https://flow-control.dev/public.gpg' -o /tmp/flow-control-public.gpg
-    gpg --no-default-keyring --keyring /tmp/flow-control-public.gpg --verify "/tmp/$filename.$ext.sig" "/tmp/$filename.$ext"
+    curl -fL "$url.sig" -o "$tmp_path/$filename.$ext.sig"
+    curl -fL 'https://flow-control.dev/public.gpg' -o "$tmp_path/flow-control-public.gpg"
+    gpg --no-default-keyring --keyring "$tmp_path/flow-control-public.gpg" --verify "$tmp_path/$filename.$ext.sig" "$tmp_path/$filename.$ext"
 
     if [ "$local" -eq 1 ]; then
-        gpg --verify "/tmp/$filename.$ext.sig" "/tmp/$filename.$ext"
+        gpg --verify "$tmp_path/$filename.$ext.sig" "$tmp_path/$filename.$ext"
     fi
 
-    rm /tmp/flow-control-public.gpg
-    rm "/tmp/$filename.$ext.sig"
+    rm "$tmp_path/flow-control-public.gpg"
+    rm "$tmp_path/$filename.$ext.sig"
 fi
 
 echo "installing $([ "$nightly" -eq 1 ] && echo 'NIGHTLY build' || echo 'flow')..."
 if [ "$ext" = "tar.gz" ]; then
-    tar -xzf "/tmp/$filename.$ext" -C "$install_dir"
+    tar -xzf "$tmp_path/$filename.$ext" -C "$install_dir"
 else
-    unzip -o "/tmp/$filename.$ext" -d "$install_dir"
+    unzip -o "$tmp_path/$filename.$ext" -d "$install_dir"
 fi
 
 chmod +x "$install_dir/flow"
-rm "/tmp/$filename.$ext"
+rm "$tmp_path/$filename.$ext"
 echo "$([ "$nightly" -eq 1 ] && echo 'NIGHTLY build' || echo 'flow') installed successfully!"
 
 create_alias() {
@@ -140,7 +141,7 @@ create_alias() {
 
 if [ "$add_alias" -eq 1 ]; then
     create_alias
-elif [ -t 0 ]; then
+elif [ -t 0 ] && [ "$add_alias" -eq 0 ]; then
     printf "do you want to create an alias 'f' for 'flow'? [y/N]: "
     read -r answer_alias
     if [ "$answer_alias" = "y" ] || [ "$answer_alias" = "Y" ]; then
