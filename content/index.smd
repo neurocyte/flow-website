@@ -53,8 +53,8 @@ curl -fsSL https://flow-control.dev/install | sh -s -- --nightly --verify
 
 
 ### Prebuilt Binaries
-- Stable: [Releases](https://github.com/neurocyte/flow/releases)
-- Nightly: [Nightly Builds](https://github.com/neurocyte/flow-nightly/releases)
+- Stable: [Releases](https://github.com/neurocyte/flow/releases/latest)
+- Nightly: [Nightly Builds](https://github.com/neurocyte/flow-nightly/releases/latest)
 
 Or check your favorite local system package repository.
 
