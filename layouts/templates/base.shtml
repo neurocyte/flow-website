@@ -16,13 +16,19 @@
         <a href="$ctx.about.link()" text="$ctx.about.title">Home</a>
       </ctx>
       •
-      <a href="https://github.com/neurocyte/flow/releases">Downloads</a>
+      <a href="https://github.com/neurocyte/flow/releases/latest">Downloads</a>
       •
-      <a href="https://github.com/neurocyte/flow-nightly/releases">Nightly Builds</a>
+      <a href="https://github.com/neurocyte/flow-nightly/releases/latest">Nightly Builds</a>
+      •
+      <a href="https://git.flow-control.dev/neurocyte/flow">Source</a>
       •
       <a href="https://discord.com/invite/4wvteUPphx">Discord</a>
       •
       <a href="https://github.com/neurocyte/flow">Github</a>
+      •
+      <a href="https://codeberg.org/neurocyte/flow">Codeberg</a>
+      •
+      <a href="https://git.sr.ht/~neurocyte/flow">sourcehut</a>
     </nav>
     <h1 :text="$page.title"></h1>
     <div :html="$page.content()"></div>
