@@ -1,6 +1,6 @@
 # Building
 
-To build this site, you need zig
+To build this site, you need zine
 
 Just clone the repository
 ```
@@ -10,7 +10,7 @@ cd flow-control.dev
 and issue
 
 ```
-zig build serve
+zine
 ```
 
 Then visit with your browser the site pointed by the previous command

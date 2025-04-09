@@ -12,7 +12,7 @@
   </head>
   <body>
   <nav id="menu" class="centered">
-      <ctx about="$site.page('index')">
+      <ctx about="$site.page('')">
         <a href="$ctx.about.link()" text="$ctx.about.title">Home</a>
       </ctx>
       •

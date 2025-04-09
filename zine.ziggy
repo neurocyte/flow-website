@@ -1,0 +1,13 @@
+Site {
+    .title = "Flow Control: a progammer's text editor",
+    .host_url = "https://flow-control.dev",
+    .content_dir_path = "content",
+    .layouts_dir_path = "layouts",
+    .assets_dir_path = "assets",
+    .static_assets = [
+        "install",
+        "public.gpg",
+        "fonts/AcPlus_IBM_VGA_9x16.ttf",
+        "fonts/Iosevka-Regular.woff2",
+    ],
+}
