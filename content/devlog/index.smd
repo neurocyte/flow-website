@@ -1,0 +1,20 @@
+---
+.title = "Devlog Archive",
+.date = @date("1990-01-01T00:00:00"),
+.author = "CJ van den Berg",
+.layout = "devlog-archive.shtml",
+.alternatives = [{ 
+    .name = "rss",
+    .layout = "devlog.xml", 
+    .output = "index.xml",
+}],
+.draft = false,
+--- 
+
+[]($section.id('about'))
+## About this Devlog
+
+I try to keep a log of major (and some minor) changes and new features going into flow. This is an
+archive of posts from previous years.
+
+The latest devlog year is available [via RSS feed]($link.alternative('rss')).

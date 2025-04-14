@@ -34,7 +34,6 @@
 </head>
 <body id="body">
   <h1 class="title" :text="$page.title"></h1>
-  <div :html="$page.contentSection('about')"></div>
   <div class="feed" :loop="$page.contentSections().slice(1)">
     <div id="$loop.it.id">
       <span :text="$loop.it.id.parseDate().format('January 02, 2006')"></span>
@@ -42,4 +41,5 @@
       <ctx :html="$loop.it.htmlNoHeading()"></ctx>
     </div>
   </div>
+  <div :html="$page.contentSection('about')"></div>
 </body>

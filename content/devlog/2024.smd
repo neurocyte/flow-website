@@ -1,0 +1,291 @@
+---
+.title = "Devlog - 2024",
+.date = @date("2024-01-01T00:00:00"),
+.author = "CJ van den Berg",
+.layout = "devlog.shtml",
+.draft = false,
+---
+
+[]($section.id('about'))
+## About this Devlog
+
+I try to keep a log of major (and some minor) changes and new features going into flow as I work on
+them.
+
+You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')) and find more
+devlog entries in the [archive](/devlog/).
+
+## [Command palette fuzzy matching]($section.id("2024-06-19T17:47:00"))
+
+Fuzzy matching is now supported in the command palette and clicking the flow button will now open
+the command palette instead of switching input modes. Also fixed a crash with large bracketed paste
+operations (C-S-v in most terminals).
+
+Still to come in the palette, English command descriptions (docstrings), active keybinding hints,
+MRU ordering persistence and (maybe/probably) command argument parsing with syntax hints.
+
+
+## [Bug fixes & command palette]($section.id("2024-06-14T21:52:00"))
+
+A few bug fixes today. Mostly fix for mouse and resize handling of menus and buttons.
+
+Also, started work on the command palette. Lot's to do still. Fuzzy find, show keybindings, last
+recently used sorting, etc.
+
+Here's something to look at in the mean time:
+
+[]($image.asset('2024-06-14.png'))
+
+
+## [FreeBSD]($section.id("2024-06-13T12:20:00"))
+
+Flow Control now runs on FreeBSD too!
+
+
+## [Windows port has landed!]($section.id("2024-06-08T20:42:00"))
+
+Aaaannd it's merged!
+
+libvaxis is now the default (actually only) renderer. This brings way broader terminal support and
+flow now runs pretty much anywhere, including Windows!
+
+[]($image.asset('2024-06-08.png'))
+
+Windows support still has a couple of limitations (and bugs). Most notably, no mouse support and
+language server support is currently still in progress.
+
+
+## [Windows porting]($section.id("2024-06-07T22:27:00"))
+
+Getting close...
+
+[]($image.asset('2024-06-07.png'))
+
+
+## [Notcurses dropped]($section.id("2024-06-07T16:57:00"))
+
+I've dropped notcurses entirely in the version next branch. Doesn't seem like it has any value now
+and I don't need any extra maintenance burden.
+
+
+## [Windows support in thespian]($section.id("2024-06-07T16:53:00"))
+
+Thespian is building on windows now. I just need to add a windows variant of thespian's async
+subprocess API, and then I can start porting flow to windows.
+
+
+## [libvaxis backend completed]($section.id("2024-05-23T22:40:00"))
+
+The libvaxis backend is now complete and far surpasses the notcurses backend in terms of
+compatibility. With libvaxis Flow now renders correctly in kitty, ghostty, iterm2, gnome-terminal,
+konsole, xterm, rxvt, alacritty, wezterm, foot, windows terminal and probably most others. Unicode
+works correctly in macos now (there were width bugs cause by macos libc) and cross compiling works
+everywhere (except for windows targets) with no additional dependencies to install.
+
+I will switch the default backend to libvaxis as soon as I get around to re-writing the readme
+build section. I may even remove the notcurses backend soon as there seems like no reason to keep
+it, but I wait a little while just to be safe.
+
+Flow Control in iTerm2
+[]($image.asset('2024-05-23-iterm2.png'))
+
+Flow Control in Windows Terminal
+[]($image.asset('2024-05-23-windows-terminal.png'))
+
+
+## [libvaxis copy & paste]($section.id("2024-05-22T12:37:00"))
+
+Still working on the new libvaxis backend. Lot's of changes to get it feature equivalent to the
+notcurses backend. I'm trying to keep as much as possible upstream so other zig TUI apps can
+benefit. Yesterday I added  osc52 support to libvaxis (copy/paste) and today I will add detection
+of pixel mouse coordinate support. Then it's hopefully just some bug fixing (drag detection,
+perhaps others) and I can think about making libvaxis the new default.
+
+
+## [to_upper/lower]($section.id("2024-05-12T00:20:00"))
+
+Today I added to_upper and to_lower commands. Bound to Alt-u and Alt-l.
+
+
+## [Add remaining libvaxis styles]($section.id("2024-05-10T22:56:00"))
+
+I've added the remaining styles to the libvaxis renderer. notcurses and libvaxis backends should
+look identical now.
+
+
+## [libvaxis preview release]($section.id("2024-05-10T12:56:00"))
+
+I have pushed the work-in-progress libvaxis backend to master and will continue work there. It is
+not enabled by default. If you want to try it out build with `-Duse_vaxis=true` which will produce
+`zig-out/bin/flow-vaxis`.
+
+
+## [libvaxis nearing compleation]($section.id("2024-05-10T11:54:00"))
+
+The libvaxis backend is nearing completion. Render times look good, although it's not quite a
+perfect apples to apples comparison just yet because a few styles are still incomplete in the
+libvaxis version. That difference should be pretty minor though so I don't expect this comparison
+to really change much.
+
+[]($image.asset('2024-05-10.png'))
+
+
+## [libvaxis progress]($section.id("2024-05-09T00:59:00"))
+
+libvaxis support is still a work in progress. I have most of the backend implemented, but I am
+battling to smooth out the bugs. There are a few major semantic  differences between notcurses
+planes and libvaxis windows that I haven't handled quite right yet.
+
+
+## [LSP & tree-sitter sync fix]($section.id("2024-05-09T00:39:00"))
+
+Today I fixed tree-sitter and/or LSP getting out of sync when editing. Both should stay properly
+synced now.
+
+
+## [Refactor completed]($section.id("2024-05-01T16:59:00"))
+
+Refactoring complete. The TUI layer in Flow no longer directly depends on notcurses. 🎉 
+
+Time to start real work on a libvaxis renderer.
+
+[]($image.asset('2024-05-01.png'))
+
+
+## [Refactoring renderer]($section.id("2024-04-27T23:24:00"))
+
+Development has not stalled. I'm working on a major refactor to bring in libvaxis as an alternative
+rendering backend. libvaxis is mostly on par with notcurses already, and moving forward I'd rather
+work on/contribute to upstream libraries written in zig.
+
+
+## [Diagnostics rendering]($section.id("2024-04-20T00:07:00"))
+
+Added rendering of diagnostics and goto next/previous diagnostic commands. (bount to Alt-n and
+Alt-p). Also added diagnostic counter widget to the status bar and fixed several bugs.
+
+[]($image.asset('2024-04-20.png'))
+
+
+## [LSP diagnostics prep work]($section.id("2024-04-16T23:27:00"))
+
+Added processing of textDocument/publishDiagnostics notification message from the language server.
+Ready to be rendered, but so far just logged.
+
+
+## [Fuzzy finding]($section.id("2024-04-15T21:36:00"))
+
+Added fuzzy finding in the recent files list via fuzzig, a nice zig fuzzy finder library that was
+released yesterday. Also fixed a couple of shutdown issues and an issue causing goto_definition and
+get_mru_position to over write each other.
+
+
+## [Most recently used persistence]($section.id("2024-04-11T23:04:00"))
+
+Today I added saving and restoring of the most-recently-used info on a per project basis. So the
+order of the open recent file list and the last cursor position will now persist across sessions.
+
+
+## [Vim bindings]($section.id("2024-04-09T23:11:00"))
+
+Updated the vim bindings to enable open recent, goto definition and jump mode.
+
+
+## [Recent files tweaks]($section.id("2024-04-09T22:42:00"))
+
+Added lots of QOL tweaks to the recent files handling. The recent files list is now updated by most
+recently used and the last file line column stored and restored on file switch. This means
+switching back and forth between two (or more) files is as quick as double tapping Ctrl-e.
+
+
+## [Mouse goto definition]($section.id("2024-04-09T19:25:00"))
+
+Added cross file location history today and also cleaned up the location history tracking logic a
+lot. This, in combination with goto defintion, makes source navigation nice and slick. Also added
+mouse bindings for goto_definition (alt-leftclick) and jump_back/forward (button8/button9) so you
+can browse source comfortably with just the mouse.
+
+[]($video.asset('2024-04-09_flow_goto_definition.mp4').controls(true))
+
+
+## [Traces]($section.id("2024-04-08T22:38:00"))
+
+Mostly bug fixing today. Goto definition should be stable now. Also added a cli option to write
+traces to a file (~/.cache/flow/trace.log) so you don't have to use tracy to see what is going on
+inside flow. Add it multiple times (up to five) to get overloaded with detail. Next up will be
+cross file location history and then after that I'll probably start work on completion.
+
+
+## [LSP goto definition]($section.id("2024-04-05T23:03:00"))
+
+Today I got the first language server use case working. Goto definition works, at least for zls and
+clangd! Lot's of issues still to fix, e.g. there is no cross file location history support yet, so
+navigating back from a goto def is a bit of a pain. Probably more than a couple bugs too. But hey,
+it still feels like a big step forward! 😃🍾
+
+
+## [More LSP progress]($section.id("2024-04-04T22:00:00"))
+
+More work on LSP today. Got my first valid response from clangd to a textDocument/definition
+request! Unfortunately zls is still giving me InvalidRequest responses, even though my request is
+identical to the one sent by vscode. 🤷
+
+
+## [Modifer state tracking]($section.id("2024-04-01T22:39:00"))
+
+Added modifier state tracking today, along with a few other minor bug fixes. Modifier state, used
+for ctrl-click, fast scroll and few other features, can no longer get stuck if your terminal drops
+key events. This could happen previously on focus change. Now the modifier state will automatically
+re-sync when you switch back to the terminal running flow.
+
+
+## [More multi-cursor and some LSP]($section.id("2024-03-31T22:52:00"))
+
+Added two minor multi-cursor commands today. Add cursors to all matches (Ctrl-Shift-l) and Add
+cursors to line ends (Shift-Alt-i). More for completness than anything else. I don't really use
+these myself.
+
+Also, I continued working on LSP support. Started work on goto defintion via LSP. Still lot's to do
+though before LSP is usable.
+
+
+## [Open recent file search box]($section.id("2024-03-28T22:42:00"))
+
+Today I finished the basic functionality of the open recent file search box.
+
+There are still a few important details to add, like sorting the list by persisted MRU for example.
+
+[]($video.asset('2024-03-28_flow_open_recent.mp4').controls(true))
+
+
+## [Bracketed paste]($section.id("2024-03-20T21:52:00"))
+
+Today I've added support for bracketed paste. This means that pasting into the editor with your
+terminal's paste function instead of flow's own paste keybind should work just as well as flow's
+native paste command. No more endless undo steps because you pasted with the wrong keybind and no
+more annoying auto-indent reformatting of pastes. This is especially nice if you often paste from a
+clipboard manager application like I do.
+
+
+## [Cursor collapsing]($section.id("2024-03-12T23:57:00"))
+
+Today I added cursor collapsing. Now cursors are removed if they end up pointing to the same
+location as another cursor after a move operation.
+
+
+## [Multi cursor copy & paste]($section.id("2024-03-11T21:48:00"))
+
+Today I finally added the finishing touches on multi-cursor support. Cut, copy & paste!
+Multi-cursor is now complete.
+
+[]($video.asset('2024-03-11_multi-cursor_copy_paste.mp4').controls(true))
+
+
+## [Widgets]($section.id("2024-03-06T00:54:11"))
+
+I did some work on widgets today. Prep work for things like completion menus and command palette.
+The menu on the home screen is now composed out of widgets that support mouse interaction, instead
+of just a bunch of text printed to the plane.
+
+[]($video.asset('2024-03-06_00-54-11.mp4').controls(true))
+
