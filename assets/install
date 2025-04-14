@@ -7,6 +7,19 @@ add_alias=${ALIAS:-0}
 nightly=${NIGHTLY:-0}
 verify=${VERIFY:-0}
 local=${LOCAL:-0}
+use_sudo=${USE_SUDO:-0}
+
+usage() {
+    echo "Options:"
+    echo
+    echo "  -a, --alias               Create/update 'f' alias"
+    echo "  -n, --nightly             Latest nightly build"
+    echo "  -d <path>, --dest <path>  Set install destination (default /usr/local/bin)"
+    echo "  -V, --verify              Verify gpg signature"
+    echo "  -l, --local               Verify gpg signature with local keychain"
+    echo "  -s, --sudo                Use sudo to request write permission if needed"
+    exit 1
+}
 
 while true; do
     case "${1}" in
@@ -18,7 +31,7 @@ while true; do
         nightly=1
         shift 1
         ;;
-    -p | --prefix)
+    -d | --dest)
         install_dir=/$2
         shift 2
         ;;
@@ -30,13 +43,64 @@ while true; do
         local=1
         shift 1
         ;;
+    -s | --sudo)
+        use_sudo=1
+        shift 1
+        ;;
+    -h | --help)
+        usage
+        ;;
     --)
         shift 1
         break
         ;;
-    *) break ;;
+    "")
+        break
+        ;;
+    *)
+        echo error: Unknown argument "${1}"
+        echo
+        usage
+        ;;
     esac
 done
+
+need_sudo=""
+if [ ! -w "$install_dir" ]; then
+    need_sudo="$install_dir"
+fi
+
+if [ -z "$need_sudo" ] && [ -e "$install_dir/flow" ]; then
+    if [ ! -w "$install_dir/flow" ]; then
+        need_sudo="$install_dir/flow"
+    fi
+fi
+
+if [ -z "$need_sudo" ] && [ -e "$install_dir/f" ]; then
+    if [ ! -w "$install_dir/f" ]; then
+        need_sudo="$install_dir/f"
+    fi
+fi
+
+if [ "$use_sudo" -eq 0 ] && [ -t 0 ] && [ -n "$need_sudo" ]; then
+    printf "'%s' is not writable. Do you want to install with sudo? [y/N]: " "$need_sudo"
+    read -r answer_use_sudo
+    if [ "$answer_use_sudo" = "y" ] || [ "$answer_use_sudo" = "Y" ]; then
+        use_sudo=1
+    fi
+fi
+
+SUDOCMD=""
+if [ -n "$need_sudo" ]; then
+    if [ "$use_sudo" -eq 1 ]; then
+        SUDOCMD=sudo
+    else
+        echo "$need_sudo is not writable. Install with the --sudo argument or use a user"
+        echo "with write permissions."
+        echo
+        usage
+    fi
+fi
 
 # prompt for nightly build option if interactive
 if [ "$nightly" -eq 0 ] && [ -t 0 ]; then
@@ -47,10 +111,30 @@ if [ "$nightly" -eq 0 ] && [ -t 0 ]; then
     fi
 fi
 
+if [ "$verify" -eq 0 ] && [ -t 0 ]; then
+    printf "do you want to download and verify the gpg signature? [y/N]: "
+    read -r answer_verify
+    if [ "$answer_verify" = "y" ] || [ "$answer_verify" = "Y" ]; then
+        verify=1
+    fi
+fi
+
+if [ ! "$(readlink "$install_dir/f")" = "$install_dir/flow" ]; then
+    if [ -t 0 ] && [ "$add_alias" -eq 0 ]; then
+        printf "do you want to create an alias 'f' for 'flow'? [y/N]: "
+        read -r answer_alias
+        if [ "$answer_alias" = "y" ] || [ "$answer_alias" = "Y" ]; then
+            add_alias=1
+        fi
+    fi
+fi
+
 if [ "$nightly" -eq 1 ]; then
     repo="neurocyte/flow-nightly"
+    title="flow nightly build"
 else
     repo="neurocyte/flow"
+    title="flow"
 fi
 
 # detect os and architecture
@@ -70,9 +154,10 @@ esac
 # get latest version tag from github releases api
 version=$(curl -s "https://api.github.com/repos/$repo/releases/latest" | grep '"tag_name":' | cut -d'"' -f4)
 [ -z "$version" ] && {
-    echo "failed to fetch latest version"
+    echo "failed to fetch $title latest version"
     exit 1
 }
+title="$title $version"
 
 # construct download url
 # note: nightly assets are named like "flow-<version>-<os>-<arch>.<ext>"
@@ -83,27 +168,15 @@ if [ "$os" = "windows" ]; then
 fi
 url="https://github.com/$repo/releases/download/$version/$filename.$ext"
 
-if [ "$nightly" -eq 1 ]; then
-    echo "downloading NIGHTLY build $version..."
-else
-    echo "downloading flow $version..."
-fi
+echo "downloading $title..."
 
 curl -fL "$url" -o "$tmp_path/$filename.$ext"
 
 # simple file size check (adjust threshold if needed)
 filesize=$(stat -c%s "$tmp_path/$filename.$ext" 2>/dev/null || stat -f%z "$tmp_path/$filename.$ext")
-if [ "$filesize" -lt 100 ]; then
+if [ "$filesize" -lt 16384 ]; then
     echo "downloaded file appears to be invalid (size: ${filesize} bytes)"
     exit 1
-fi
-
-if [ "$verify" -eq 0 ] && [ -t 0 ]; then
-    printf "do you want to download and verify the gpg signature? [y/N]: "
-    read -r answer_verify
-    if [ "$answer_verify" = "y" ] || [ "$answer_verify" = "Y" ]; then
-        verify=1
-    fi
 fi
 
 if [ "$verify" -eq 1 ]; then
@@ -119,32 +192,27 @@ if [ "$verify" -eq 1 ]; then
     rm "$tmp_path/$filename.$ext.sig"
 fi
 
-echo "installing $([ "$nightly" -eq 1 ] && echo 'NIGHTLY build' || echo 'flow')..."
+echo "installing $title to $install_dir/flow..."
 if [ "$ext" = "tar.gz" ]; then
-    tar -xzf "$tmp_path/$filename.$ext" -C "$install_dir"
+    $SUDOCMD tar -xzf "$tmp_path/$filename.$ext" -C "$install_dir"
 else
-    unzip -o "$tmp_path/$filename.$ext" -d "$install_dir"
+    $SUDOCMD unzip -o "$tmp_path/$filename.$ext" -d "$install_dir"
 fi
 
-chmod +x "$install_dir/flow"
+$SUDOCMD chmod +x "$install_dir/flow"
 rm "$tmp_path/$filename.$ext"
-echo "$([ "$nightly" -eq 1 ] && echo 'NIGHTLY build' || echo 'flow') installed successfully!"
-
-create_alias() {
-    if [ -e "$install_dir/f" ]; then
-        echo "warning: existing file or alias detected at $install_dir/f, overwriting..."
-        rm -f "$install_dir/f"
-    fi
-    ln -s "$install_dir/flow" "$install_dir/f"
-    echo "alias 'f' created successfully!"
-}
 
 if [ "$add_alias" -eq 1 ]; then
-    create_alias
-elif [ -t 0 ] && [ "$add_alias" -eq 0 ]; then
-    printf "do you want to create an alias 'f' for 'flow'? [y/N]: "
-    read -r answer_alias
-    if [ "$answer_alias" = "y" ] || [ "$answer_alias" = "Y" ]; then
-        create_alias
+    if [ "$(readlink "$install_dir/f")" = "$install_dir/flow" ]; then
+        echo "alias $install_dir/f -> $install_dir/flow already exists"
+    else
+        if [ -e "$install_dir/f" ]; then
+            echo "WARNING: existing file or alias detected at $install_dir/f, skipping alias creation..."
+        else
+            $SUDOCMD ln -s "$install_dir/flow" "$install_dir/f"
+            echo "alias $install_dir/f -> $install_dir/flow created successfully"
+        fi
     fi
 fi
+
+echo "$title installed successfully to $install_dir/flow"
