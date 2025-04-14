@@ -88,21 +88,6 @@ if [ -z "$need_sudo" ] && [ -e "$install_dir/f" ]; then
     fi
 fi
 
-if [ "$use_sudo" -eq 0 ] && [ -n "$need_sudo" ]; then
-    printf "%s is not writable. Permissions will be requested with sudo.\n" "$need_sudo"
-    use_sudo=1
-fi
-
-SUDOCMD=""
-if [ -n "$need_sudo" ]; then
-    if [ "$use_sudo" -eq 1 ]; then
-        SUDOCMD=sudo
-    else
-        echo "error: '$need_sudo' is not writable."
-        exit 1
-    fi
-fi
-
 # prompt for nightly build option if interactive
 if [ "$nightly" -eq 0 ] && [ "$have_term" -eq 1 ]; then
     printf "do you want to install a Nightly build? [y/N]: "
@@ -169,6 +154,21 @@ if [ "$force_update" -eq 0 ] && [ -e "$install_dir/flow" ]; then
         if [ -n "$current_version" ]; then
             echo "updating flow from $current_version to $version"
         fi
+    fi
+fi
+
+if [ "$use_sudo" -eq 0 ] && [ -n "$need_sudo" ]; then
+    printf "%s is not writable. Permissions will be requested with sudo.\n" "$need_sudo"
+    use_sudo=1
+fi
+
+SUDOCMD=""
+if [ -n "$need_sudo" ]; then
+    if [ "$use_sudo" -eq 1 ]; then
+        SUDOCMD=sudo
+    else
+        echo "error: '$need_sudo' is not writable."
+        exit 1
     fi
 fi
 
