@@ -2,7 +2,7 @@
 .title = "Flow Control",
 .date = @date("2020-07-06T00:00:00"),
 .author = "CJ van den Berg",
-.layout = "home.shtml",
+.layout = "index.shtml",
 .draft = false,
 ---
 

@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" >
-    <meta name="generator" content="pandoc" >
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" >
-    <meta name="author" content="CJ van den Berg" >
+  <head id="head">
+    <meta charset="UTF-8">
+    <meta name="generator" content="pandoc">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="author" content="CJ van den Berg">
     <link rel="icon" type="image/png" href="$site.asset('img/flow-control.png').link()">
     <link rel="stylesheet" type="text/css" href="$site.asset('css/reset.css').link()">
     <link rel="stylesheet" type="text/css" href="$site.asset('css/index.css').link()">
     <title :text="$site.title"></title>
+    <super>
   </head>
-  <body>
-  <nav id="menu" class="centered">
+  <body id="body">
+    <nav id="menu" class="centered">
       <ctx about="$site.page('')">
         <a href="$ctx.about.link()" text="$ctx.about.title">Home</a>
       </ctx>
@@ -30,8 +31,7 @@
       •
       <a href="https://git.sr.ht/~neurocyte/flow">sourcehut</a>
     </nav>
-    <h1 :text="$page.title"></h1>
-    <div :html="$page.content()"></div>
-  <script src="$site.asset('js/index.js').link()"></script>
+    <script src="$site.asset('js/index.js').link()"></script>
+    <super>
   </body>
 </html>
