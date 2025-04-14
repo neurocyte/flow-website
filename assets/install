@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 install_dir="${PREFIX:-/usr/local}/bin"
@@ -17,7 +17,6 @@ usage() {
     echo "  -d <path>, --dest <path>  Set install destination (default /usr/local/bin)"
     echo "  -V, --verify              Verify gpg signature"
     echo "  -l, --local               Verify gpg signature with local keychain"
-    echo "  -s, --sudo                Use sudo to request write permission if needed"
     exit 1
 }
 
@@ -43,10 +42,6 @@ while true; do
         local=1
         shift 1
         ;;
-    -s | --sudo)
-        use_sudo=1
-        shift 1
-        ;;
     -h | --help)
         usage
         ;;
@@ -65,6 +60,11 @@ while true; do
     esac
 done
 
+have_term=0
+if [ -t 0 ]; then
+    have_term=1
+fi
+
 need_sudo=""
 if [ ! -w "$install_dir" ]; then
     need_sudo="$install_dir"
@@ -82,12 +82,9 @@ if [ -z "$need_sudo" ] && [ -e "$install_dir/f" ]; then
     fi
 fi
 
-if [ "$use_sudo" -eq 0 ] && [ -t 0 ] && [ -n "$need_sudo" ]; then
-    printf "'%s' is not writable. Do you want to install with sudo? [y/N]: " "$need_sudo"
-    read -r answer_use_sudo
-    if [ "$answer_use_sudo" = "y" ] || [ "$answer_use_sudo" = "Y" ]; then
-        use_sudo=1
-    fi
+if [ "$use_sudo" -eq 0 ] && [ -n "$need_sudo" ]; then
+    printf "%s is not writable. Permissions will be requested with sudo.\n" "$need_sudo"
+    use_sudo=1
 fi
 
 SUDOCMD=""
@@ -95,15 +92,13 @@ if [ -n "$need_sudo" ]; then
     if [ "$use_sudo" -eq 1 ]; then
         SUDOCMD=sudo
     else
-        echo "$need_sudo is not writable. Install with the --sudo argument or use a user"
-        echo "with write permissions."
-        echo
-        usage
+        echo "error: '$need_sudo' is not writable."
+        exit 1
     fi
 fi
 
 # prompt for nightly build option if interactive
-if [ "$nightly" -eq 0 ] && [ -t 0 ]; then
+if [ "$nightly" -eq 0 ] && [ "$have_term" -eq 1 ]; then
     printf "do you want to install a Nightly build? [y/N]: "
     read -r answer_nightly
     if [ "$answer_nightly" = "y" ] || [ "$answer_nightly" = "Y" ]; then
@@ -111,7 +106,7 @@ if [ "$nightly" -eq 0 ] && [ -t 0 ]; then
     fi
 fi
 
-if [ "$verify" -eq 0 ] && [ -t 0 ]; then
+if [ "$verify" -eq 0 ] && [ "$have_term" -eq 1 ]; then
     printf "do you want to download and verify the gpg signature? [y/N]: "
     read -r answer_verify
     if [ "$answer_verify" = "y" ] || [ "$answer_verify" = "Y" ]; then
@@ -120,7 +115,7 @@ if [ "$verify" -eq 0 ] && [ -t 0 ]; then
 fi
 
 if [ ! "$(readlink "$install_dir/f")" = "$install_dir/flow" ]; then
-    if [ -t 0 ] && [ "$add_alias" -eq 0 ]; then
+    if [ "$have_term" -eq 1 ] && [ "$add_alias" -eq 0 ]; then
         printf "do you want to create an alias 'f' for 'flow'? [y/N]: "
         read -r answer_alias
         if [ "$answer_alias" = "y" ] || [ "$answer_alias" = "Y" ]; then
