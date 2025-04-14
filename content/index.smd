@@ -31,8 +31,6 @@ Flow Control is under active development, but usually very stable.
 
 ## 📦 Installation
 
-### Installer
-
 Fetch and install the latest release to `/usr/local/bin` with the installation helper script:
 
 ```
