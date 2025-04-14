@@ -8,6 +8,7 @@ nightly=${NIGHTLY:-0}
 verify=${VERIFY:-0}
 local=${LOCAL:-0}
 use_sudo=${USE_SUDO:-0}
+force_update=${FORCE_UPDATE:-0}
 
 usage() {
     echo "Options:"
@@ -17,6 +18,7 @@ usage() {
     echo "  -d <path>, --dest <path>  Set install destination (default /usr/local/bin)"
     echo "  -V, --verify              Verify gpg signature"
     echo "  -l, --local               Verify gpg signature with local keychain"
+    echo "  -F, --force               Force re-install even if flow is up-to-date"
     exit 1
 }
 
@@ -31,7 +33,7 @@ while true; do
         shift 1
         ;;
     -d | --dest)
-        install_dir=/$2
+        install_dir=$2
         shift 2
         ;;
     -V | --verify)
@@ -40,6 +42,10 @@ while true; do
         ;;
     -l | --local)
         local=1
+        shift 1
+        ;;
+    -F | --force)
+        force_update=1
         shift 1
         ;;
     -h | --help)
@@ -153,6 +159,18 @@ version=$(curl -s "https://api.github.com/repos/$repo/releases/latest" | grep '"
     exit 1
 }
 title="$title $version"
+
+if [ "$force_update" -eq 0 ] && [ -e "$install_dir/flow" ]; then
+    current_version=$(flow --version 2>/dev/null | grep version: | cut -f2 -d ' ')
+    if [ "$current_version" = "$version" ]; then
+        echo "flow is up-to-date (version $version @ $install_dir/flow)"
+        exit 0
+    else
+        if [ -n "$current_version" ]; then
+            echo "updating flow from $current_version to $version"
+        fi
+    fi
+fi
 
 # construct download url
 # note: nightly assets are named like "flow-<version>-<os>-<arch>.<ext>"
