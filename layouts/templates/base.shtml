@@ -21,6 +21,10 @@
       •
       <a href="https://github.com/neurocyte/flow-nightly/releases/latest">Nightly Builds</a>
       •
+      <ctx :if="$site.page('devlog').subpages().first?()">
+        <a href="$if.link()">Devlog</a>
+        •
+      </ctx>
       <a href="https://git.flow-control.dev/neurocyte/flow">Source</a>
       •
       <a href="https://discord.com/invite/4wvteUPphx">Discord</a>
