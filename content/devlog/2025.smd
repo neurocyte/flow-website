@@ -1,0 +1,253 @@
+---
+.title = "Devlog - 2025",
+.date = @date("2025-01-01T00:00:00"),
+.author = "CJ van den Berg",
+.layout = "devlog.shtml",
+.draft = false,
+---
+
+[]($section.id('about'))
+## About this Devlog
+
+I try to keep a log of major (and some minor) changes and new features going into flow as I work on
+them.
+
+You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')) and find more
+devlog entries in the [archive](/devlog/).
+
+
+## [New command: copy_file_name]($section.id("2025-04-15T17:54:00"))
+
+I added a command to copy the current file name and position to the system clipboard. This is very
+useful for grabbing something to use for setting a breakpoint, or for pasting into a bookmarks
+file. It's bound to `shift+alt+c` for file name and line, column position and `ctrl+k alt+c` for
+just the file name. Also, if there are multiple cursors it will copy multiple entries on a line
+each. Nice for creating jump lists.
+
+
+## [Column highlight]($section.id("2025-04-08T23:14:00"))
+
+Today brings a new configuration option: `highlight_columns`. This string contains a list of space
+separated columns numbers where flow should draw a border. This can help with manual wrapping of
+text as as visual indicator of how long the current line is.
+
+
+## [Integer command arguments]($section.id("2025-04-08T18:04:00"))
+
+Integer arguments are back! Now you can once again use integer prefixes for many commands. Most
+commands use the integer prefix as a repeat count, but the exact meaning is dependant on the
+command being executed. The current value of the prefix is displayed in the `keybind` widget in the
+status bar. Prefix digits are bound to `alt+0` through `alt+9` in flow and emacs mode and just
+the plain digit keys in vim and helix modes.
+
+
+## [Atomic updates for vim & helix insert modes]($section.id("2025-04-07T21:08:00"))
+
+I added `init_command` and `deinit_command` support for keybinding modes that allow us to now
+call `pause_undo_history` and `resume_undo_history` when entering/exiting insert modes. This means
+that insert modes will now create just one single undo step for the entire input made while in the
+mode.
+
+
+## [Customizable themes]($section.id("2025-03-26T23:05:00"))
+
+You can now customise the current theme in your local configuration directory without modifying
+flow itself. Just run the `Customize theme` command and flow will copy the current theme to your
+configuration directory and open it for you to edit.
+
+
+## [Debug build warning]($section.id("2025-03-26T19:22:00"))
+
+There is now a small warning on the home screen when you run a debug build. Debug builds are
+significantly slower than ReleaseFast builds. The build type is also now mentioned in the version
+information.
+
+
+## [Widget parameters]($section.id("2025-03-25T21:19:00"))
+
+Mini feature today. You can now add parameters to (some of) the status bar widgets by separating
+them from the widget name with a colon.
+
+- `linenumber` widgets may have (up to) three parameters: pad width (int), pad value (space/zero) and
+digit style (ascii/digital/subscript/superscript).
+
+For example: `linenumber:4,zero,digital`.
+
+- `spacer` widgets may have one parameter: width (int)
+
+- `clock` widgets may have one parameter: digit style (ascii/digital/subscript/superscript)
+
+[]($image.asset('2025-03-25.png'))
+
+
+## [Binary queries & fully async LSP]($section.id("2025-03-25T10:26:00"))
+
+A few major behind the scene updates in the last week. Nothing directly user facing, but still
+worth mentioning here.
+
+- Flow now uses pre-loaded binary versions of the tree-sitter queries. The scheme query text is
+  loaded at compile time and serialized to binary which is then loaded at runtime. The tree-sitter
+  query parser is incredibly slow and the binary loader is close to instant, so this saves around
+  20-30ms when loading files. Every frame counts!
+
+- Flow's LSP backend is now 100% async. It used to be able to block the project manager in some
+  cases, potentially leading to pauses when listing project files and occationally timeouts when
+  loading the first file of a file type. These issues can no longer occur. LSP pauses can now only
+  effect LSP things, like diagnostics or goto_* requests.
+
+
+## [zig-0.14 released]($section.id("2025-03-05T15:31:00"))
+
+Nightly builds are now on the freshly released `zig-0.14`.
+
+
+## [Smart pairs and smarter open file]($section.id("2025-03-04T21:11:00"))
+
+Today we have a couple of useful quality of life features.
+
+A much improved `smart_insert_pair` command, and to go along with it, new commands
+`smart_insert_pair_close` and `smart_delete_backwards`. This pretty much completes smart pair
+handling as far as I am concerned and flow should generally do-the-right-thing when inserting or
+deleting paired characters like `()`, `{}`, `[]`, `""`, etc.
+
+Automatic file link parsing in selections when using the `open_file` command. What this means is
+that flow will automatically open files (if they actually exist) if you select the file path before
+pressing `ctrl+o`, including parsing for line number and column indexes. This is especially useful
+for command output buffer and means that you can easily jump to files in compiler errors or grep
+matches. Tip: use the `expand_selection` command to select a whole file path in a command output
+buffer.
+
+[]($video.asset('2025-03-04_20-59-15.mp4').controls(true))
+
+[]($video.asset('2025-03-04_20-51-02.mp4').controls(true))
+
+
+
+## [Zig-0.14 issues]($section.id("2025-02-06T21:46:00"))
+
+Wierd issues on macos with `zig-0.14` today, so I have reverted the `master` branch to `zig-0.13`
+with a force push and cherry-picked all the new features since the `zig-0.14` update. There is now
+a `zig-0.14` branch pointing to the `zig-0.14` changes (where `master` used to be). I also added
+the build mode and zig version to the version info.
+
+
+## [Bling!]($section.id("2025-02-05T22:40:00"))
+
+Todays feature of the day is a little bit of bliiiiing. You can now select from four different
+digit styles for the line number gutter!
+
+[]($video.asset('2025-02-05_22-35-31.mp4').controls(true))
+
+
+## [Switched to zig master]($section.id("2025-02-04T23:12:00"))
+
+Flow Control is now on zig master once again! 🎉
+
+```
+41 files changed, 648 insertions(+), 623 deletions(-)
+```
+
+By far the most painful zig update in flow's history!
+
+
+## [Ephemeral buffers]($section.id("2025-01-27T20:11:00"))
+
+Today's update brings better support for ephemeral buffers. These buffers are used for task output,
+new files and the help buffer. They can only be saved by giving them a new name first with the
+`save_as` command and do not store undo info when closed unless first given a name. Also added is
+the new create_new_file command, bound by default to `ctrl+shift+n`.
+
+
+## [Tasks]($section.id("2025-01-26T22:11:00"))
+
+Today's feature is a task runner. You can now run commands inside flow and have their output placed
+in a buffer. Tasks are remembered per project. The default keybinding for the task palette is
+`alt+!`.
+
+[]($video.asset('2025-01-26_flow_task_runner.mp4').controls(true))
+
+
+## [Tabs widget]($section.id("2025-01-24T23:47:00"))
+
+Today's quality flow time brings a new `tabs` widget. Add it to your topbar config option to get a
+tab bar that you can use to switch buffers with the mouse or a keybinding to
+`next_tab`/`previous_tab`. You can close a tab with middle mouse click.
+
+[]($video.asset('2025-01-24_flow_tabs_widget.mp4').controls(true))
+
+
+## [Delete buffer command]($section.id("2025-01-22T22:56:00"))
+
+There is now a `delete_buffer` command that is bound to the `delete` key when in the buffer
+selector palette. Deleting a buffer will remove it from the buffers list and free it's undo
+history.
+
+
+## [Multi-buffer]($section.id("2025-01-21T23:10:00"))
+
+Today's feature of the day is **multi-buffer support**. Thanks to a new buffer manager module you
+can now switch buffers without first saving them. The recent files list has gained a dirty
+indicator so you can see which files need to be saved and there is a new command `switch_buffer`
+that will bring up a list of currently open buffers. The home screen now also has a `save_all`
+command for those times you just want to exit without saving each file individually first.
+
+[]($video.asset('2025-01-21_flow_buffer_switcher.mp4').controls(true))
+
+
+## [Lots and lots]($section.id("2025-01-19T15:09:00"))
+
+A lot has happened over the last two weeks. Sorry about the lack of posts here in the devlog. Due
+to the huge uptick in community contributions I have been concentrating on getting PRs reviewed and
+merged. Here's a list of highlights of whats new (in no particular order):
+
+- **Beam cursor mode mouse select** - Selecting with the mouse when you have a beam cursor active now
+    gives selection behaviour like a GUI editor. ie. the position of the selection is calculated
+    gap to gap instead of char to char.
+
+- **Flow select mode** - Press `ctrl+space` in flow input mode to enter a select mode that lets you
+    extend your selection with regular movement keys.
+
+- **Emacs bindings greatly improved** - Emacs input mode keybindings are now much more fleshed out and
+    include all the emacs basic movement commands. Emacs input mode now also has a selection mode
+    (also `ctrl+space`). Thanks to `@marler8997` for this work.
+
+- **Win32 GUI** - Yes, flow can now render itself in a win32 GUI window for all those terminal
+    impaired windows users (with full GPU acceleration!). The GUI binary can be built with `zig
+    build -Dgui --release=safe` and is called `flow-gui.exe`. Functionality in this GUI version of
+    flow is identical to the TUI version, although as of this writing there are some minor renderer
+    features still missing such as curly underlines, mouse cursors and double wide characters.
+    Thanks to `@marler8997` for the huge amount of work he put into this.
+
+- **Multi cursor changes** - Adding cursors is now `alt+click` (it was `ctrl+click`). This is to
+    fall inline with common practice in other editors (zed and vscode). Also, you can now remove
+    cursors by `alt+click`ing on them.
+
+- **Gutter symbols** - There is a new config option to disable gutter symbols and reduce the size
+    of the line number gutter if you so desire.
+
+- **Verilog support** - Thanks to `@edwloef` we now support syntax highlighting and formatting for
+    verlog files.
+
+- **LSP: Rename symbol command** - Thanks to `@Travis` we now have LSP `rename_symbol` support.
+    This is done a little differently in flow to most other editors. When running the
+    `rename_symbol` command we add cursors at all the symbol references and let you rename them
+    interactively. Cross file renames are not yet supported, but will show up in the references
+    list for you to jump directly to them and perform the rename yourself if you so desire.
+
+Oh, and one more thing:
+
+- **Shell command bindings** - You can now bind shell commands to keys and have the output inserted
+   into the current buffer, a new buffer, or the log. The commands are `shell_execute_insert` and
+   `shell_execute_log`. See `src/keybind/builtin/flow.json` for some examples.
+
+
+## [Whitespace revamp]($section.id("2025-01-02T18:44:00"))
+
+Today's feature of the day: Much improved whitespace rendering. Flow now uses a map of the rendered
+view to process whitespace rendering after finishing the main render pass. This fixes a few minor
+whitespace rendering bugs, and more importantly, allows easy and fast rendering of more whitespace
+related features. There are new modes: leading, eol and tabs, to render just subset of whitespace.
+And, best of all, flow now highlights leading (ie. spaces before tabs) and trailing whitespace
+errors.
+
+[]($video.asset('2025-01-02_18-35-05.mp4').controls(true))
