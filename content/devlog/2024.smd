@@ -15,6 +15,426 @@ them.
 You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')) and find more
 devlog entries in the [archive](/devlog/).
 
+
+## [Windows native clipboard support]($section.id("2024-12-24T14:58:00"))
+
+I spent the morning dog-fooding flow on windows. I added native clipboard support, so now (finally)
+pasting code blocks does not munge their formatting, and you can now use the regular `ctrl+v`
+keybinding on windows instead of your terminal's paste function (ie. `ctrl+shift+v`). Also, I fixed
+`alt+shift+` keybindings, which were broken on windows (and no-one seems to have noticed!?).
+
+
+## [Binary releases]($section.id("2024-12-19T22:55:00"))
+
+Flow Control get it's first binary release! 🎉🍾🥳
+
+[neurocyte/flow/releases/tag/v0.2.0](https://github.com/neurocyte/flow/releases/tag/v0.2.0)
+
+
+## [Auto UTF-8 sanitization]($section.id("2024-12-18T16:33:00"))
+
+Flow will now read non UTF-8 files with out crashing. It'll do a simplistic 8bit to UTF-8
+transcoding and display a warning in the status bar. Writing the file will save it as UTF-8 and
+what you see is what you get. This is really simplistic, but at least for most western european
+codepages it should pretty much do the right thing.
+
+[]($image.asset('2024-12-18.png'))
+
+
+## [File type palette]($section.id("2024-12-10T20:27:00"))
+
+Another day, another feature. Today's feature-of-the-day is a new file type palette. You can now
+change the current file type on the fly with the Change file type command.
+
+[]($video.asset('2024-12-10_20-22-46.mp4').controls(true))
+
+
+## [Keybind configuration]($section.id("2024-12-05T20:55:00"))
+
+Today I merged the configurable keybindings branch! You can now customize your keybindings with the
+`Edit key bindings` command. This will open the keybindings json file in the configuration
+directory for the mode you are using. If the file does not yet exist it will be created from the
+built-in configuration. You can also save your keybinding configuration under a new file name to
+create a whole new keybinding mode.
+
+To help with editing the keybindings there is a new command `insert_command_name` that will list
+all available commands (not just those in the command palette) and insert the command name into the
+current file. This is usually bound to `ctrl+f2`. Commands can take arguments which are hinted in
+the `insert_command_name` list and may be added after the command name in the keybinding
+declaration. For example: `["ctrl+f9", "set_theme", "1984"],`
+
+Thank you to `@Robert Burnett` for getting the ball rolling on this and writing the vim style
+keybind parser!
+
+[]($video.asset('2024-12-05_20-40-45.mp4').controls(true))
+
+
+## [Expand/shrink selection]($section.id("2024-11-25T22:10:00"))
+
+Today I added implementations for the tree-sitter based expand/shrink selection commands. And also
+select next/previous sibling commands. Now you can move your selection around based on the
+tree-sitter syntax tree. These commands are bound to alt+shift+left/right and alt+home/end
+respectively. (in flow mode)
+
+
+## [Theme alpha channel support]($section.id("2024-11-04T23:29:00"))
+
+Today I added proper support for alpha blending of theme colors. This fixes a lot of issues with
+themes, especially light themes and should improve the overall polish of flow quite a bit.
+
+
+## [New themes, new comamnds and more]($section.id("2024-10-29T22:10:00"))
+
+Various minor features have been added over the past week. A new group of themes called Catppuccin.
+Swift language syntax highlighting. A new command `Open previous file`, useful for toggling between
+two files. And as always, many minor bug fixes and improvements.
+
+Today I pushed a major refactor of our tree-sitter incremental parsing support. Flow now uses a
+diff algorithm (dizzy) to generate tree-sitter edits on each frame (if there are changes) instead
+of directly translating individual edit operations into tree-sitter edits on every change. This
+seems to get us much more predicatable and reliable results from tree-sitter.
+
+Major refactoring of the keybinding system is still underway. When that is complete we will be able
+to move forward with support for dynamic keybindings. This will allow plugins to configure keybinds
+at runtime.
+
+
+## [Modal palettes]($section.id("2024-10-19T20:39:00"))
+
+Small quality of life UI fix today. Palettes are now properly modal and you can cancel them by
+clicking outside of the palette. This brings Flow a little closer to common GUI UI patterns. Also,
+just for fun, added a slight dimming effect to the modal background.
+
+[]($video.asset('Screencast_From_2024-10-19_20-36-37.webm').controls(true))
+
+And a fade effect...
+
+Fade effects are controlled by the `animation_max_lag` configuration parameter.
+
+
+## [New args parser]($section.id("2024-10-14T20:42:00"))
+
+Today flow's CLI got a nice revamp thanks to Joe Mckay and his flags zig library. This also brings
+improved error messages on invalid parameters. Thanks Joe!
+
+[]($image.asset('2024-10-14.png'))
+
+
+## [Toggle highlighting]($section.id("2024-10-12T20:34:00"))
+
+You can now toggle syntax highlighting with `S-F10` or the `Toggle syntax highlighting` command.
+This is not persistent, it's just for the currently open file. Also, the `--no-syntax` command line
+option will now leave LSP support and file type detection enabled and just disable syntax
+highlighting globally for the current session. You can still then turn it back on with `Toggle
+syntax highlighting`.
+
+
+## [Improved whitespace rendering]($section.id("2024-10-10T23:30:00"))
+
+Today I made some improvements to whitespace rendering. Indent size and tab width are now
+configurable and there is a third whitespace rendering mode that renders indent guides.
+
+Also, I added proper support for editing CRLF files and changing the line ending mode a couple of
+weeks ago and forgot to mention it here before going on vacation.
+
+
+## [Hover]($section.id("2024-09-10T22:04:00"))
+
+Today's feature is hover information support. Hold down Alt and hover with the mouse to fire off a
+hover LSP request. You can also use the keybinding, <Ctrl-k Ctrl-i> in flow/vim mode and <Space k>
+in helix mode. Also, Alt-LeftClick is goto_definition, which complements hover mode nicely
+(goto_definition is not new though).
+
+The information view is fairly simple. It does not render the markdown or allow clicking on links
+in the content yet.
+
+[]($video.asset('Screencast_from_2024-09-10_21-56-03.webm').controls(true))
+
+
+## [Save as]($section.id("2024-08-30T21:16:00"))
+
+Feature of the day. Save As! The save as command uses the same file browser mini mode as open file,
+so you can complete existing directory and file names. This can be used to copy, replace or create
+new files.
+
+[]($video.asset('Screencast_from_2024-08-30_21-13-02.webm').controls(true))
+
+
+## [Improved open file completion]($section.id("2024-08-29T21:50:00"))
+
+Pressing tab at the open file now completes from with a simple prefix match just in the directory
+instead of fuzzy matching across the entire project. This is much more like vim, emacs, vscode,
+etc. and lays some ground work for adding a file browser later.
+
+
+## [Format on save]($section.id("2024-08-27T22:55:00"))
+
+Flow can now automatically format on save. You can enable it in the configuration file with the
+`enable_format_on_save` option.
+
+
+## [Open file fuzzy completion]($section.id("2024-08-26T22:00:00"))
+
+Pressing tab at the open file prompt will now fuzzy complete the file name from the project MRU
+file list. Pressing tab multiple time will cycle to  the next best matching file.
+
+
+## [Clock widget & beam cursor]($section.id("2024-08-26T21:09:00"))
+
+I've added a simple clock widget. You can add it to your bars wherever you want with the "clock"
+tag. It is not enabled by default.
+
+[]($image.asset('2024-08-26.png'))
+
+Thanks to @rockorager vim & helix modes will now show a beam cursor in insert mode and an underline
+cursor in visual/select mode if you have "enable_terminal_cursor" turned on in your config. Only on
+the primary cursor though as terminals do not support more than one native cursor.
+
+
+## [Status bar configuration]($section.id("2024-08-25T21:32:00"))
+
+Flow's statusbar is now much more configurable. Instead of individual config switches to
+enable/disable each widget, you can now configure the position of each widget with a string. Also,
+there is now an optional top bar too and a new expander widget to help centering or spacing out
+widgets. Have fun!
+
+[]($video.asset('Screencast_from_2024-08-25_21-25-50.mp4').controls(true))
+
+
+## [Open recent project]($section.id("2024-08-19T23:28:00"))
+
+Today I finally implemented the open recent project command. Now you can quickly switch projects
+with C-r. Switching projects will also change the current working directory in the terminal so that
+new terminal splits and tabs will open at the correct location.
+
+[]($video.asset('2024-08-19_flow_open_recent_project.webm').controls(true))
+
+
+## [Cross file diagnostics]($section.id("2024-08-17T16:43:00"))
+
+Today's feature is diagnostics in other files. If your LSP returns diagnostics messages for a file
+(or files) you are not currently editing, then flow will display them in the file list panel and
+let you jump to the location with A-n or mouse click.
+
+You can also show diagnostics for the current file with C-S-m or by clicking on the diagnostics
+summary in the status bar.
+
+[]($video.asset('2024-08-18_flow_diagnostics_file_list_view.webm').controls(true))
+
+
+## [Find all references]($section.id("2024-08-17T23:59:00"))
+
+Today I finished off the find all references command. Enjoy!
+
+[]($video.asset('Screencast_from_2024-08-17_23-53-42.mp4').controls(true))
+
+
+## [Non-tree-sitter build support]($section.id("2024-08-16T22:59:00"))
+
+You can now build Flow entirely without tree-sitter with zig build -Duse_tree_sitter=false. This
+will give you a tiny executable that is much more suitable for really small devices. Add it to all
+your docker containers and never use nano ever again! (ok, it's not quite that small)
+
+Also, you can now start the regular build of flow with --no-syntax if for some reason you don't
+want syntax highlighting.
+
+Also, 32 bit arm builds should now work. (with -Duse_tree_sitter=false)
+
+
+## [Find all refs prep work]($section.id("2024-08-16T00:13:00"))
+
+Started work on the find all references command (S-f12). It is working already, but I still need to
+add more detail to the results list. Also, you have to manually clear the list at the moment (C-j).
+Navigation of the results works the same as with find in files.
+
+
+## [Theme panel]($section.id("2024-08-14T21:33:00"))
+
+Feature of the day today is a new way to select themes. The list is getting long, so now there is a
+palette just for selecting themes. This also brings easily reusable palettes, so adding other
+features that need a palette type interface is now easy.
+
+[]($video.asset('Screencast_from_2024-08-14_21-30-26.webm').controls(true))
+
+
+## [Panel views mouse control]($section.id("2024-08-13T19:48:00"))
+
+Flow's panel views can now be resized with the mouse!
+
+[]($video.asset('2024-08-13_flow_panel_resize.webm').controls(true))
+
+
+## [File list view keybinds and terminal background]($section.id("2024-08-12T23:28:00"))
+
+Today I added up/down/enter keybindings to find in files mode so it is possible to browse the match
+list via keyboard before jumping to a specific match.
+
+Also, flow now sets the terminal background color to match the selected theme. This makes borders a
+little less ugly if your terminal does not resize in grid steps. It also reduces resizing flicker
+on some terminals and enables transparency effects on others.
+
+
+## [File list view update]($section.id("2024-08-11T22:42:00"))
+
+Today I finished off the file list view. It is now scrollable with keyboard, mouse wheel and
+scrollbar. Also made it a little prettier. I fixed a few minor issues with the command palette too.
+
+[]($video.asset('2024-08-11_flow_filelist_view.mp4').controls(true))
+
+Oops, I forgot to record the mouse cursor. 😂 You all get the idea  though I hope.
+
+
+## [Windows TLC]($section.id("2024-08-08T22:53:00"))
+
+I gave the windows version some TLC today. Subprocess stdin input now works correctly and the
+project manager encodes and decodes LSP URLs with windows file paths.
+
+This means that language server and language formatter support in Windows is now on par with Linux
+and MacOS. 🎉 
+
+Pasting on windows now uses the internal clipboard by default as Windows doesn't support bracketed
+paste. You can still paste from the system clipboard with C-S-v.
+
+
+## [Fixing]($section.id("2024-08-07T21:58:00"))
+
+Mostly bug fixing today. In-band resize support is properly reset on exit now which eliminates the
+junk at your prompt if you resize your terminal after exiting flow. Also, find_in_files will no
+longer cause an integer overflow error if it matches the beginning of a line.
+
+
+## [Extra large file support]($section.id("2024-08-05T22:13:00"))
+
+Support for loading very very large files is now merged. I've tested files up to around 270 million
+lines large at around 4GB. File size should now be limited only by the available memory. Required
+RAM is around 8 times the file size. On my machine loads files at around 8 seconds per GB, which I
+think is fairly acceptable.
+
+
+## [CLI list languages and execute commands]($section.id("2024-07-30T22:21:00"))
+
+Today I added some CLI arguments:
+```
+        --list-languages
+            Show available languages.
+
+    -e, --exec <command>...
+            Excute a command on startup.
+```
+
+`--exec` allows you to execute mini scripts on flow startup.
+
+For example to change flow's whitespace setting:
+
+```
+flow --exec toggle_whitespace --exec quit
+```
+
+Or open and move to the end of a file:
+
+```
+flow src/main.zig --exec move_buffer_end
+```
+
+
+## [Performance tuning]($section.id("2024-07-29T22:12:00"))
+
+Two major performance enhancements today. One to make tree-sitter re-parsing not require a
+re-serialization of the entire buffer on every edit. And the second dramatically reduces the number
+of egc_length calls (aka, graphemeIterator) needed to create tree-sitter edit updates. Editing
+very, very large files (Sema.zig anyone?) should now be lag free again, at least for one cursor,
+and editing with multiple cursors should scale much better.
+
+
+## [File list jump commands]($section.id("2024-07-28T22:51:00"))
+
+Today I've added commands and keybindings (A-n/p) for jumping through the file list view. These are
+the same keybindings as next/previous diagnostic, but they are only active if the file list is
+visible.
+
+[]($video.asset('Screencast_from_2024-07-28_22-47-40.mp4').controls(true))
+
+
+## [Find in files results]($section.id("2024-07-28T00:06:00"))
+
+Today I did some more work on a results list for the find in files command. It's not quite complete
+yet, but already quite usable.
+
+[]($video.asset('2024-07-28_00-04-01.mp4').controls(true))
+
+
+## [Recent files & superhtml]($section.id("2024-07-22T23:46:00"))
+
+I'm back from vacation and development work will now continue. Today brings some minor improvements
+to the rendering of the open recent file list and superhtml support (shtml).
+
+
+## [New language support]($section.id("2024-07-10T22:03:00"))
+
+Added yaml syntax highlighting today. Previously also added nim, nimble and kdl.
+
+
+## [Colored undercurls]($section.id("2024-07-09T23:46:00"))
+
+Flow now has colored undercurls for diagnostics.
+
+[]($image.asset('2024-07-09.png'))
+
+(if the terminal supports them)
+
+
+## [Just fixing]($section.id("2024-07-09T15:38:00"))
+
+Sorry that the dev-log is so quiet. I haven't stopped working on flow or anything, but it's been
+all fixes and tweaks for the last week or so. I only report on new user visible features here. And
+then only if they're not discussed in any of the other channels.
+
+
+## [Windows fixes]($section.id("2024-06-27T22:28:00"))
+
+Lot of fixes for flow on windows today. Fuzzy find, window size, some integer overflows and
+subprocess calls. Just LSP URIs left to fix.
+
+Also, the inspector view is now working again (everywhere).
+
+
+## [CLI project support]($section.id("2024-06-23T21:41:00"))
+
+You can now open directories (aka projects) on the command line. Only one is allowed. All other
+files on the same command line will be opened relative to this project.
+
+
+## [Command palette MRU persistence]($section.id("2024-06-23T19:31:00"))
+
+Last used times are now persisted in `~/.local/state/flow/commands`
+
+
+## [State moved]($section.id("2024-06-23T15:53:00"))
+
+Flow now stores it's state files in `~/.cache/flow` instead of `~/.local/state/flow`
+
+This better matches the XDG Base Directory Specification.
+
+Move your existing state files with `mv ~/.cache/flow ~/.local/state` if you want to keep them.
+
+
+## [Command palette MRU ordered]($section.id("2024-06-22T22:00:00"))
+
+The command palette is now sorted by last used time. This helps a lot with repeating commands. Last
+used time is not persisted across sessions yet though.
+
+
+## [Command palette improvements]($section.id("2024-06-21T01:24:00"))
+
+Today's blood sweat and tears brings keybinding hints, a scrollbar and page down/up commands to the
+command palette. 😅
+
+[]($image.asset('2024-06-21.png'))
+
+This should help discoverability a lot for all those who were too lazy to RTFM.  (that's me 10
+minutes after adding yet another keybinding 😂)
+
+
 ## [Command palette fuzzy matching]($section.id("2024-06-19T17:47:00"))
 
 Fuzzy matching is now supported in the command palette and clicking the flow button will now open
