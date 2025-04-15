@@ -25,6 +25,14 @@ just the file name. Also, if there are multiple cursors it will copy multiple en
 each. Nice for creating jump lists.
 
 
+## [Improved installer script]($section.id("2025-04-14T19:57:00"))
+
+The installer script is now significantly more intelligent. It will request permissions with sudo
+if the destination directory is not writable and it will check the version of the currently
+installed flow version before downloading to avoid re-downloading the same version. This makes it
+a pretty useful auto update tool.
+
+
 ## [Column highlight]($section.id("2025-04-08T23:14:00"))
 
 Today brings a new configuration option: `highlight_columns`. This string contains a list of space
