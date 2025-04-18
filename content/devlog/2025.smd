@@ -16,6 +16,14 @@ You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')
 devlog entries in the [archive](/devlog/).
 
 
+## [Alpha blended highlight columns]($section.id("2025-04-18T22:24:00"))
+
+Highlight columns are now rendered using alpha blending of the background color. They are also
+enabled now in the default configuration.
+
+[]($image.asset('2025-04-18.png'))
+
+
 ## [New command: copy_file_name]($section.id("2025-04-15T17:54:00"))
 
 I added a command to copy the current file name and position to the system clipboard. This is very
