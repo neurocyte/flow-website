@@ -16,6 +16,12 @@ You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')
 devlog entries in the [archive](/devlog/).
 
 
+## [New widget: branch]($section.id("2025-04-20T23:15:00"))
+
+Added a statusbar widget called `branch` that shows the current git branch if the current project
+is in a git repository.
+
+
 ## [Alpha blended highlight columns]($section.id("2025-04-18T22:24:00"))
 
 Highlight columns are now rendered using alpha blending of the background color. They are also
