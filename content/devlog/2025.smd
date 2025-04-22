@@ -16,6 +16,16 @@ You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')
 devlog entries in the [archive](/devlog/).
 
 
+## [Ignore files ignored by git]($section.id("2025-04-22T21:36:00"))
+
+Flow now loads the project file list from git if the project is contained in a git repository. This
+means that files ignored by git via it's many configuration options are now also ignored by the
+flow file browser. Explicitly specifying the path to a file will still open it in flow and also
+store it in the project's most recently used files list.
+
+Also, the branch widget is now included in the default configuration of the status bar.
+
+
 ## [New widget: branch]($section.id("2025-04-20T23:15:00"))
 
 Added a statusbar widget called `branch` that shows the current git branch if the current project
