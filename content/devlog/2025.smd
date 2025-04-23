@@ -16,6 +16,13 @@ You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')
 devlog entries in the [archive](/devlog/).
 
 
+## [mini git status]($section.id("2025-04-23T22:31:00"))
+
+The branch widget now displays a mini git status along with the branch name.
+
+[]($image.asset('2025-04-23.png'))
+
+
 ## [Ignore files ignored by git]($section.id("2025-04-22T21:36:00"))
 
 Flow now loads the project file list from git if the project is contained in a git repository. This
