@@ -16,6 +16,15 @@ You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')
 devlog entries in the [archive](/devlog/).
 
 
+## [tree-sitter parse error detection]($section.id("2025-04-24T21:39:00"))
+
+Today I added error queries and they are used to check for tree-sitter parsing errors. If
+tree-sitter reports a syntax error it may be because of an error in the file, or just because
+the tree-sitter partial reparse has become confused due to over complicated edits. Either way we
+now trigger a full reparse to be safe and make sure that the syntax tree doesn't get stuck in a
+bad state.
+
+
 ## [mini git status]($section.id("2025-04-23T22:31:00"))
 
 The branch widget now displays a mini git status along with the branch name.
