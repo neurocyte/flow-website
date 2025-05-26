@@ -16,6 +16,11 @@ You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')
 devlog entries in the [archive](/devlog/).
 
 
+## [base16 theme collection]($section.id("2025-05-26T11:57:39+02:00"))
+
+Added the entire base16 theme collection to flow-themes.
+
+
 ## [tree-sitter parse error detection]($section.id("2025-04-24T21:39:00"))
 
 Today I added error queries and they are used to check for tree-sitter parsing errors. If
