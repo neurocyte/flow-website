@@ -71,7 +71,7 @@ Or check your favorite local system package repository.
 ### Build from Source
 ```bash
 # Basic build
-zig build -Doptimize=ReleaseSafe
+zig build --release=fast
 
 # Cross-compile examples
 zig build -Dtarget=x86_64-windows --prefix zig-out/win64
