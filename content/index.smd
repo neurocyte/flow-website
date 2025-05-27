@@ -54,6 +54,14 @@ See all avalable options for the installer script:
 curl -fsSL https://flow-control.dev/install | sh -s -- --help
 ```
 
+Install the installer for easy updating of flow:
+
+```
+sudo curl -fsSL -o /usr/local/bin/update-flow https://flow-control.dev/install
+sudo chmod +x /usr/local/bin/update-flow
+update-flow
+```
+
 ### Prebuilt Binaries
 - Stable: [Releases](https://github.com/neurocyte/flow/releases/latest)
 - Nightly: [Nightly Builds](https://github.com/neurocyte/flow-nightly/releases/latest)
