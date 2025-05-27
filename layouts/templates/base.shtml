@@ -14,22 +14,22 @@
   <body id="body">
     <nav id="menu" class="centered">
       <ctx about="$site.page('')">
-        <a href="$ctx.about.link()" text="$ctx.about.title">Home</a>
+        <a href="$ctx.about.link()" text="$ctx.about.title">home</a>
       </ctx>
       •
-      <a href="https://github.com/neurocyte/flow/releases/latest">Downloads</a>
+      <a href="https://github.com/neurocyte/flow/releases/latest">downloads</a>
       •
-      <a href="https://github.com/neurocyte/flow-nightly/releases/latest">Nightly Builds</a>
+      <a href="https://github.com/neurocyte/flow-nightly/releases/latest">nightly</a>
       •
       <ctx :if="$site.page('devlog').subpages().first?()">
-        <a href="$if.link()">Devlog</a>
+        <a href="$if.link()">devlog</a>
         •
       </ctx>
-      <a href="https://git.flow-control.dev/neurocyte/flow">Source</a>
+      <a href="https://git.flow-control.dev/neurocyte/flow">source</a>/<a href="https://deepwiki.com/neurocyte/flow">docs</a>
       •
       <a href="https://discord.com/invite/4wvteUPphx">Discord</a>
       •
-      <a href="https://github.com/neurocyte/flow">Github</a>
+      <a href="https://github.com/neurocyte/flow">GitHub</a>
       •
       <a href="https://codeberg.org/neurocyte/flow">Codeberg</a>
       •
