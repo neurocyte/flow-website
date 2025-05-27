@@ -1,0 +1,6 @@
+#!/bin/sh
+set -e
+set -x
+
+zine release
+rsync -avx --delete public/ flow-control.dev:/srv/flow-control.dev/html
