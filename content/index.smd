@@ -18,12 +18,17 @@ Flow Control is under active development, but usually very stable.
 - **Language Server Protocol** pre configured support for most language servers
 - Multi-cursor editing & mouse support
 - Cross-platform (Linux/macOS/Windows/Android)
-- VSCode/Vim keybindings + custom schemes
+- Multiple keybinding modes
+    - Flow Control (common GUI IDE style bindings)
+    - Emacs
+    - Vim
+    - Helix
+    - Custom user bindings
 - Hybrid rope/piece-table buffer system
 
 ## Requirements
 - A modern terminal with 24bit color and, ideally, kitty keyboard protocol support. Kitty,
-    Foot and Ghostty are the only recommended terminals at this time. Most other terminals
+    Foot and Ghostty are the recommended terminals at this time. Most other terminals
     will work, but with reduced functionality.
 - NerdFont support. Either via terminal font fallback or a patched font.
 - Linux, MacOS, Windows, Android (Termux) or FreeBSD.
