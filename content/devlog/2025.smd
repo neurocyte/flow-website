@@ -16,6 +16,26 @@ You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')
 devlog entries in the [archive](/devlog/).
 
 
+## [fix: removed multithreaded buffer usage]($section.id("2025-06-03T18:28:43+02:00"))
+
+The `project_manger` and `diff` modules run in the background asynchronously. These modules access
+buffers, potentially from a different thread to the main buffer manager. While the buffer itself is
+technically threadsafe, there is not yet any kind of threadsafe buffer lifetime management. That
+means that buffers may get deleted while the differ or LSP is serializing them. At some point the
+buffer manager should provide some method of locking buffer lifetimes to prevent them from being
+deleted while in use.
+
+For now I have prevented multithreaded buffer access by removing all buffer serialization in
+background tasks. This means a very minor increase in latency for these operations, but much
+improved stability.
+
+
+## [added highlight_columns_enabled config option]($section.id("2025-06-03T18:26:44+02:00"))
+
+This new option will disable `highlight_columns` without unconfiguring them entirely. Also, the
+command `toggle_highlight_columns` is now persistent.
+
+
 ## [base16 theme collection]($section.id("2025-05-26T11:57:39+02:00"))
 
 Added the entire base16 theme collection to flow-themes.
