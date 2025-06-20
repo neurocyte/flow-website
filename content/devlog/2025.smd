@@ -16,6 +16,13 @@ You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')
 devlog entries in the [archive](/devlog/).
 
 
+## [hurl support and tilde expansion]($section.id("2025-06-20T19:40:45+02:00"))
+
+Flow now has syntax highlighting for Hurl files.
+
+Also, `~` is now expanded properly to your home directory when using the `open_file` command.
+
+
 ## [fix: removed multithreaded buffer usage]($section.id("2025-06-03T18:28:43+02:00"))
 
 The `project_manger` and `diff` modules run in the background asynchronously. These modules access
