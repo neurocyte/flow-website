@@ -42,10 +42,22 @@ Fetch and install the latest release to `/usr/local/bin` with the installation h
 curl -fsSL https://flow-control.dev/install | sh
 ```
 
-Install latest nightly build and (optionally) specify the installation destination:
+or on Windows
 
 ```
-curl -fsSL https://flow-control.dev/install | sh -s -- --nightly --prefix ~/.local/bin
+Invoke-RestMethod "https://flow-control.dev/install.ps1" | Invoke-Expression
+```
+
+Install the latest nightly build:
+
+```
+curl -fsSL https://flow-control.dev/install | sh -s -- --nightly
+```
+
+or on Windows
+
+```
+Invoke-RestMethod "https://flow-control.dev/install-nightly.ps1" | Invoke-Expression
 ```
 
 See all avalable options for the installer script:
