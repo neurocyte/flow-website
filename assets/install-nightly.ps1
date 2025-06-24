@@ -7,7 +7,6 @@ $updater = "install-nightly"
 $release = Invoke-RestMethod -Uri "https://api.github.com/repos/$repo/releases/latest"
 $version = $release.tag_name
 $title_updater = "$title updater"
-$title = "$title $version"
 $install_dir = "$env:APPDATA\flow\bin"
 
 $existing_flow = Join-Path -Path $install_dir -ChildPath "flow.exe"
@@ -17,11 +16,13 @@ if (Test-Path $existing_flow) {
     if ($existing_version_lines -and $matches) {
         $existing_version = $matches[1]
         if ($version -eq $existing_version) {
-            Write-Host "flow is up-to-date (version $version @ $install_dir)"
+            Write-Host "$title is up-to-date (version $version @ $install_dir)"
             return
         }
     }
 }
+
+$title = "$title $version"
 
 switch ($env:PROCESSOR_ARCHITECTURE) {
     "AMD64"  { $arch = "x86_64" }
