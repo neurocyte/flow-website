@@ -18,7 +18,7 @@ if (Test-Path $existing_flow) {
         $existing_version = $matches[1]
         if ($version -eq $existing_version) {
             Write-Host "flow is up-to-date (version $version @ $install_dir)"
-            exit 0
+            return
         }
     }
 }
@@ -28,7 +28,8 @@ switch ($env:PROCESSOR_ARCHITECTURE) {
     "ARM64"  { $arch = "aarch64" }
     default  {
         Write-Host "unknown architecture: $($env:PROCESSOR_ARCHITECTURE)"
-        exit 1
+        $LASTEXITCODE = 1
+        return
     }
 }
 
