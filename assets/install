@@ -5,6 +5,7 @@ install_dir="${PREFIX:-/usr/local}/bin"
 tmp_path="${TMPDIR:-/tmp}"
 add_alias=${ALIAS:-0}
 nightly=${NIGHTLY:-0}
+debug=${DEBUG:-0}
 verify=${VERIFY:-0}
 local=${LOCAL:-0}
 use_sudo=${USE_SUDO:-0}
@@ -15,6 +16,7 @@ usage() {
     echo
     echo "  -a, --alias               Create/update 'f' alias"
     echo "  -n, --nightly             Latest nightly build"
+    echo "  -D, --debug               Debug build"
     echo "  -d <path>, --dest <path>  Set install destination (default /usr/local/bin)"
     echo "  -V, --verify              Verify gpg signature"
     echo "  -l, --local               Verify gpg signature with local keychain"
@@ -30,6 +32,10 @@ while true; do
         ;;
     -n | --nightly)
         nightly=1
+        shift 1
+        ;;
+    -D | --debug)
+        debug=1
         shift 1
         ;;
     -d | --dest)
@@ -97,6 +103,14 @@ if [ "$nightly" -eq 0 ] && [ "$have_term" -eq 1 ]; then
     fi
 fi
 
+if [ "$debug" -eq 0 ] && [ "$have_term" -eq 1 ]; then
+    printf "do you want to install a debug build? [y/N]: "
+    read -r answer_debug
+    if [ "$answer_debug" = "y" ] || [ "$answer_debug" = "Y" ]; then
+        debug=1
+    fi
+fi
+
 if [ "$verify" -eq 0 ] && [ "$have_term" -eq 1 ]; then
     printf "do you want to download and verify the gpg signature? [y/N]: "
     read -r answer_verify
@@ -145,6 +159,10 @@ version=$(curl -s "https://api.github.com/repos/$repo/releases/latest" | grep '"
 }
 title="$title $version"
 
+if [ "$debug" -eq 1 ]; then
+    title="$title (debug)"
+fi
+
 if [ "$force_update" -eq 0 ] && [ -e "$install_dir/flow" ]; then
     current_version=$(flow --version 2>/dev/null | grep version: | cut -f2 -d ' ')
     if [ "$current_version" = "$version" ]; then
@@ -178,6 +196,9 @@ filename="flow-$version-$os-$arch"
 ext="tar.gz"
 if [ "$os" = "windows" ]; then
     ext="zip"
+fi
+if [ "$debug" -eq 1 ]; then
+    filename="$filename-debug"
 fi
 url="https://github.com/$repo/releases/download/$version/$filename.$ext"
 
