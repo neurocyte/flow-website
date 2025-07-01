@@ -36,16 +36,12 @@ Flow Control is under active development, but usually very stable.
 
 ## 📦 Installation
 
+### Linux, MacOS and *BSD
+
 Fetch and install the latest release to `/usr/local/bin` with the installation helper script:
 
 ```
 curl -fsSL https://flow-control.dev/install | sh
-```
-
-or on Windows
-
-```
-Invoke-RestMethod "https://flow-control.dev/install.ps1" | Invoke-Expression
 ```
 
 Install the latest nightly build:
@@ -54,10 +50,10 @@ Install the latest nightly build:
 curl -fsSL https://flow-control.dev/install | sh -s -- --nightly
 ```
 
-or on Windows
+with debug symbols:
 
 ```
-Invoke-RestMethod "https://flow-control.dev/install-nightly.ps1" | Invoke-Expression
+curl -fsSL https://flow-control.dev/install | sh -s -- --nightly --debug
 ```
 
 See all avalable options for the installer script:
@@ -73,6 +69,36 @@ sudo curl -fsSL -o /usr/local/bin/update-flow https://flow-control.dev/install
 sudo chmod +x /usr/local/bin/update-flow
 update-flow
 ```
+
+At the top of the installer are variables to pre-answer the installation questions.
+Configure them to your liking.
+
+
+### Windows
+
+For Windows the installer scripts are a little different.
+
+Fetch and install the latest release to `%AppData%/Roaming/flow/bin`:
+
+```
+Invoke-RestMethod "https://flow-control.dev/install.ps1" | Invoke-Expression
+```
+
+Install the latest nightly build:
+
+```
+Invoke-RestMethod "https://flow-control.dev/install-nightly.ps1" | Invoke-Expression
+```
+
+Install the latest nightly build with pdb debug symbol files:
+
+```
+Invoke-RestMethod "https://flow-control.dev/install-debug.ps1" | Invoke-Expression
+```
+
+The Windows installer will also install itself as `update-flow.ps1` so you can just
+run `update-flow` in a terminal to update to the latest release or nightly.
+
 
 ### Prebuilt Binaries
 - Stable: [Releases](https://github.com/neurocyte/flow/releases/latest)
