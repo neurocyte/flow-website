@@ -16,6 +16,14 @@ You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')
 devlog entries in the [archive](/devlog/).
 
 
+## [improved backtraces for segfaults]($section.id("2025-07-01T20:00:00+02:00"))
+
+I've cloned the std.debug segfault signal handlers and added the ability to reset the terminal
+before dumping the stack trace after a segfault. This means that debug builds of flow will now
+properly display usable stack traces even for full segfaults and not just for regulare checked
+panics. This should make it much easier to understand and fix proper segfaults.
+
+
 ## [hurl support and tilde expansion]($section.id("2025-06-20T19:40:45+02:00"))
 
 Flow now has syntax highlighting for Hurl files.
