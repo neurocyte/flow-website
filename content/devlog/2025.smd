@@ -16,6 +16,14 @@ You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')
 devlog entries in the [archive](/devlog/).
 
 
+## [configurable file types]($section.id("2025-07-14T18:55:02+02:00"))
+
+You can now modify the configuration of file types. There is a new command `Edit file type
+configuration` that will open a config file the defaults for a file type which you can change and
+save. Changes take effect on restart of flow. This means you can finally change your language server
+and formatter configuration and add file extensions without having to build flow yourself.
+
+
 ## [improved backtraces for segfaults]($section.id("2025-07-01T20:00:00+02:00"))
 
 I've cloned the std.debug segfault signal handlers and added the ability to reset the terminal
