@@ -16,6 +16,12 @@ You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')
 devlog entries in the [archive](/devlog/).
 
 
+## [new command: toggle_format_on_save]($section.id("2025-07-16T19:53:30+02:00"))
+
+The `Toggle format on save` command will enable/disable format on save just for the current
+buffer.
+
+
 ## [configurable file types]($section.id("2025-07-14T18:55:02+02:00"))
 
 You can now modify the configuration of file types. There is a new command `Edit file type
