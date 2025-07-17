@@ -1,5 +1,5 @@
 ---
-.title = "Devlog - 2024",
+.title = "Devlog 2024",
 .date = @date("2024-01-01T00:00:00"),
 .author = "CJ van den Berg",
 .layout = "devlog.shtml",
