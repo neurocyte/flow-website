@@ -15,6 +15,13 @@ them.
 You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')) and find more
 devlog entries in the [archive](/devlog/).
 
+## [indent_mode]($section.id("2025-07-30T22:03:50+02:00"))
+
+There is now a new configuration option `indent_mode`. This can be set to `"auto"`, `"spaces"` or
+`"tabs"`. Setting it to `"auto"` will enable detection of the indentation mode on a per buffer
+basis. The detection is fairly simple and enables tab indentation if a line starting with a tab
+character is found anywhere in the file.
+
 
 ## [Auto save]($section.id("2025-07-16T19:57:32+02:00"))
 
