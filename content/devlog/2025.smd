@@ -15,6 +15,15 @@ them.
 You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')) and find more
 devlog entries in the [archive](/devlog/).
 
+## [smarter insert line functions]($section.id("2025-08-01T16:48:44+02:00"))
+
+Today's feature of the day is a small quality-of-life fix. The
+`smart_insert_line*` family of commands will now collapse trailing whitespace
+automatically on the line being left during the operation.  This helps a lot
+when inserting blank lines in indented code or working with indented text in
+markdown.
+
+
 ## [indent_mode]($section.id("2025-07-30T22:03:50+02:00"))
 
 There is now a new configuration option `indent_mode`. This can be set to `"auto"`, `"spaces"` or
