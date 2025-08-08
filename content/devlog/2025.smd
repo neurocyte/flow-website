@@ -15,6 +15,23 @@ them.
 You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')) and find more
 devlog entries in the [archive](/devlog/).
 
+## [miscellaneous minor improvements]($section.id("2025-08-08T21:38:47+02:00"))
+
+This week brought several improvements and fixes:
+
+ - **Better file completion in `open_file`** - Completion is now case insenstive and it is easier to
+   complete into subdirectories. Also, you can now open directories (aka. projects) directly from
+   the `open_file` command.
+
+ - **Find files palette auto refresh** - The palette will now auto refresh when the background scan of
+   project files is complete. The fixes the blank list issue if you hit find file too quickly after
+   starting flow or opening a project.
+
+ - **Full state restore on restart** - Restarting flow will now restore most of the project state. This
+   includes previously open files (with unsaved changes) and background and ephemeral buffers and even
+   editor state like selections, cursors and find history. Note: This does not yet include undo history.
+
+
 ## [auto hide tab bar]($section.id("2025-08-03T21:16:43+02:00"))
 
 The tabs widget will now only be shown when more than one tab is open. This can
