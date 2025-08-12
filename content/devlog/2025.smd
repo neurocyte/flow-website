@@ -15,6 +15,23 @@ them.
 You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')) and find more
 devlog entries in the [archive](/devlog/).
 
+## [tab width commands]($section.id("2025-08-12T13:08:51+02:00"))
+
+The tab width parameter can now be configured interactively. There are three commands:
+
+- **`set_tab_width`** - set the tab width globally and persist it in the config
+- **`set_buffer_tab_width`** - set the tab width for the current buffer
+- **`set_session_tab_width`** - set the tab width for the current session
+
+These command all optionally take an integer parameter to set the tab width directly. If no parameter
+is given they all open an interactive mini mode.
+
+Also added support for integer command arguments on the command line. So for example you can now
+use `--exec set_session_tab_width:2` to set the session tab width from the command line.
+
+`set_session_tab_width` is also bound to `alt+shift+t` in flow mode for quick tab width adjustments.
+
+
 ## [miscellaneous minor improvements]($section.id("2025-08-08T21:38:47+02:00"))
 
 This week brought several improvements and fixes:
