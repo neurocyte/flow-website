@@ -15,6 +15,17 @@ them.
 You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')) and find more
 devlog entries in the [archive](/devlog/).
 
+## [widget styles]($section.id("2025-08-14T16:33:39+02:00"))
+
+[]($video.asset('2025-08-14_16-33-39.mp4').controls(true))
+
+Added style variations for menu based widgets. You can switch the style of the currently widget with
+`alt+f9`. This is persisted automatically. To go along with this new visual polish there are a few
+other minor style changes, like for example icons in the filter input boxes in palettes. This helps
+to line up visually with the contents of the palette. These icons are also disabled when
+`show_fileicons = false` is set in the configuration.
+
+
 ## [tab width commands]($section.id("2025-08-12T13:08:51+02:00"))
 
 The tab width parameter can now be configured interactively. There are three commands:
