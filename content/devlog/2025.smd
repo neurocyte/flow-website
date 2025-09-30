@@ -394,10 +394,10 @@ merged. Here's a list of highlights of whats new (in no particular order):
 
 - **Win32 GUI** - Yes, flow can now render itself in a win32 GUI window for all those terminal
     impaired windows users (with full GPU acceleration!). The GUI binary can be built with `zig
-    build -Dgui --release=safe` and is called `flow-gui.exe`. Functionality in this GUI version of
-    flow is identical to the TUI version, although as of this writing there are some minor renderer
-    features still missing such as curly underlines, mouse cursors and double wide characters.
-    Thanks to `@marler8997` for the huge amount of work he put into this.
+    build -Dgui -Doptimize=ReleaseSafe` and is called `flow-gui.exe`. Functionality in this GUI
+    version of flow is identical to the TUI version, although as of this writing there are some
+    minor renderer features still missing such as curly underlines, mouse cursors and double wide
+    characters. Thanks to `@marler8997` for the huge amount of work he put into this.
 
 - **Multi cursor changes** - Adding cursors is now `alt+click` (it was `ctrl+click`). This is to
     fall inline with common practice in other editors (zed and vscode). Also, you can now remove
