@@ -290,7 +290,7 @@ I gave the windows version some TLC today. Subprocess stdin input now works corr
 project manager encodes and decodes LSP URLs with windows file paths.
 
 This means that language server and language formatter support in Windows is now on par with Linux
-and MacOS. 🎉 
+and MacOS. 🎉
 
 Pasting on windows now uses the internal clipboard by default as Windows doesn't support bracketed
 paste. You can still paste from the system clipboard with C-S-v.
