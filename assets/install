@@ -145,7 +145,7 @@ fi
 
 arch="$(uname -m)"
 case "$arch" in
-x86_64) arch="x86_64" ;;
+amd64) arch="x86_64" ;;
 arm64) arch="aarch64" ;;
 i686) arch="x86" ;;
 i386) arch="x86" ;;
