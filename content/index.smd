@@ -17,7 +17,7 @@ Flow Control is under active development, but usually very stable.
 - **Tree-sitter** powered syntax highlighting
 - **Language Server Protocol** pre configured support for most language servers
 - Multi-cursor editing & mouse support
-- Cross-platform (Linux/macOS/Windows/Android)
+- Cross-platform (Linux/macOS/Windows/Android/FreeBSD)
 - Multiple keybinding modes
     - Flow Control (common GUI IDE style bindings)
     - Emacs
@@ -36,7 +36,7 @@ Flow Control is under active development, but usually very stable.
 
 ## 📦 Installation
 
-### Linux, MacOS and *BSD
+### Linux, MacOS and FreeBSD
 
 Fetch and install the latest release to `/usr/local/bin` with the installation helper script:
 
@@ -130,7 +130,7 @@ access.
 
 Configuration is mostly dynamically maintained with various commands in the UI.
 It is stored under the standard user configuration path. Usually `~/.config/flow`
-on Linux. %APPDATA%\Roaming\flow on Windows.
+on Linux/FreeBSD/MacOS. %APPDATA%\Roaming\flow on Windows.
 
 There are commands to open the various configuration files, so you don't have to
 manually find them. Look for commands starting with `Edit` in the command palette.
@@ -141,7 +141,7 @@ directory. Have a look at an existing file type to see what options are availabl
 
 Logs, traces and per-project most recently used file lists are stored in the
 standard user application state directory. Usually `~/.local/state/flow` on
-Linux and %APPDATA%\Roaming\flow on Windows.
+Linux/FreeBSD/MacOS and %APPDATA%\Roaming\flow on Windows.
 
 Kitty, Ghostty and most other terminals have default keybindings that conflict
 with common editor commands. We highly recommend rebinding them to keys that are
