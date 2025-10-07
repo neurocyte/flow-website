@@ -1,7 +1,7 @@
 ---
 .title = "Architecture",
 .date = @date("2025-07-06T00:00:00"),
-.author = "CJ van den Berg",
+.author = "Igor Támara",
 .layout = "index.shtml",
 .draft = false,
 ---
@@ -11,9 +11,12 @@ understand how the code is organized and where to look at when starting
 to contribute developing Flow Control.  Make sure you have read
 first [help.md](https://github.com/neurocyte/flow/blob/master/help.md)
 and use the editor at least in flow mode. We recommend reading the
-[deepwiki description](https://deepwiki.com/neurocyte/flow) and join
+[deepwiki description](https://deepwiki.com/neurocyte/flow) for a more
+in depth documentation and joining
 [Discord](https://discord.com/invite/4wvteUPphx) to ask from the
-simplest.
+simplest.  If something does not look accurate on this documentation or
+in deepwiki. Do not hesitate to ask in the channels and open a PR to
+improve anything.
 
 ## Internals
 
@@ -58,8 +61,9 @@ through a set of `_views` (i.e. `logview`, `inputview`,
 
 ## Operating systems and UI
 
-libvaxis is in charge of rendering the text and all the interface in
-Linux, MacOS, FreeBSD, while in Windows there is an special GUI.
+[libvaxis](https://github.com/rockorager/libvaxis) is in charge of
+rendering the text and all the interface in Linux, MacOS, FreeBSD,
+while in Windows there is an special GUI.
 
 ## Communication between components
 
@@ -67,8 +71,8 @@ Linux, MacOS, FreeBSD, while in Windows there is an special GUI.
 sending messages between different flow components, for example,
 when a widget needs updating information from changing states of
 internal data and when components or external processes take
-time, for example, tree-sitter queries to highlight the current
-file, of a particular language, LSPs, git, running a `shell`
+time. For example, tree-sitter queries to highlight the current
+file of a particular language, LSPs, git, running a `shell`
 command via a `task`.
 
 ## Programming languages
@@ -85,4 +89,4 @@ actions that ease developing Flow itself and also are used to offer
 feedback via `logview`.
 
 
-You can find [contributing guidelines](/docs/contributing).
+We have some [contribution guidelines](/docs/contributing).
