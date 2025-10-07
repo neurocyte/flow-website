@@ -1,7 +1,7 @@
 ---
 .title = "Contributing",
 .date = @date("2025-07-06T00:00:00"),
-.author = "CJ van den Berg",
+.author = "Igor Támara",
 .layout = "index.shtml",
 .draft = false,
 ---
@@ -33,8 +33,9 @@ is a good way to contribute. When reporting one, it should contain:
 * Any other information, like screenshots, video, screencast, the
 platform allows to add that information.
 
-Issues later on are tagged with proposed version to solve it, in case it's a
-low hanging fruit, it's possible that it can be solved pretty quick.
+Issues later on are tagged with proposed version to solve them, in case
+it's a low hanging fruit, it's possible that it can be solved pretty
+quick.
 
 Spreading the word is another way to contribute to Flow Code growth.
 
@@ -45,7 +46,7 @@ Spreading the word is another way to contribute to Flow Code growth.
 
 [Fork](https://github.com/neurocyte/flow/fork), no worries, if you
 happen to use [codeberg](https://codeberg.org/neurocyte/flow), or
-[sourcehot](https://git.sr.ht/~neurocyte/flow), it's possible to
+[sourcehut](https://git.sr.ht/~neurocyte/flow), it's possible to
 fork and contribute via those services too.
 
 Discussing via [Discord](https://discord.com/invite/4wvteUPphx) is a good
@@ -62,7 +63,12 @@ follow the codebase.
 Please follow what you see in the source code for functions, Structs,
 variables, const names, etc...  Functions have descriptive names to
 use less time adding and maintaining comments to communicate the
-purpose and intent.
+purpose and intent. Don't worry about commenting each function, module
+or parameter, there are automated tools that are currently helping
+with this, take a peek on [deepwiki](https://deepwiki.com/neurocyte/flow),
+if you find something inaccurate in those docs or others, do open an
+issue or jump in [Discourse to comment](https://discord.com/invite/4wvteUPphx)
+and comment.
 
 ### Testing
 
@@ -71,7 +77,6 @@ that the amount of relationships among components increase the
 opportunity to generate regressions.
 
 ## Getting in touch.
-
 
 [Discord](https://discord.com/invite/4wvteUPphx) and
 [Github issues](https://github.com/neurocyte/flow/issues) are the
