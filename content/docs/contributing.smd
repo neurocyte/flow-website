@@ -1,0 +1,79 @@
+---
+.title = "Contributing",
+.date = @date("2025-07-06T00:00:00"),
+.author = "CJ van den Berg",
+.layout = "index.shtml",
+.draft = false,
+---
+
+
+## Asking for a feature
+
+Please [open an issue](https://github.com/neurocyte/flow/issues) that
+explains what is the requirement, being as descriptive as
+possible.  First review other issues in case someone already
+requested the feature, or join
+[Discord](https://discord.com/invite/4wvteUPphx) to ask for
+more information.  At the end, the issues in github have more
+chance to get developed, given that there are plenty of things
+to do for this kind of software.
+
+## Reporting a problem
+
+If you discover a problem, or unexpected behaviour, feel free to
+join [Discord](https://discord.com/invite/4wvteUPphx) to check
+if there is a simple way to overcome the inconvenience or to get
+some guidance.  [Reporting a bug](https://github.com/neurocyte/flow/issues)
+is a good way to contribute. When reporting one, it should contain:
+
+* Flow version. You get it with `flow --version`
+* What you were doing, if possible step, by step to reproduce it
+* What actually happened
+* What was expecting to happen
+* Any other information, like screenshots, video, screencast, the
+platform allows to add that information.
+
+Issues later on are tagged with proposed version to solve it, in case it's a
+low hanging fruit, it's possible that it can be solved pretty quick.
+
+Spreading the word is another way to contribute to Flow Code growth.
+
+## Developing
+
+[Flow Control](https://flow-control.dev/) is programmed with
+[zig](https://ziglang.org/).
+
+[Fork](https://github.com/neurocyte/flow/fork), no worries, if you
+happen to use [codeberg](https://codeberg.org/neurocyte/flow), or
+[sourcehot](https://git.sr.ht/~neurocyte/flow), it's possible to
+fork and contribute via those services too.
+
+Discussing via [Discord](https://discord.com/invite/4wvteUPphx) is a good
+start to talk about what you are about to offer, or if you decide to pick
+an open issue, is a good practice first opening an issue and
+commenting in one of the channels to get some feedback and get to
+agreements or find guidance.
+
+This [summary](/docs/architecture) can help on getting started to
+follow the codebase.
+
+### Coding style
+
+Please follow what you see in the source code for functions, Structs,
+variables, const names, etc...  Functions have descriptive names to
+use less time adding and maintaining comments to communicate the
+purpose and intent.
+
+### Testing
+
+It's possible that the test set grows as the project evolves, given
+that the amount of relationships among components increase the
+opportunity to generate regressions.
+
+## Getting in touch.
+
+
+[Discord](https://discord.com/invite/4wvteUPphx) and
+[Github issues](https://github.com/neurocyte/flow/issues) are the
+main channels to do so.
+

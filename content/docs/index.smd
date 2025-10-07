@@ -4,24 +4,7 @@
 .author = "CJ van den Berg",
 .layout = "index.shtml",
 .draft = false,
---- 
+---
 
-The terminal Editor that came to reallity
-
-## Features
-We have keybindings
-
-We have modes
-
-We have syntax highlighting
-
-We have multiple cursors
-
-## Differential
-
-## What we have
-
-## Friendly Projects
-* [Zig](https://ziglang.org/)
-* [Zine](https://zine-ssg.io/)
-* [Monospace Web](https://owickstrom.github.io/the-monospace-web/)
+* [Architecture overview](/docs/architecture)
+* [Contributing](/docs/contributing)
