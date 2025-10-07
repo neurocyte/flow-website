@@ -1,0 +1,88 @@
+---
+.title = "Architecture",
+.date = @date("2025-07-06T00:00:00"),
+.author = "CJ van den Berg",
+.layout = "index.shtml",
+.draft = false,
+---
+
+This document describes in a general way, concepts that help to
+understand how the code is organized and where to look at when starting
+to contribute developing Flow Control.  Make sure you have read
+first [help.md](https://github.com/neurocyte/flow/blob/master/help.md)
+and use the editor at least in flow mode. We recommend reading the
+[deepwiki description](https://deepwiki.com/neurocyte/flow) and join
+[Discord](https://discord.com/invite/4wvteUPphx) to ask from the
+simplest.
+
+## Internals
+
+The foundational unit is the `Buffer` that holds the document in memory;
+there might be various opened files, each one loaded in a buffer.
+A buffer can be ephemeral, meaning, it is not related to a file, that
+might be the product of a `Task` run.  Buffers are implementations of
+ropes that offer multiple services such as insert characters, load from
+file, write to file, load from string, return as string, tell if it has
+unsaved changes(dirty), among many others. A buffer can have multiple
+`Selections` and `Cursors` interacting with it. The `Buffer Manager`
+offers services around the set of buffers.
+
+A `Project` initially is the directory where flow is opened at, once
+opened, it starts processes to discover the files under the directory
+hierarchy, interact with lsp and git. When flow is opened, only one
+active project is loaded in the current session. The `Project Manager`
+offers services around the set of projects.
+
+## Editor commands and modes
+
+When a buffer is active, it has an `Editor` attached to it; an editor
+might have associated tree-sitter support, given the file type detected,
+and offers common services that are aimed to be used by `Commands` to
+manipulate the contents of a buffer at a higher level, the selections,
+cursors and the `View`. The commands are used by `Modes` with
+`Keybindings`. The main mode is Flow and the keybindings can be used
+to map to a mode built up entirely on solely calling already created
+commands. An example of a mode created by command composition is
+`Emacs` mode, for instance, it's possible to create a nano mode with
+just keybindings. In the other hand, `Vim` and `Helix` modes have
+particular definitions for commands that interact with the buffers,
+being modal editors.
+
+## Text user interface
+
+`Tui` governs it all offering support for `Palettes` that are known
+in other environments as pickers, as well as offering information
+through a set of `_views` (i.e. `logview`, `inputview`,
+`inspector_view`) and `status` (i.e. `tabs`, `clock`, `branch`,
+`linenum`).
+
+## Operating systems and UI
+
+libvaxis is in charge of rendering the text and all the interface in
+Linux, MacOS, FreeBSD, while in Windows there is an special GUI.
+
+## Communication between components
+
+[Thespian](https://github.com/neurocyte/thespian) is in charge of
+sending messages between different flow components, for example,
+when a widget needs updating information from changing states of
+internal data and when components or external processes take
+time, for example, tree-sitter queries to highlight the current
+file, of a particular language, LSPs, git, running a `shell`
+command via a `task`.
+
+## Programming languages
+
+There are plenty of programming languages that use tree-sitter via
+[flow-syntax](https://github.com/neurocyte/flow-syntax) and whose
+language servers and formatters are configured via `file_type_lsp`.
+Currently one Language Server is supported for each language.
+
+## Facilities
+
+Logging support offers various levels to give feedback for various
+actions that ease developing Flow itself and also are used to offer
+feedback via `logview`.
+
+
+You can find [contributing guidelines](/docs/contributing).
