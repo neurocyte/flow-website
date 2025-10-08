@@ -1,10 +1,21 @@
 ---
-.title = "Flow Control - a programmer's text editor",
+.title = "Documentation",
 .date = @date("2020-07-06T00:00:00"),
 .author = "CJ van den Berg",
 .layout = "index.shtml",
 .draft = false,
 ---
+
+## Online help
+
+Flow Control has an online manual that is included in the `flow` binary. You can
+open it directly in the editor by pressing `F1` or selecting the `Open help`
+command. The manual is included here for convenience.
+
+* [Flow Control online help](/docs/help)
+
+
+## Developer Resources
 
 * [Architecture overview](/docs/architecture)
 * [Contributing](/docs/contributing)
