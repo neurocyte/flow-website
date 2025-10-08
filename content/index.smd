@@ -161,11 +161,11 @@ flow --help                         # List of command line options
 ```
 
 ## ⌨️ Key Controls
-| Command            | Action               |
-|--------------------|----------------------|
-| `F4`               | Switch input mode    |
-| `Ctrl+Shift+P`     | Command palette      |
-| `Ctrl+F2`          | View all keybindings |
+| Command                   | Action               |
+|---------------------------|----------------------|
+| `F4`                      | Switch input mode    |
+| `Ctrl+Shift+P` or `Alt+x` | Command palette      |
+| `Ctrl+F2`                 | View all keybindings |
 
 Run the `Edit keybindings` command to save the current keybinding mode to a
 file and open it for editing. Save your customized keybinds under a new name
