@@ -13,19 +13,17 @@
   </head>
   <body id="body">
     <nav id="menu" class="centered">
-      <ctx about="$site.page('')">
-        <a href="$ctx.about.link()" text="$ctx.about.title">home</a>
-      </ctx>
+      <ctx about="$site.page('')"><a href="$ctx.about.link()" text="$ctx.about.title">home</a></ctx>
       •
       <a href="https://github.com/neurocyte/flow/releases/latest">downloads</a>
       •
       <a href="https://github.com/neurocyte/flow-nightly/releases/latest">nightly</a>
       •
-      <ctx :if="$site.page('devlog').subpages().first?()">
-        <a href="$if.link()">devlog</a>
-        •
-      </ctx>
-      <a href="https://git.flow-control.dev/neurocyte/flow">source</a>/<a href="https://deepwiki.com/neurocyte/flow">docs</a>
+      <ctx :if="$site.page('devlog').subpages().first?()"><a href="$if.link()">devlog</a></ctx>
+      •
+      <a href="https://git.flow-control.dev/neurocyte/flow">source</a>
+      •
+      <ctx about="$site.page('docs')"><a href="$ctx.about.link()" text="$ctx.about.title">docs</a></ctx>
       •
       <a href="https://discord.com/invite/4wvteUPphx">Discord</a>
       •
