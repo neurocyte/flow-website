@@ -15,6 +15,14 @@ them.
 You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')) and find more
 devlog entries in the [archive](/devlog/).
 
+## [close and save buttons in tabs]($section.id("2025-10-09T21:41:08+02:00"))
+
+Tabs now show a close or save icon when the mouse hovers over them. Clicking the icon will either
+close or save the buffer. The icons and colors are customizable in the tab style configuration.
+
+[]($video.asset('2025-10-09_flow_tabs_save_close.mp4').controls(true))
+
+
 ## [file type icons in tabs]($section.id("2025-10-09T14:34:30+02:00"))
 
 Tabs now show file type icons. If you're not into icons you can disable them in the tab style
