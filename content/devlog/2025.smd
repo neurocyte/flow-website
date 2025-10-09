@@ -15,6 +15,14 @@ them.
 You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')) and find more
 devlog entries in the [archive](/devlog/).
 
+## [zig-0.15]($section.id("2025-10-01T17:00:47+02:00"))
+
+After weeks of fixing writergate issues in dependencies and flow itself, we now finally have our
+first fully working flow built by `zig-0.15.1`!
+
+Feature development will now return to our regular pace of new features every couple of days or so.
+
+
 ## [widget styles]($section.id("2025-08-14T16:33:39+02:00"))
 
 []($video.asset('2025-08-14_16-33-39.mp4').controls(true))
