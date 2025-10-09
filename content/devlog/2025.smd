@@ -15,6 +15,12 @@ them.
 You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')) and find more
 devlog entries in the [archive](/devlog/).
 
+## [file type icons in tabs]($section.id("2025-10-09T14:34:30+02:00"))
+
+Tabs now show file type icons. If you're not into icons you can disable them in the tab style
+configuration by setting the option `file_type_icon` to `false`.
+
+
 ## [Improved WSL1 support]($section.id("2025-10-07T10:25:55+0200"))
 
 Several fixes went in today that allow flow to now work properly on WSL1 with project directories
