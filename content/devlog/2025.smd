@@ -15,6 +15,13 @@ them.
 You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')) and find more
 devlog entries in the [archive](/devlog/).
 
+## [FreeBSD binary builds]($section.id("2025-10-02T14:04:35+0200"))
+
+Thanks to the awesomeness of the Zig team who added FreeBSD cross-compilation support in the
+zig-0.15 release, we now have pre-built nightly binaries for FreeBSD. You can download/update them
+via the usual installer script or manually via github or codeberg.
+
+
 ## [LSP completion]($section.id("2025-10-01T21:55:12+0200"))
 
 Completion is now functional, although not super pretty. Give it a try! Feedback on what the final
