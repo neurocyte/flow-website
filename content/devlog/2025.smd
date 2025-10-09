@@ -15,6 +15,13 @@ them.
 You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')) and find more
 devlog entries in the [archive](/devlog/).
 
+## [Improved WSL1 support]($section.id("2025-10-07T10:25:55+0200"))
+
+Several fixes went in today that allow flow to now work properly on WSL1 with project directories
+on the Windows host filesystem. These fixes add fallback handling for cases when the stat syscall
+fails (as it does on WSL1) so this may improve support elsewhere too.
+
+
 ## [helix mode improvements]($section.id("2025-10-06T22:28:52+0200"))
 
 Thanks to Igor Támara we have new helix mode commands to close other buffers and reload all files.
