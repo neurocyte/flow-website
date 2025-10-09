@@ -15,6 +15,12 @@ them.
 You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')) and find more
 devlog entries in the [archive](/devlog/).
 
+## [helix mode improvements]($section.id("2025-10-06T22:28:52+0200"))
+
+Thanks to Igor Támara we have new helix mode commands to close other buffers and reload all files.
+Also, various improvements to flow's documentation.
+
+
 ## [FreeBSD binary builds]($section.id("2025-10-02T14:04:35+0200"))
 
 Thanks to the awesomeness of the Zig team who added FreeBSD cross-compilation support in the
