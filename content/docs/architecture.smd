@@ -42,14 +42,14 @@ When a buffer is active, it has an `Editor` attached to it; an editor
 might have associated tree-sitter support, given the file type detected,
 and offers common services that are aimed to be used by `Commands` to
 manipulate the contents of a buffer at a higher level, the selections,
-cursors and the `View`. The commands are used by `Modes` with
-`Keybindings`. The main mode is Flow and the keybindings can be used
-to map to a mode built up entirely on solely calling already created
-commands. An example of a mode created by command composition is
-`Emacs` mode, for instance, it's possible to create a nano mode with
-just keybindings. In the other hand, `Vim` and `Helix` modes have
-particular definitions for commands that interact with the buffers,
-being modal editors.
+cursors, cursor selections `CurSel` and the `View`. The commands are
+used by `Modes` with `Keybindings`. The main mode is Flow and the
+keybindings can be used to map to a mode built up entirely on solely
+calling already created commands. An example of a mode created by
+command composition is `Emacs` mode, for instance, it's possible to
+create a nano mode with just keybindings. In the other hand, `Vim` and
+`Helix` modes have particular definitions for commands that interact
+with the buffers, being modal editors.
 
 ## Text user interface
 
@@ -75,7 +75,7 @@ time. For example, tree-sitter queries to highlight the current
 file of a particular language, LSPs, git, running a `shell`
 command via a `task`.
 
-## Programming languages
+## Programming languages support
 
 There are plenty of programming languages that use tree-sitter via
 [flow-syntax](https://github.com/neurocyte/flow-syntax) and whose
@@ -83,6 +83,9 @@ language servers and formatters are configured via `file_type_lsp`.
 Currently one Language Server is supported for each language.
 
 ## Facilities
+
+The clipboard is used for copy, paste operations and there is also
+support to use the system clipboard, copying and pasting to/from it.
 
 Logging support offers various levels to give feedback for various
 actions that ease developing Flow itself and also are used to offer
