@@ -70,6 +70,24 @@ if you find something inaccurate in those docs or others, do open an
 issue or jump in [Discord](https://discord.com/invite/4wvteUPphx)
 and comment.
 
+### Commit comments
+
+It's better to use commits for different purposes, even if they look small and
+there is a temptation to include on the same new code, fixes and refactors. Making
+concise and self contained commits make review easier and future fixes possible,
+in case of need.
+
+Use these prefixes as much as you can, doing so helps when identifying the features
+and eases the process of letting others know about what's new, fixed and help
+communicate better when releasing.
+
+* `feat:` when there is a new feature, if specific to a mode, please use
+`feat: [mode]`.
+* `refactor`: when reorganizing code, usually when you make something clearer
+for future readers and commiters.
+* `fix:` When something changed to a more expected behaviour.
+* `build`: the commit doesn't change code at all.
+
 ### Testing
 
 It's possible that the test set grows as the project evolves, given
