@@ -15,6 +15,16 @@ them.
 You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')) and find more
 devlog entries in the [archive](/devlog/).
 
+## [clipboard history]($section.id("2025-10-13T20:45:48+02:00"))
+
+Internal clipboard handling has been re-worked to support multiple history entries. This integrates
+with multi-cursor support by copying/pasting one history item for each cursor. The internal
+clipboard is bound to `alt+v` (as it always has been) and the new clipboard history palette is bound
+to `alt+shift+v`.
+
+[]($video.asset('2025-10-13_clipboard_history.mp4').controls(true))
+
+
 ## [close and save buttons in tabs]($section.id("2025-10-09T21:41:08+02:00"))
 
 Tabs now show a close or save icon when the mouse hovers over them. Clicking the icon will either
