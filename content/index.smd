@@ -14,6 +14,7 @@ Flow Control is under active development, but very stable.
 
 
 ## 🚀 Features
+
 - **Lightning Fast** TUI with ≤6ms frame times, **low latency** input handling
   and smooth **animated scrolling**
 - Intuitive UI with **tabs**, **scrollbars** and **palettes** with full
@@ -32,12 +33,15 @@ Flow Control is under active development, but very stable.
     - User created
 - Hybrid rope/piece-table buffer system, edit **very large files** with
   **thousands of cursors**
+- Infinite **undo** (at least until you run out of ram)
 - Full **unicode** support, including support for the kitty text sizing protocol
+- Plenty of **themes** included and support for vscode themes via the flow-themes project
 - Runs on **Linux, FreeBSD, MacOS, Windows and Android** (under termux) with
   easy **cross-compilation** to all supported targets
 
 
 ## Requirements
+
 - A modern terminal with **24bit color** and, ideally, **kitty keyboard
   protocol** support. **Kitty**, **Foot** and **Ghostty** are the recommended
   terminals at this time. **Zellij** also works well. Most other terminals will
@@ -50,12 +54,14 @@ Flow Control is under active development, but very stable.
 
 See our [devlog](/devlog/2025) for on-going updates from the development team.
 
-**In Development**:
+### In Development
+
 - LSP completion support
 - Persistent undo/redo
 - File watcher integration
 
-**Future**:
+### Future
+
 - Collaborative editing
 - Plugin system
 - Multi-terminal sessions
