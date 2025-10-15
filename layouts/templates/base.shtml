@@ -15,23 +15,15 @@
     <nav id="menu" class="centered">
       <ctx about="$site.page('')"><a href="$ctx.about.link()" text="$ctx.about.title">home</a></ctx>
       •
-      <a href="https://github.com/neurocyte/flow/releases/latest">downloads</a>
+      <ctx about="$site.page('installation')"><a href="$ctx.about.link()" text="$ctx.about.title">installation</a></ctx>
       •
-      <a href="https://github.com/neurocyte/flow-nightly/releases/latest">nightly</a>
+      <ctx about="$site.page('downloads')"><a href="$ctx.about.link()" text="$ctx.about.title">downloads</a></ctx>
       •
       <ctx :if="$site.page('devlog').subpages().first?()"><a href="$if.link()">devlog</a></ctx>
       •
-      <a href="https://git.flow-control.dev/neurocyte/flow">source</a>
-      •
       <ctx about="$site.page('docs')"><a href="$ctx.about.link()" text="$ctx.about.title">docs</a></ctx>
       •
-      <a href="https://discord.com/invite/4wvteUPphx">Discord</a>
-      •
-      <a href="https://github.com/neurocyte/flow">GitHub</a>
-      •
-      <a href="https://codeberg.org/neurocyte/flow">Codeberg</a>
-      •
-      <a href="https://git.sr.ht/~neurocyte/flow">sourcehut</a>
+      <ctx about="$site.page('community')"><a href="$ctx.about.link()" text="$ctx.about.title">community</a></ctx>
     </nav>
     <script src="$site.asset('js/index.js').link()"></script>
     <super>

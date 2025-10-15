@@ -8,172 +8,48 @@
 
 ## a programmer's text editor
 
-Flow Control is under active development, but usually very stable.
+Flow Control is under active development, but very stable.
 
 []($video.siteAsset('video/flow-control.mp4').controls(true))
 
+
 ## 🚀 Features
-- **Lightning Fast** TUI with ≤6ms response times
-- **Tree-sitter** powered syntax highlighting
+- **Lightning Fast** TUI with ≤6ms frame times, **low latency** input handling
+  and smooth **animated scrolling**
+- Intuitive UI with **tabs**, **scrollbars** and **palettes** with full
+  **mouse** support for all UI elements
+- Support for more than **70 programming languages**, **zero
+  configuration** needed, via **tree-sitter** powered syntax highlighting
 - **Language Server Protocol** pre configured support for most language servers
-- Multi-cursor editing & mouse support
-- Cross-platform (Linux/macOS/Windows/Android/FreeBSD)
-- Multiple keybinding modes
-    - Flow Control (common GUI IDE style bindings)
+- Powerful **multi-cursor** editing and integrated **clipboard history**
+- Powerful configurable keybinding system that supports **modal** and
+  **non-modal** editing styles
+- Multiple pre-configured **keybinding modes**
+    - Flow Control - GUI IDE style bindings (similar to vscode)
     - Emacs
     - Vim
     - Helix
-    - Custom user bindings
-- Hybrid rope/piece-table buffer system
+    - User created
+- Hybrid rope/piece-table buffer system, edit **very large files** with
+  **thousands of cursors**
+- Full **unicode** support, including support for the kitty text sizing protocol
+- Runs on **Linux, FreeBSD, MacOS, Windows and Android** (under termux) with
+  easy **cross-compilation** to all supported targets
+
 
 ## Requirements
-- A modern terminal with 24bit color and, ideally, kitty keyboard protocol support. Kitty,
-    Foot and Ghostty are the recommended terminals at this time. Most other terminals
-    will work, but with reduced functionality.
-- NerdFont support. Either via terminal font fallback or a patched font.
-- Linux, MacOS, Windows, Android (Termux) or FreeBSD.
-- A UTF-8 locale
-
-## 📦 Installation
-
-### Linux, MacOS and FreeBSD
-
-Fetch and install the latest release to `/usr/local/bin` with the installation helper script:
-
-```
-curl -fsSL https://flow-control.dev/install | sh
-```
-
-Install the latest nightly build:
-
-```
-curl -fsSL https://flow-control.dev/install | sh -s -- --nightly
-```
-
-with debug symbols:
-
-```
-curl -fsSL https://flow-control.dev/install | sh -s -- --nightly --debug
-```
-
-See all avalable options for the installer script:
-
-```
-curl -fsSL https://flow-control.dev/install | sh -s -- --help
-```
-
-Install the installer for easy updating of flow:
-
-```
-sudo curl -fsSL -o /usr/local/bin/update-flow https://flow-control.dev/install
-sudo chmod +x /usr/local/bin/update-flow
-update-flow
-```
-
-At the top of the installer are variables to pre-answer the installation questions.
-Configure them to your liking.
-
-
-### Windows
-
-For Windows the installer scripts are a little different.
-
-Fetch and install the latest release to `%AppData%/Roaming/flow/bin`:
-
-```
-Invoke-RestMethod "https://flow-control.dev/install.ps1" | Invoke-Expression
-```
-
-Install the latest nightly build:
-
-```
-Invoke-RestMethod "https://flow-control.dev/install-nightly.ps1" | Invoke-Expression
-```
-
-Install the latest nightly build with pdb debug symbol files:
-
-```
-Invoke-RestMethod "https://flow-control.dev/install-debug.ps1" | Invoke-Expression
-```
-
-The Windows installer will also install itself as `update-flow.ps1` so you can just
-run `update-flow` in a terminal to update to the latest release or nightly.
-
-
-### Prebuilt Binaries
-- Stable: [Releases](https://github.com/neurocyte/flow/releases/latest)
-- Nightly: [Nightly Builds](https://github.com/neurocyte/flow-nightly/releases/latest)
-
-Or check your favorite local system package repository.
-
-### Build from Source
-```bash
-# Basic build
-zig build -Doptimize=ReleaseSafe
-
-# Cross-compile examples
-zig build -Dtarget=x86_64-windows --prefix zig-out/win64
-zig build -Dtarget=aarch64-linux-musl --prefix zig-out/arm-linux
-```
-
-The binary is:
-
-```
-zig-out/bin/flow
-```
-
-It is statically built (by default) and contains all the required tree-sitter parsers
-and queries. No additional runtime files are required. Place it in your path for convenient
-access.
-
-## Configuration
-
-Configuration is mostly dynamically maintained with various commands in the UI.
-It is stored under the standard user configuration path. Usually `~/.config/flow`
-on Linux/FreeBSD/MacOS. %APPDATA%\Roaming\flow on Windows.
-
-There are commands to open the various configuration files, so you don't have to
-manually find them. Look for commands starting with `Edit` in the command palette.
-
-File types may be configured with the `Edit file type configuration` command. You
-can also create a new file type by adding a new `.conf` file to the `file_type`
-directory. Have a look at an existing file type to see what options are available.
-
-Logs, traces and per-project most recently used file lists are stored in the
-standard user application state directory. Usually `~/.local/state/flow` on
-Linux/FreeBSD/MacOS and %APPDATA%\Roaming\flow on Windows.
-
-Kitty, Ghostty and most other terminals have default keybindings that conflict
-with common editor commands. We highly recommend rebinding them to keys that are
-not generally used inside TUI applications.
-
-For Kitty rebinding `kitty_mod` is usually enough:
-```
-kitty_mod ctrl+alt
-```
-
-## 🛠️ Basic Usage
-```bash
-flow file.zig:42                    # Open at line 42
-flow --language zig CMakeLists.txt  # Force file type
-flow --list-languages               # Show all supported languages
-flow --help                         # List of command line options
-```
-
-## ⌨️ Key Controls
-| Command                   | Action               |
-|---------------------------|----------------------|
-| `F4`                      | Switch input mode    |
-| `Ctrl+Shift+P` or `Alt+x` | Command palette      |
-| `Ctrl+F2`                 | View all keybindings |
-
-Run the `Edit keybindings` command to save the current keybinding mode to a
-file and open it for editing. Save your customized keybinds under a new name
-in the same directory to create an entirely new keybinding mode. Keybinding
-changes will take effect on restart.
+- A modern terminal with **24bit color** and, ideally, **kitty keyboard
+  protocol** support. **Kitty**, **Foot** and **Ghostty** are the recommended
+  terminals at this time. **Zellij** also works well. Most other terminals will
+  work, but likely with reduced functionality.
+- **NerdFont** support. Either via terminal font fallback or a patched font.
+- A **UTF-8** locale
 
 
 ## 🛣️ Roadmap
+
+See our [devlog](/devlog/2025) for on-going updates from the development team.
+
 **In Development**:
 - LSP completion support
 - Persistent undo/redo
@@ -184,5 +60,3 @@ changes will take effect on restart.
 - Plugin system
 - Multi-terminal sessions
 
-## 💬 Community
-Join our [Discord server](https://discord.com/invite/4wvteUPphx) or discuss on [GitHub Discussions](https://github.com/neurocyte/flow/discussions)

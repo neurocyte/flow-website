@@ -1,0 +1,94 @@
+---
+.title = "Installation",
+.date = @date("2025-10-15T11:14:32+02:00"),
+.author = "CJ van den Berg",
+.layout = "index.shtml",
+.draft = false,
+---
+
+- [Linux, MacOS, FreeBSD and Termux](#posix)
+- [Windows](#windows)
+- [Source](#source)
+- [Tarball install](#tarball)
+
+[]($section.id("posix"))
+## Linux, MacOS, FreeBSD and Termux
+
+Fetch and install the latest release with the installation helper script:
+
+```
+curl -fsSL https://flow-control.dev/install | sh
+```
+
+Install the latest nightly build:
+
+```
+curl -fsSL https://flow-control.dev/install | sh -s -- --nightly
+```
+
+with debug symbols:
+
+```
+curl -fsSL https://flow-control.dev/install | sh -s -- --nightly --debug
+```
+
+See all avalable options for the installer script:
+
+```
+curl -fsSL https://flow-control.dev/install | sh -s -- --help
+```
+
+Install the installer for easy updating of flow:
+
+```
+sudo curl -fsSL -o /usr/local/bin/update-flow https://flow-control.dev/install
+sudo chmod +x /usr/local/bin/update-flow
+update-flow
+```
+
+At the top of the installer are variables to pre-answer the installation
+questions. Configure them to your liking.
+
+
+[]($section.id("windows"))
+## Windows
+
+For Windows the installer scripts are a little different.
+
+Fetch and install the latest release to `%AppData%/Roaming/flow/bin`:
+
+```
+Invoke-RestMethod "https://flow-control.dev/install.ps1" | Invoke-Expression
+```
+
+Install the latest nightly build:
+
+```
+Invoke-RestMethod "https://flow-control.dev/install-nightly.ps1" | Invoke-Expression
+```
+
+Install the latest nightly build with pdb debug symbol files:
+
+```
+Invoke-RestMethod "https://flow-control.dev/install-debug.ps1" | Invoke-Expression
+```
+
+The Windows installer will also install itself as `update-flow.ps1` so you can
+just run `update-flow` in a terminal to update to the latest release or nightly.
+
+
+[]($section.id("source"))
+## Build from Source
+
+See the [Building section of `README.md`](https://git.flow-control.dev/neurocyte/flow/src/branch/master/README.md#building)
+in the source repository for build instructions.
+
+
+[]($section.id("tarball"))
+## Manual install from tarballs or zip files
+
+See the [downloads](/downloads) page for binaries that you can manually install.
+Just download, unpack, and place the binary anywhere you want. There are no
+runtime files required and configuration directories and files are created on
+demand.
+

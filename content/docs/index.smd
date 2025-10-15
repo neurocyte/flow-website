@@ -15,6 +15,58 @@ command. The manual is included here for convenience.
 * [Flow Control online help](/docs/help)
 
 
+## Basic Usage
+```bash
+flow file.zig:42                    # Open at line 42
+flow --language zig CMakeLists.txt  # Force file type
+flow --list-languages               # Show all supported languages
+flow --help                         # List of command line options
+```
+
+
+## Key Controls
+| Command                   | Action               |
+|---------------------------|----------------------|
+| `F1`                      | Open online manual   |
+| `F4`                      | Switch input mode    |
+| `Ctrl+Shift+P` or `Alt+x` | Command palette      |
+| `Ctrl+F2`                 | View all keybindings |
+
+Run the `Edit keybindings` command to save the current keybinding mode to a
+file and open it for editing. Save your customized keybinds under a new name
+in the same directory to create an entirely new keybinding mode. Keybinding
+changes will take effect on restart.
+
+
+## Configuration
+
+Configuration is mostly dynamically maintained with various commands in the UI.
+It is stored under the standard user configuration path. Usually
+`~/.config/flow` on Linux/FreeBSD/MacOS. %APPDATA%\Roaming\flow on Windows.
+
+There are commands to open the various configuration files, so you don't have to
+manually find them. Look for commands starting with `Edit` in the command
+palette.
+
+File types may be configured with the `Edit file type configuration` command.
+You can also create a new file type by adding a new `.conf` file to the
+`file_type` directory. Have a look at an existing file type to see what options
+are available.
+
+Logs, traces and per-project most recently used file lists are stored in the
+standard user application state directory. Usually `~/.local/state/flow` on
+Linux/FreeBSD/MacOS and %APPDATA%\Roaming\flow on Windows.
+
+Kitty, Ghostty and most other terminals have default keybindings that conflict
+with common editor commands. We highly recommend rebinding them to keys that are
+not generally used inside TUI applications.
+
+For Kitty rebinding `kitty_mod` is usually enough:
+```
+kitty_mod ctrl+alt
+```
+
+
 ## Developer Resources
 
 * [Architecture overview](/docs/architecture)

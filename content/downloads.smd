@@ -1,0 +1,34 @@
+---
+.title = "Downloads",
+.date = @date("2025-10-15T11:14:32+02:00"),
+.author = "CJ van den Berg",
+.layout = "index.shtml",
+.draft = false,
+---
+
+See the [installation guide](/installation) for instructions on downloading and
+installing with the installer script.
+
+## Releases
+
+- [codeberg.org](https://codeberg.org/neurocyte/flow/releases/latest) (binaries & source)
+- [github.com](https://github.com/neurocyte/flow/releases/latest) (binaries & source)
+
+Or check your favorite local system package repository.
+See [repology](https://repology.org/project/flow-control/versions) for available
+versions.
+
+
+## Nightly builds
+
+- [flow-control.dev](https://git.flow-control.dev/neurocyte/flow-nightly/releases/latest) (source only)
+- [codeberg.org](https://codeberg.org/neurocyte/flow-nightly/releases/latest) (binaries & source)
+- [github.com](https://github.com/neurocyte/flow-nightly/releases/latest) (binaries & source)
+
+
+## Source Code
+
+- [flow-control.dev](https://git.flow-control.dev/neurocyte/flow)
+- [github.com](https://github.com/neurocyte/flow)
+- [codeberg.org](https://codeberg.org/neurocyte/flow)
+- [sr.ht (sourcehut)](https://git.sr.ht/~neurocyte/flow)

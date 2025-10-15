@@ -1,0 +1,10 @@
+---
+.title = "Community",
+.date = @date("2025-10-15T12:24:45+02:00"),
+.author = "CJ van den Berg",
+.layout = "index.shtml",
+.draft = false,
+---
+
+Join our [Discord server](https://discord.com/invite/4wvteUPphx)
+or discuss on [GitHub Discussions](https://github.com/neurocyte/flow/discussions)
