@@ -6,6 +6,7 @@
 .draft = false,
 ---
 
+[]($section.id("help"))
 ## Online help
 
 Flow Control has an online manual that is included in the `flow` binary. You can
@@ -38,6 +39,7 @@ in the same directory to create an entirely new keybinding mode. Keybinding
 changes will take effect on restart.
 
 
+[]($section.id("configuration"))
 ## Configuration
 
 Configuration is mostly dynamically maintained with various commands in the UI.
@@ -67,6 +69,7 @@ kitty_mod ctrl+alt
 ```
 
 
+[]($section.id("resources"))
 ## Developer Resources
 
 * [Architecture overview](/docs/architecture)
