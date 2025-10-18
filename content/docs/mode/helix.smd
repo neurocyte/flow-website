@@ -1,0 +1,67 @@
+---
+.title = "Helix Mode",
+.date = @date("2025-10-10T00:00:00"),
+.author = "Igor Támara",
+.layout = "index.shtml",
+.draft = false,
+---
+
+This document describes implementation of Helix Mode.
+
+## What and what not
+
+The first and biggest difference is that Flow has a mode that
+emulates Helix, or at least has equivalent of the worthiest
+actions that can be done in Helix. The conversely is not true.
+
+`:` opens up Flow's rich command palette that might have
+functionalities Helix users are used to have, if you find
+something missing, it's possible to
+[open a Feature Request](https://github.com/neurocyte/flow/issues)
+to see if there is anyone interested in porting it.  Or maybe
+someone is already creating or interested in the one you are
+missing.  [Join Discord](https://discord.gg/kzJC9fA7) to ask
+if anyone is working on something similar or there is a
+workaoround.
+
+## Enhancing hx mode
+
+This is a programmer editor, you are more than welcome to
+enhance to suit your needs that maybe coincide with others.
+
+Please take a look at [architecture](/docs/architecture) and
+[contributing](/docs/contributing) for an overview and the
+mechanics of getting your changes into Flow.
+
+hx mode is modal kind, the same as vim mode, and the file
+that has the particular work to make it real is in
+`src/tui/mode/helix.zig`, adding a `command` and the
+corresponding `meta` is what is required.
+[More on commands](/docs/architecture/command).
+
+### Pickers
+
+Flow hx mode offers most of the picker types equivalents
+with `panels` and `palettes`.  Example of panels are
+the `g` `r` (go to reference from lsp) and `space` `/`
+(a.k.a find in files). Examples of `palettes` are
+`space` `b` to pick a buffer or `space` `f` to open a
+file in your project. Panels open below the editor
+while palettes open overlapping the working area.
+
+One medium sized project is to create a widget that
+has one input widget, two panels, on the left the
+list of options and on the right the preview of
+the selected option and offer various keybindings
+to manipulate the objects inside both panels with
+filtering.
+
+Given this, it's possible to start contributing via
+pull requesting [keybinds](/docs/architecture/keybind),
+[commands](/docs/architecture/command),
+[palettes](/docs/architecture/palette), or the
+special widget mentioned previously.
+
+
+More about the [architecture](/docs/architecture) or jump to
+[contribution guidelines](/docs/contributing).
