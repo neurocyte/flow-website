@@ -1,0 +1,110 @@
+---
+.title = "Minimodes",
+.date = @date("2025-10-15T00:00:00"),
+.author = "Igor Támara",
+.layout = "index.shtml",
+.draft = false,
+---
+
+Minimodes can be used by other modes adding functionality
+to the editor, they have their own set of keybindings and
+are used momentarily for an specific action, i.e. find
+something in the current buffer or in project files,
+open/save a file, and, in modal modes(like vim and helix).
+An example of the latter is using numeric prefixes to
+repeat an action many times.
+
+## Anatomy of minimodes
+
+To create a minimode it's needed:
+
+* A Keybinding
+* An Action mapping
+* A Minimode definition
+
+### Keybinding
+
+When a key or a keystroke(set of keys) are pressed, the
+associated minimode gets activated and will start to
+capture the key/strokes until a special keybinding
+makes it exit, or an specific action exits the minimode.
+Head to `src/keybind/builtin/flow.json`(flow keybinds)
+and look for `mini_find`, where you will know which
+specific actions are triggered by the keybindings of the
+minimode.
+
+### Action mapping
+
+Actions executed by each minimode are stored one per
+file under `src/tui/mode/mini/`. The command that
+opens opens the door to the minimode is linked from
+`src/tui/tui.zig` which calls them dynamically when needed.
+
+Look for `mini` inside `tui.zig` to find out which minimodes
+are present and where to look to learn how each minimode
+does its own task.
+
+### Minimode definition
+
+Possibly the simplest minimode that will be found that does
+not require defining a particular widget is the `replace`
+minimode, used in helix mode and vim mode.  To enter the
+minimode in Helix while in `NOR` or `INS` use the keybind
+**r**, it consumes another key and replaces the current
+character under the main cursor with the pressed key.
+If there are multiple selections, all the characters are
+replaced by the one typed after **r**.
+
+- The minimode needs to expose a `create` function with
+type
+
+```zig
+pub fn create(Allocator,command.Context) !struct { tui.Mode, tui.MiniMode }
+```
+Which is in charge of registering the minimode to be able
+to receive events and will offer the minimode name, the
+one that appears in the lower status bar while it is active,
+to let it be known that the minimode is active. This is
+where all the instatiations are made. Which leads to
+
+- The `deinit` function whose type is
+
+```zig
+pub fn deinit(*Self)
+```
+
+- A `receive` function that will route events received
+casting the type:
+
+```zig
+pub fn receive(*Self, tp.pid_ref, tp.message) error{Exit}!bool
+```
+
+- A `commands` field that will expose the minimode `Collection`
+of `Commands`.
+
+An special command `mini_mode_insert_code_point` as an element
+of the commands collection with type:
+
+```zig
+pub fn mini_mode_insert_code_point(*Self, Ctx) Result
+```
+
+acting as the default handler of the key presses that the minimode
+will receive when there is no other defined.
+
+All the keys were handled and managed by the default "invisible"
+widget that processes the keys for the minimode.  And there is
+room for custom widgets that are explained next.
+
+## A custom widget
+
+When there is a need for an specialized widget, it's possible to
+define one, for example, the `file_browser` is used to load and
+save files, and `numeric_input` is used to set the tab width for
+example(look for it in the command palette `:`).
+
+
+* Head to [architecture](/docs/architecture)
+* Learn about [commands](/docs/architecture/command)
+* Review [keybindings](/docs/architecture/keybind)
