@@ -2,8 +2,9 @@
 .title = "Minimodes",
 .date = @date("2025-10-15T00:00:00"),
 .author = "Igor Támara",
-.layout = "index.shtml",
+.layout = "tutorial.shtml",
 .draft = false,
+.custom = { .githubedit = "https://github.com/neurocyte/flow-website/tree/master/content/docs/architecture/minimode.md"},
 ---
 
 Minimodes can be used by other modes adding functionality
@@ -38,7 +39,8 @@ minimode.
 Actions executed by each minimode are stored one per
 file under `src/tui/mode/mini/`. The command that
 opens opens the door to the minimode is linked from
-`src/tui/tui.zig` which calls them dynamically when needed.
+`src/tui/tui.zig` which calls the minimodes dynamically
+when needed.
 
 Look for `mini` inside `tui.zig` to find out which minimodes
 are present and where to look to learn how each minimode
@@ -46,14 +48,14 @@ does its own task.
 
 ### Minimode definition
 
-Possibly the simplest minimode that will be found that does
-not require defining a particular widget is the `replace`
-minimode, used in helix mode and vim mode.  To enter the
+Possibly the simplest minimode that does not require
+defining a particular widget is the `replace` minimode,
+used in [helix](/docs/mode/helix) and vim mode.  To enter the
 minimode in Helix while in `NOR` or `INS` use the keybind
-**r**, it consumes another key and replaces the current
-character under the main cursor with the pressed key.
-If there are multiple selections, all the characters are
-replaced by the one typed after **r**.
+**r**; it consumes another key and replaces the current
+character under the main cursor with the immediately pressed
+key after **r**. If there are multiple selections, all the
+characters are replaced by the one typed after **r**.
 
 - The minimode needs to expose a `create` function with
 type
@@ -83,7 +85,7 @@ pub fn receive(*Self, tp.pid_ref, tp.message) error{Exit}!bool
 - A `commands` field that will expose the minimode `Collection`
 of `Commands`.
 
-An special command `mini_mode_insert_code_point` as an element
+- An special command `mini_mode_insert_code_point` as an element
 of the commands collection with type:
 
 ```zig
@@ -91,7 +93,7 @@ pub fn mini_mode_insert_code_point(*Self, Ctx) Result
 ```
 
 acting as the default handler of the key presses that the minimode
-will receive when there is no other defined.
+will receive when there is no other keybind defined for the minimode.
 
 All the keys were handled and managed by the default "invisible"
 widget that processes the keys for the minimode.  And there is
