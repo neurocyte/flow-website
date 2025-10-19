@@ -1,0 +1,76 @@
+---
+.title = "Editor",
+.date = @date("2025-10-19T00:00:00"),
+.author = "Igor Támara",
+.layout = "tutorial.shtml",
+.draft = false,
+.custom = { .githubedit = "https://github.com/neurocyte/flow-website/tree/master/content/docs/architecture/editor.md"},
+---
+
+The `editor` coordinates visualization and modification of
+buffer contents, multiple cursors, selections and marks.
+
+To get the most of this section, it's recommended to have
+read the [architecture briefing](/docs/architecture), about
+[commands](/docs/architecture/command) and
+[keybinds](/docs/architecture/keybind).
+
+## Some concepts
+
+The `primary Cursor` is presented always in the `Editor`,
+signaling the part of the `Buffer` that can be modified and
+manipulated as you see it. It scrolls on the current visible
+portion of the buffer.
+
+Other cursors can be in the `View` or in regions outside the
+current view, depending on the size of both the buffer and
+the editor view.
+
+A `Selection` has two cursors that are not visible, they mark
+the begin and the end of the selection, and CurSels are actually
+what allow to have the concept of a cursor with a selection. A
+`Cursel` has a cursor and optionally a Selection.
+
+Most of editor operations act on the set of CurSels, the Primary
+Cursor is in fact a CurSel, as opposed to what we previously
+mentioned.
+
+To complete the editor scenario, `Marks` have the potential
+to become selections, and behind the scenes CurSels and are
+evident to the eye when in search mode, they are seen as
+the primary cursor is positioned over an occurrence with a
+different color according to the theme.
+
+The Editor will be acting on Buffer.Root which is the root of
+the tree representing the document that is being edited. The API
+of the Buffer.Root is stable and offers the necessary to insert,
+delete and move along the buffer, knowing if the end, the
+beginning has been reached when interacting with a Cursor.
+
+## Editor Commands
+
+We mentioned earlier that most of the operations work on all
+the cursors and selections, there are various commands that
+will use functions that iterate over cursors, selections, cursels
+or marks. Given said this, we will be using functions as
+parameters in most of the situations. Functional programming
+languages are popular in these scenarios, to name a prominent
+one, Emacs and emacs lisp.
+
+If the buffer is not to be modified, we will be using `` to
+get the root of it to find and position the cursors. While
+we will use `` when the buffer is to be modified.
+
+## Moving
+
+
+
+## Selections
+
+## Modifying the buffer
+
+
+[Discord](https://discord.com/invite/4wvteUPphx) and
+[Github issues](https://github.com/neurocyte/flow/issues) are the
+main channels to do so.
+

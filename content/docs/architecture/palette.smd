@@ -1,0 +1,24 @@
+---
+.title = "Palettes",
+.date = @date("2025-10-20T00:00:00"),
+.author = "Igor Támara",
+.layout = "tutorial.shtml",
+.draft = false,
+.custom = { .githubedit = "https://github.com/neurocyte/flow-website/tree/master/content/docs/architecture/palette.md"},
+---
+
+Palettes are overlay menus that allow to select an item from the
+presented list, applying a command with the selected element,
+optionally deleting the selected item; it's possible to close
+the palette without selecting(cancel), filter the elements, and
+having special elements that trigger different actions.
+
+To get the most of this section, it's recommended to have
+read about [commands](/docs/architecture/command), and optionally
+[minimodes](/docs/architecture/minimode).
+
+See
+[clipboard history palette](https://github.com/neurocyte/flow/commit/634a18cb5685a3c3fcfc08301306e628d33c3256)
+
+
+
