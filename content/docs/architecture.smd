@@ -2,8 +2,9 @@
 .title = "Architecture",
 .date = @date("2025-07-06T00:00:00"),
 .author = "Igor Támara",
-.layout = "index.shtml",
+.layout = "tutorial.shtml",
 .draft = false,
+.custom = { .githubedit = "https://github.com/neurocyte/flow-website/tree/master/content/docs/architecture.smd"},
 ---
 
 This document describes in a general way, concepts that help to
@@ -68,12 +69,12 @@ while in Windows there is an special GUI.
 ## Communication between components
 
 [Thespian](https://github.com/neurocyte/thespian) is in charge of
-sending messages between different flow components, for example,
-when a widget needs updating information from changing states of
-internal data and when components or external processes take
-time. For example, tree-sitter queries to highlight the current
-file of a particular language, LSPs, git, running a `shell`
-command via a `task`.
+processes synchronization and allows sending messages between
+different flow components, for example, when a widget needs
+updating information from changing states of internal data and
+when components or external processes take time. For example,
+tree-sitter queries to highlight the current file of a particular
+language, LSPs, git, running a `shell` command via a `task`.
 
 ## Programming languages support
 
