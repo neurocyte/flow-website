@@ -2,8 +2,9 @@
 .title = "Helix Mode",
 .date = @date("2025-10-10T00:00:00"),
 .author = "Igor Támara",
-.layout = "index.shtml",
+.layout = "tutorial.shtml",
 .draft = false,
+.custom = { .githubedit = "https://github.com/neurocyte/flow-website/tree/master/content/docs/mode/helix.md"},
 ---
 
 This document describes implementation of Helix Mode.
@@ -17,12 +18,12 @@ actions that can be done in Helix. The conversely is not true.
 `:` opens up Flow's rich command palette that might have
 functionalities Helix users are used to have, if you find
 something missing, it's possible to
-[open a Feature Request](https://github.com/neurocyte/flow/issues)
-to see if there is anyone interested in porting it.  Or maybe
-someone is already creating or interested in the one you are
-missing.  [Join Discord](https://discord.gg/kzJC9fA7) to ask
-if anyone is working on something similar or there is a
-workaoround.
+[open a Feature Request](https://github.com/neurocyte/flow/issues),
+make sure to review [other issues](https://github.com/neurocyte/flow/issues?q=is%3Aissue%20state%3Aopen%20label%3Ahelix-mode)
+to avoid repeating or see if there is anyone interested
+in porting on [Discord](https://discord.gg/kzJC9fA7) to ask
+if or there is a workaoround, remember that it's possible
+to bounce back to Flow mode if needed.
 
 ## Enhancing hx mode
 
