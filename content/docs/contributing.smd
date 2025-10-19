@@ -2,10 +2,10 @@
 .title = "Contributing",
 .date = @date("2025-07-06T00:00:00"),
 .author = "Igor Támara",
-.layout = "index.shtml",
+.layout = "tutorial.shtml",
 .draft = false,
+.custom = { .githubedit = "https://github.com/neurocyte/flow-website/tree/master/content/docs/contributing.smd"},
 ---
-
 
 ## Asking for a feature
 
@@ -27,7 +27,7 @@ some guidance.  [Reporting a bug](https://github.com/neurocyte/flow/issues)
 is a good way to contribute. When reporting one, it should contain:
 
 * Flow version. You get it with `flow --version`
-* What you were doing, if possible step, by step to reproduce it
+* What you were doing, if possible, step by step to reproduce it
 * What actually happened
 * What was expecting to happen
 * Any other information, like screenshots, video, screencast, the
@@ -49,9 +49,9 @@ happen to use [codeberg](https://codeberg.org/neurocyte/flow), or
 [sourcehut](https://git.sr.ht/~neurocyte/flow), it's possible to
 fork and contribute via those services too.
 
-Discussing via [Discord](https://discord.com/invite/4wvteUPphx) is a good
-start to talk about what you are about to offer, or if you decide to pick
-an open issue, is a good practice first opening an issue and
+Using [Discord](https://discord.com/invite/4wvteUPphx) is a good
+starting point to discuss about what you are about to offer, or if
+you decide to pick an open issue, is a good practice first
 commenting in one of the channels to get some feedback and get to
 agreements or find guidance.
 
@@ -65,10 +65,11 @@ variables, const names, etc...  Functions have descriptive names to
 use less time adding and maintaining comments to communicate the
 purpose and intent. Don't worry about commenting each function, module
 or parameter, there are automated tools that are currently helping
-with this, take a peek on [deepwiki](https://deepwiki.com/neurocyte/flow),
-if you find something inaccurate in those docs or others, do open an
+with this, take a peek on [deepwiki](https://deepwiki.com/neurocyte/flow);
+if you find something inaccurate in this doc or others, do open an
 issue or jump in [Discord](https://discord.com/invite/4wvteUPphx)
-and comment.
+and comment, it's valid to
+[improve too](https://github.com/neurocyte/flow-website/tree/master/content/docs/contributing.smd").
 
 ### Commit comments
 

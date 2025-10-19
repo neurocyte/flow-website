@@ -1,0 +1,11 @@
+<extend template="base.shtml">
+<head id="head">
+</head>
+<body id="body">
+  <h1 :text="$page.title"></h1>
+  <div :html="$page.content()"></div>
+  <hr>
+  <p>If you find anything that could be better, because it does not reflect
+  what happens with flow or can be explain better, don't hesitate to
+  <a href="$page.custom.getOr('githubedit', 'https://github.com/neurocyte/flow-website/')">improve me</a>.</p>
+</body>
