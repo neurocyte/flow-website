@@ -1,0 +1,145 @@
+---
+.title = "Keybinding",
+.date = @date("2025-10-19T00:00:00"),
+.author = "Igor Támara",
+.layout = "tutorial.shtml",
+.draft = false,
+.custom = { .githubedit = "https://github.com/neurocyte/flow-website/tree/master/content/docs/architecture/keybind.md"},
+---
+
+If you are here, it's possible that you already have edited your
+own keybinds to suit your needs and are looking for some advanced
+topics to extend your use cases and make everything easier and
+fluid when in Flow. If you have not, take a peek to learning how
+to do it.
+
+Using the command palette `Ctrl+Shift+p` and typing **Edit key bindings**,
+takes you to the json file to extend Flow configuring
+keybindings to suit your needs.
+
+[]($section.id('tldr'))
+## ;TLDR;
+
+Once you open the corresponding json file, locate inside the imode
+(internal mode) that will accept the key or keys/combo and add an
+array, where the first element is the combination to map to the
+commands that will happen, the array accepts strings like in
+
+```js
+["ctrl+alt+shift+p", "open_command_palette"]
+```
+
+To avoid screwing up the combinations, and putting Flow in an unusable
+state derived from a wrong mapping of key combinations, read on.
+
+## Resetting keys to factory defaults
+
+User configured keybindings are stored in Flow's configuration
+directory under `keys/mode.json` where mode can be `flow`,
+`emacs`, `vim`, `helix` or customized ones. Removing the keys
+directory or the particular mode file can take you out from a
+broken state.
+
+## Keybinds for each mode
+
+Keybinds are edited per mode, and other modes inherit what is
+defined in your `flow.json` keybindings. Each mode override keybindings
+of its parent mode. For example, if you are in **emacs** mode you will
+be redirected to `emacs.json` and it will override the keybindings from
+flow.
+
+[introducing keybindings](/devlog/2024#2024-12-05T20:55:00) showcases
+how to get to edit keybindings.
+
+## Keybindings hierarchy
+
+Some terminology
+
+* **Mode**: Stored in a json file, like flow mode declared in `flow.json`.
+* **Imode**: under the json file.
+* **Major Imode**: `project` or descendant from `project`.
+* **Minimodes**: To be used momentarily and do not inherit from `project`.
+
+In general a keybinding json shows this hierarchy:
+
+```
+Mode > Imode > press > Key and commands
+map > map   > array > array(array(string,numbers),strings,numbers)
+```
+
+`Mode` is the json file that holds a map, where each
+entry has a map called `press` that is an array of
+arrays.
+
+`project` is the main imode in `flow.json` and it can be
+noticed that `normal` imode `inherit`s from `project`,
+some modes have `release`, usually one will be using
+only `press` inside `normal` imode or the specific mode
+if inside `vim`, `helix` or `emacs` modes.
+
+Looking further, it can be seen that
+[minimodes](/docs/architecture/minimode) have their
+keybinding mappings defined in a particular imode.
+
+As stated previously, there is a mode hierarchy, the main mode
+is flow and other modes inherit from it. We remind that also
+imodes have a hierarchy and it's common for major imodes to be
+descendants from `project`.
+
+## Adding a Keybinding
+
+The most basic case to map a keybind to a command was covered in
+[TLDR](#tldr) which used the combination of three keys pressed
+simultaneously `ctrl`, `shift` and `p`, all of them where combined
+with `+` to execute the command `open_command_palette`.
+
+A common use case is to add a keybinding to invoke an already
+existing command and chain it to another, making Flow more suited to your
+own needs.
+
+[]($section.id('shell'))
+## Running shell commands
+
+For example, `f5` by default is used to run `zig build test`
+outputting its results to a *scratch buffer* called `test`.
+
+```js
+["f5", ["create_scratch_buffer", "*test*"], ["shell_execute_insert", "zig", "build", "test"]],
+```
+
+Note that:
+
+The keybind is `f5`, which maps to the `f5` keycode. is invoking
+`create_scratchbuffer`, receiving the parameter `*test*` which
+results in creating a scratch buffer if didn't exist. And
+then executing the command `shell_execute_insert` that receives
+the paramaters `zig`, `build`, `test`. This latter command is
+executing a shell command called `zig` with the parameters
+`build` and `test`; if you don't have zig installed, it will
+not work, and you might want to remap f5 to a different shell
+command.
+
+```
+[
+  "f5",
+  [
+    "create_scratch_buffer",
+    "*test*"
+  ],
+  [
+    "shell_execute_insert",
+    "zig",
+    "build",
+    "test"
+  ]
+]
+```
+
+Observe [tasks running](/devlog/2025#2025-01-26T22:11:00) and maybe
+consider using more keybindings or running tasks for your projects.
+
+Probably binding commands is good, but maybe there is a feature in
+other texts editors that you miss and would love to have it at
+your fingertips. Then it's Zig time:
+[Adding commands](/docs/architecture/command) to flow.
+
