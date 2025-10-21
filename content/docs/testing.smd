@@ -1,0 +1,76 @@
+---
+.title = "Testing",
+.date = @date("2025-10-20T00:00:00"),
+.author = "Igor Támara",
+.layout = "tutorial.shtml",
+.draft = false,
+.custom = {
+  .githubedit = "https://github.com/neurocyte/flow-website/tree/master/content/docs/testing.md",
+  .prevurl = "/docs/contributing",
+  .prevtext = "Contributing",
+  .topurl = "/docs/architecture",
+  .toptext = "Architecture",
+  .codepath ="test",
+},
+---
+Currently flow tests are aimed to work as unit tests, it always is a good
+idea to review the
+[zig tests documentation](https://ziglang.org/documentation/master/#Zig-Test)
+and also an
+[introduction to testing](https://pedropark99.github.io/zig-book/Chapters/03-unittests.html).
+
+
+To work with tests you will need to:
+
+* [Clone](https://github.com/neurocyte/flow) the repo
+* Have [zig installed](https://ziglang.org/download/). Highly recommended to use
+[anyzig](https://github.com/marler8997/anyzig)
+
+## Running the tests
+
+To run the full set of tests, inside flow, use F6, which invokes
+
+```
+zig build test
+```
+
+it will work if flow was invoked from the root flow when you cloned the repo.
+
+## Run a particular test
+
+To run a particular test use
+
+```
+zig build test -Dtest-filter="test_block_name"
+```
+
+## Adding a new test file
+
+Tests files are linked via `tests.zig` and if your file test requires
+to import an additional module from flow, it can be done via the
+corresponding test step in `build.zig`, look for `test_step.dependOn`
+to find out where to make the module available for your test case
+need.
+
+## I need to test something that requires importing the editor
+
+There are two paths from here:
+
+1. Refactor your code to test the lower level functions
+1. Extend the tests to automate via external tools
+
+
+### Refactor to test lower level functions
+
+Refactor the functions involved in the functionality to make them
+not rely directly with editor and other higher level componets, and
+test the lower level ones.
+
+### Use aditional tools to test a running flow session
+
+Use additional tools to invoke the built editor and send keys to
+it, modify a file and then compare the initial contents of the file
+and the resulting contents of your file and the expected ones.
+
+If in doubt about how to do something,
+[please ask](https://discord.com/invite/4wvteUPphx).

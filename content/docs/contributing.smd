@@ -4,7 +4,14 @@
 .author = "Igor Támara",
 .layout = "tutorial.shtml",
 .draft = false,
-.custom = { .githubedit = "https://github.com/neurocyte/flow-website/tree/master/content/docs/contributing.smd"},
+.custom = { .githubedit = "https://github.com/neurocyte/flow-website/tree/master/content/docs/contributing.smd",
+  .nexturl = "/docs/testing",
+  .nexttext = "Testing",
+  .topurl = "/docs/",
+  .toptext = "Docs",
+  .prevurl = "/docs/architecture",
+  .prevtext = "Architecture",
+}
 ---
 
 ## Asking for a feature
@@ -93,11 +100,12 @@ for future readers and commiters.
 
 It's possible that the test set grows as the project evolves, given
 that the amount of relationships among components increase the
-opportunity to generate regressions.
+opportunity to generate regressions. If you are new to zig a good
+place to start to learn about the codebase is
+[adding some tests](/docs/testing)
 
 ## Getting in touch.
 
 [Discord](https://discord.com/invite/4wvteUPphx) and
 [Github issues](https://github.com/neurocyte/flow/issues) are the
 main channels to do so.
-
