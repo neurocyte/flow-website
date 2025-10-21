@@ -485,3 +485,10 @@ label input {
 .debug-toggle-label {
   text-align: right;
 }
+
+div nav {
+    text-align: right;
+}
+div.tutnav p {
+    text-align: center;
+}
