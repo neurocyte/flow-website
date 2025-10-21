@@ -4,9 +4,17 @@
 .author = "Igor Támara",
 .layout = "tutorial.shtml",
 .draft = false,
-.custom = { .githubedit = "https://github.com/neurocyte/flow-website/tree/master/content/docs/architecture.smd"},
+.custom = { .githubedit = "https://github.com/neurocyte/flow-website/tree/master/content/docs/architecture.smd",
+  .prevurl = "https://github.com/neurocyte/flow",
+  .prevtext = "Code",
+  .nexturl = "/docs/contributing",
+  .nexttext = "Contributing",
+  .topurl = "/docs/",
+  .toptext = "Docs",
+}
 ---
-
+Head to: [Contribution guidelines](/docs/contributing).
+ b
 This document describes in a general way, concepts that help to
 understand how the code is organized and where to look at when starting
 to contribute developing Flow Control.  Make sure you have read
@@ -72,9 +80,13 @@ while in Windows there is an special GUI.
 processes synchronization and allows sending messages between
 different flow components, for example, when a widget needs
 updating information from changing states of internal data and
-when components or external processes take time. For example,
-tree-sitter queries to highlight the current file of a particular
-language, LSPs, git, running a `shell` command via a `task`.
+when components or external processes take time and need to return
+an answer, all this without blocking the user interface. Tree-sitter
+queries to highlight the current file of a particular
+language and LSPs usually take time by the nature of operations they
+perform, integration with git and running a `shell` command via a
+`task` all are coordinated thanks to the infrastructure that
+Thespian provides.
 
 ## Programming languages support
 
@@ -88,9 +100,6 @@ Currently one Language Server is supported for each language.
 The clipboard is used for copy, paste operations and there is also
 support to use the system clipboard, copying and pasting to/from it.
 
-Logging support offers various levels to give feedback for various
+Logging support offers various levels to give feedback for several
 actions that ease developing Flow itself and also are used to offer
 feedback via `logview`.
-
-
-We have some [contribution guidelines](/docs/contributing).
