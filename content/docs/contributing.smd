@@ -4,7 +4,8 @@
 .author = "Igor Támara",
 .layout = "tutorial.shtml",
 .draft = false,
-.custom = { .githubedit = "https://github.com/neurocyte/flow-website/tree/master/content/docs/contributing.smd",
+.custom = {
+  .githubedit = "/docs/contributing.smd",
   .nexturl = "/docs/testing",
   .nexttext = "Testing",
   .topurl = "/docs/",
