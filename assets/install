@@ -241,7 +241,7 @@ fi
 if [ "$verify" -eq 1 ]; then
     curl -fL "$url.sig" -o "$tmp_path/$filename.$ext.sig"
     curl -fL 'https://flow-control.dev/public.gpg' -o "$tmp_path/flow-control-public.gpg"
-    gpg --no-default-keyring --keyring "$tmp_path/flow-control-public.gpg" --verify "$tmp_path/$filename.$ext.sig" "$tmp_path/$filename.$ext"
+    gpg --homedir "$tmp_path/" --no-options --no-default-keyring --keyring "$tmp_path/flow-control-public.gpg" --verify "$tmp_path/$filename.$ext.sig" "$tmp_path/$filename.$ext"
 
     if [ "$local" -eq 1 ]; then
         gpg --verify "$tmp_path/$filename.$ext.sig" "$tmp_path/$filename.$ext"
