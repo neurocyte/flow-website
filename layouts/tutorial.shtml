@@ -25,10 +25,15 @@
 		<nav id="menu" class="nav">
 			<ctx about="$site.page('')">🗃 <a href="$ctx.about.link()">home</a></ctx>
 			<ctx :if="$site.page('devlog').subpages().first?()">🖆 <a href="$if.link()">devlog</a></ctx>
-			<ctx about="$site.page('community')">🗣 <a href="https://discord.com/invite/4wvteUPphx">discord</a></ctx>
+			<ctx about="$site.page('community')">🗣 <a href="https://discord.com/invite/4wvteUPphx">join</a></ctx>
 			<ctx :if="$page.custom.get?('codepath')">🍴 <a href="$page.custom.get('codepath').prefix('https://github.com/neurocyte/flow/tree/master/')">code</a></ctx>
 			<ctx :if="$page.custom.has('codepath').not()">🍴 <a href="https://github.com/neurocyte/flow">code</a></ctx>
-			<ctx about="$site.page('community')">✎ <a href="$page.custom.getOr('githubedit', 'https://github.com/neurocyte/flow-website/')">fix</a></ctx>
+			✎
+			<ctx :if="$page.custom.has('githubedit')">
+			<a href="$page.custom.get('githubedit').prefix('https://github.com/neurocyte/flow-website/tree/master/content')">fix</a>
+			</ctx><ctx :if="$page.custom.has('githubedit').not()">
+			<a href="$page.custom.getOr('githubedit', 'https://github.com/neurocyte/flow-website/')">fix</a>
+			</ctx>
 		</nav>
 	</div>
 </body>
