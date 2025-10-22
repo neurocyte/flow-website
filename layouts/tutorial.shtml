@@ -2,10 +2,38 @@
 <head id="head">
 </head>
 <body id="body">
-  <h1 :text="$page.title"></h1>
-  <div :html="$page.content()"></div>
-  <hr>
-  <p>If you find anything that could be better, because it does not reflect
-  what happens with flow or can be explain better, don't hesitate to
-  <a href="$page.custom.getOr('githubedit', 'https://github.com/neurocyte/flow-website/')">improve me</a>.</p>
+	<h1 :text="$page.title"></h1>
+	<div :html="$page.content()"></div>
+
+	<div class="tutnav">
+		<p>
+			<ctx :if="$page.custom.get?('prevurl')">← <a href="$page.custom.get('prevurl')" :text="$page.custom.get('prevtext')"></a></ctx>
+			<ctx :if="$page.custom.get?('topurl')">
+				; <a href="$page.custom.get('topurl')" :text="$page.custom.get('toptext')"></a>
+				;
+			</ctx>
+			<ctx :if="$page.custom.has('nexturl')"><a href="$page.custom.get('nexturl')" :text="$page.custom.get('nexttext')"></a></ctx>
+			<ctx :if="$page.custom.has('nexturl').not()">
+				<ctx :if="$page.custom.has('codepath')"><a href="$page.custom.get('codepath').prefix('https://github.com/neurocyte/flow/tree/master/')">Code</a></ctx>
+				<ctx :if="$page.custom.has('codepath').not()"><a href="https://github.com/neurocyte/flow">Code</a>
+				→</ctx>
+			</ctx>→
+		</p>
+	</div>
+
+	<div>
+		<nav id="menu" class="nav">
+			<ctx about="$site.page('')">🗃 <a href="$ctx.about.link()">home</a></ctx>
+			<ctx :if="$site.page('devlog').subpages().first?()">🖆 <a href="$if.link()">devlog</a></ctx>
+			<ctx about="$site.page('community')">🗣 <a href="https://discord.com/invite/4wvteUPphx">join</a></ctx>
+			<ctx :if="$page.custom.get?('codepath')">🍴 <a href="$page.custom.get('codepath').prefix('https://github.com/neurocyte/flow/tree/master/')">code</a></ctx>
+			<ctx :if="$page.custom.has('codepath').not()">🍴 <a href="https://github.com/neurocyte/flow">code</a></ctx>
+			✎
+			<ctx :if="$page.custom.has('githubedit')">
+			<a href="$page.custom.get('githubedit').prefix('https://github.com/neurocyte/flow-website/tree/master/content')">fix</a>
+			</ctx><ctx :if="$page.custom.has('githubedit').not()">
+			<a href="$page.custom.getOr('githubedit', 'https://github.com/neurocyte/flow-website/')">fix</a>
+			</ctx>
+		</nav>
+	</div>
 </body>
