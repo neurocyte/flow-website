@@ -4,21 +4,101 @@
 .author = "Igor Támara",
 .layout = "tutorial.shtml",
 .draft = false,
-.custom = { .githubedit = "https://github.com/neurocyte/flow-website/tree/master/content/docs/architecture/palette.md"},
+.custom = {
+  .githubedit = "/docs/architecture/palette.md"
+},
 ---
 
 Palettes are overlay menus that allow to select an item from the
 presented list, applying a command with the selected element,
 optionally deleting the selected item; it's possible to close
-the palette without selecting(cancel), filter the elements, and
-having special elements that trigger different actions.
+the palette without selecting anything(a.k.a. cancel), filter
+the elements, and having special elements that trigger different
+actions.
+
+Examples of palettes are command_palette, clipboard_palette,
+they all are based on palette.zig that does all the heavy lifting
+and sets the framework to create new palettes as simple as
+possible.
+
+Palettes are an special case of minimode and for instance a
+mode, they receive inputs from keyboards and execute the
+beforehand mentioned actions in response.
 
 To get the most of this section, it's recommended to have
 read about [commands](/docs/architecture/command), and optionally
 [minimodes](/docs/architecture/minimode).
 
-See
-[clipboard history palette](https://github.com/neurocyte/flow/commit/634a18cb5685a3c3fcfc08301306e628d33c3256)
+## Defining the palette
 
+Palettes are under `tui/overlay` and use the facilities offered by
+`palette.zig` to perform all the operations.
 
+1. Defining the list of elements
+2. Filtering the elements
+3. Perform an action with the selected element
 
+Note: Palettes are meant to show options and allowing to select
+the options to execute an action on the given selection. To
+maintain as readable as possible the code and thus extensible,
+the data to be used should be prepared previously.
+
+### Fields
+
+Basic fields that give hints to the user and need to be set are:
+
+```zig
+pub const label = "Clipboard history";
+pub const name = " clipboard";
+pub const description = "clipboard";
+pub const icon = "  ";
+```
+
+### Defining the list of elements in the palette
+
+`load_entries` is in charge of populating the visible entries,
+each one with an index.
+
+```zig
+pub fn load_entries(palette: *Type) !usize
+```
+
+The index will identify the action to be taken.
+
+When populating with each entry, there must be a relation that
+links the option chosen with the required action, and this happens
+in `add_menu_entry` used when the user writes in the input to filter
+out options.
+
+```zig
+pub fn add_menu_entry(palette: *Type, entry: *Entry, matches: ?[]const usize) !void {
+```
+
+The common line that will be used when registering the event to a
+selected item is
+
+```zig
+try palette.menu.add_item_with_handler(value.written(), select);
+```
+
+### Acting on selection
+
+When the selection happens, it is time to invoke the command with the
+selection and the palette needs to be closed.
+Those actions will be handled inside `select`, whose signature is:
+
+```zig
+fn select(menu: **Type.MenuType, button: *Type.ButtonType, pos: Type.Pos) void {
+```
+
+Other common operations in the palettes can be inspected looking at the source
+code of the palettes, all of them import `palette.zig`.  Once the functions are
+ready, it's time to make the palette available as a command.
+
+## Registering the palette
+
+Commands that open the palette are defined in `tui.zig` in a similar way as it
+is done with [minimodes](/docs/architecture/minimode).
+
+To view a complete implementation of a palette, take a look at
+[clipboard history palette commit](https://github.com/neurocyte/flow/commit/634a18cb5685a3c3fcfc08301306e628d33c3256)
