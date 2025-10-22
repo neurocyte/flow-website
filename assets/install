@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
 install_dir="${PREFIX:-/usr/local}/bin"
@@ -206,7 +206,7 @@ url="https://github.com/$repo/releases/download/$version/$filename.$ext"
 
 tmp_path="$(mktemp -t -d "$(basename "$0").XXXXX")"
 
-if [ -z "$tmp_path" ] || [ "$tmp_path" == "/" ]; then
+if [ -z "$tmp_path" ] || [ "$tmp_path" = "/" ]; then
     echo "failed to create a temporary download directory"
     exit 1
 fi
@@ -220,11 +220,10 @@ die() {
     exit 1
 }
 
-trap die SIGINT
-trap die SIGHUP
-trap die SIGTERM
-trap die SIGQUIT
-trap die ERR
+trap die INT
+trap die HUP
+trap die TERM
+trap die QUIT
 trap cleanup EXIT
 
 echo "downloading $title... to $tmp_path"
