@@ -2,7 +2,6 @@
 set -e
 
 install_dir="${PREFIX:-/usr/local}/bin"
-tmp_path="${TMPDIR:-/tmp}"
 add_alias=${ALIAS:-0}
 nightly=${NIGHTLY:-0}
 debug=${DEBUG:-0}
@@ -205,7 +204,30 @@ if [ "$debug" -eq 1 ]; then
 fi
 url="https://github.com/$repo/releases/download/$version/$filename.$ext"
 
-echo "downloading $title..."
+tmp_path="$(mktemp -t -d "$(basename "$0").XXXXX")"
+
+if [ -z "$tmp_path" ] || [ "$tmp_path" == "/" ]; then
+    echo "failed to create a temporary download directory"
+    exit 1
+fi
+
+cleanup() {
+    rm -Rf "$tmp_path"
+    echo "removed temporary directory $tmp_path"
+}
+
+die() {
+    exit 1
+}
+
+trap die SIGINT
+trap die SIGHUP
+trap die SIGTERM
+trap die SIGQUIT
+trap die ERR
+trap cleanup EXIT
+
+echo "downloading $title... to $tmp_path"
 
 curl -fL "$url" -o "$tmp_path/$filename.$ext"
 
@@ -224,9 +246,6 @@ if [ "$verify" -eq 1 ]; then
     if [ "$local" -eq 1 ]; then
         gpg --verify "$tmp_path/$filename.$ext.sig" "$tmp_path/$filename.$ext"
     fi
-
-    rm "$tmp_path/flow-control-public.gpg"
-    rm "$tmp_path/$filename.$ext.sig"
 fi
 
 echo "installing $title to $install_dir/flow..."
@@ -237,7 +256,6 @@ else
 fi
 
 $SUDOCMD chmod +x "$install_dir/flow"
-rm "$tmp_path/$filename.$ext"
 
 if [ "$add_alias" -eq 1 ]; then
     if [ "$(readlink "$install_dir/f")" = "$install_dir/flow" ]; then
