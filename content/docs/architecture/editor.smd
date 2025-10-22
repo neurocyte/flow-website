@@ -4,7 +4,16 @@
 .author = "Igor Támara",
 .layout = "tutorial.shtml",
 .draft = false,
-.custom = { .githubedit = "https://github.com/neurocyte/flow-website/tree/master/content/docs/architecture/editor.md"},
+.custom = {
+  .githubedit = "docs/architecture/editor.md",
+  .prevurl = "docs/command",
+  .prevtext = "Commands",
+  .topurl = "docs/architecture",
+  .toptext = "Architecture",
+  .nexturl = "docs/architecture/minimode",
+  .nexttext = "Mini modes",
+  .codepath ="src/tui/editor.zig",
+},
 ---
 
 The `editor` coordinates visualization and modification of
@@ -24,51 +33,119 @@ portion of the buffer.
 
 Other cursors can be in the `View` or in regions outside the
 current view, depending on the size of both the buffer and
-the editor view.
+the editor in your device.
 
 A `Selection` has two cursors that are not visible, they mark
 the begin and the end of the selection, and CurSels are actually
 what allow to have the concept of a cursor with a selection. A
-`Cursel` has a cursor and optionally a Selection.
+`Cursel` is composed by a cursor and optionally a Selection.
 
-Most of editor operations act on the set of CurSels, the Primary
-Cursor is in fact a CurSel, as opposed to what we previously
-mentioned.
+Most of editors operations act on the set of CurSels and the
+Primary Cursor is a particular case of the general case. And
+as a note, the Primary Cursor is in fact a CurSel.
 
 To complete the editor scenario, `Marks` have the potential
-to become selections, and behind the scenes CurSels and are
-evident to the eye when in search mode, they are seen as
-the primary cursor is positioned over an occurrence with a
-different color according to the theme.
+to become selections; the marks become evident to the eye
+when in search mode, they are seen as the primary cursor
+is positioned over an occurrence with a different color
+according to the theme.
 
 The Editor will be acting on Buffer.Root which is the root of
 the tree representing the document that is being edited. The API
 of the Buffer.Root is stable and offers the necessary to insert,
-delete and move along the buffer, knowing if the end, the
-beginning has been reached when interacting with a Cursor.
+delete and move along the buffer, knowing if the end or the
+beginning of the document have been reached when interacting
+with a Cursor.
+
+Cursors, Selections and Cursels don't know about the buffer, and
+they need to receive a reference to them to have positions and
+also sometimes receive metrics from the editor that help determine
+if a cursor is about to exit boundaries of the buffer and have
+everything "in place".
 
 ## Editor Commands
 
 We mentioned earlier that most of the operations work on all
-the cursors and selections, there are various commands that
-will use functions that iterate over cursors, selections, cursels
+the cursors and selections, moreover, there are various
+commands acting over the set of cursors, selections, cursels
 or marks. Given said this, we will be using functions as
 parameters in most of the situations. Functional programming
 languages are popular in these scenarios, to name a prominent
 one, Emacs and emacs lisp.
 
-If the buffer is not to be modified, we will be using `` to
-get the root of it to find and position the cursors. While
-we will use `` when the buffer is to be modified.
+If the buffer is not to be modified, we will be using the
+method `buf_root` to get the root of the buffer to find and
+position the cursors. In the other hand, we will use
+`buf_for_update()` when the buffer is to be modified.
+
+The benefit of sending functions as parameters is that code
+is reused and the codebase can grow without much sacrifice
+when adding new functionalities, because one would be
+thinking only in the current cursor and if required, the
+operation will be applied to all the cursors, the same applies
+to selections, cursels and marks.
 
 ## Moving
 
+For example, to move the cursors a page up, we can look at
+the command `move_page_up`, which uses the method
+`with_cursors_and_view_const` sending the function
+`move_cursor_page_up`.
 
+Looking inside `with_cursors_and_view_const`, it iterates
+over all the cursors and invokes `with_cursor_and_view_const`,
+sending a cursor as a parameter, that function, will invoke
+`move_cursor_page_up` whose commitment is to use the method
+`move_page_up` from the cursor, sending the view and the
+metrics of the editor.
+
+The family of `move` functions is big, look for the methods
+whose name has the word move in them. with the command palette
+is possible to get a glimpse of them.
 
 ## Selections
 
+There are naming conventions for the functions that help
+understanding what each one is doing, there has been taken
+great deal of care to maintain consistency that needs to be
+followed to make it easier to continue extending on
+functionalities.
+
+Look at the following set of functions, all of them act on
+cursors, cursels and selections, in singular and plural, and
+some of them receive arguments, the repeat functions act
+many times over the set of the group that they are intended
+to do so.  The parameters and following the calls from one
+to another will let you navigate and get the hang of their
+usage.
+
+```zig
+fn with_cursor_const
+fn with_cursel_const
+fn with_cursels_const
+fn with_selection_const
+fn with_cursor_const_arg
+fn with_cursors_const_arg
+fn with_cursors_const_once
+fn with_selection_const_arg
+fn with_cursors_const_repeat
+fn with_selections_const_arg
+fn with_cursor_and_view_const
+fn with_selections_const_once
+fn with_cursors_and_view_const
+fn with_selections_const_repeat
+fn with_selection_and_view_const
+fn with_selections_and_view_const
+```
+
 ## Modifying the buffer
 
+The `select` family of functions is bigger than the set of `move`
+functions, in contrast, the `cut`, `delete`, `insert`, `paste`
+looks smaller, and this is accomplished making composition of
+functions.  Usually when modifying something, first there is
+a process to locate the cursor, cursel o selection in the proper
+place and then applying the modification.
 
 [Discord](https://discord.com/invite/4wvteUPphx) and
 [Github issues](https://github.com/neurocyte/flow/issues) are the
