@@ -13,17 +13,12 @@
   </head>
   <body id="body">
     <nav id="menu" class="centered">
-      <ctx about="$site.page('')"><a href="$ctx.about.link()" text="$ctx.about.title">home</a></ctx>
-      •
-      <ctx about="$site.page('installation')"><a href="$ctx.about.link()" text="$ctx.about.title">installation</a></ctx>
-      •
-      <ctx about="$site.page('downloads')"><a href="$ctx.about.link()" text="$ctx.about.title">downloads</a></ctx>
-      •
-      <ctx :if="$site.page('devlog').subpages().first?()"><a href="$if.link()">devlog</a></ctx>
-      •
-      <ctx about="$site.page('docs')"><a href="$ctx.about.link()" text="$ctx.about.title">docs</a></ctx>
-      •
-      <ctx about="$site.page('community')"><a href="$ctx.about.link()" text="$ctx.about.title">community</a></ctx>
+      🗃 <ctx about="$site.page('')"><a href="$ctx.about.link()" text="$ctx.about.title">home</a></ctx>
+      ⚙ <ctx about="$site.page('installation')"><a href="$ctx.about.link()" text="$ctx.about.title">install</a></ctx>
+      ☑ <ctx about="$site.page('downloads')"><a href="$ctx.about.link()" text="$ctx.about.title">download</a></ctx>
+      🖆 <ctx :if="$site.page('devlog').subpages().first?()"><a href="$if.link()">devlog</a></ctx>
+      🕮 <ctx about="$site.page('docs')"><a href="$ctx.about.link()" text="$ctx.about.title">docs</a></ctx>
+      🗣 <ctx about="$site.page('community')"><a href="$ctx.about.link()" text="$ctx.about.title">community</a></ctx>
     </nav>
     <script src="$site.asset('js/index.js').link()"></script>
     <super>
