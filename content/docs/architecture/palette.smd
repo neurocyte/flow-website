@@ -5,7 +5,12 @@
 .layout = "tutorial.shtml",
 .draft = false,
 .custom = {
-  .githubedit = "/docs/architecture/palette.md"
+  .githubedit = "docs/architecture/palette.md",
+  .prevurl = "docs/minimode",
+  .prevtext = "Mini modes",
+  .topurl = "docs/architecture",
+  .toptext = "Architecture",
+  .codepath ="src/tui/mode/overlay/clipboard_palette.zig",
 },
 ---
 
@@ -98,7 +103,8 @@ ready, it's time to make the palette available as a command.
 ## Registering the palette
 
 Commands that open the palette are defined in `tui.zig` in a similar way as it
-is done with [minimodes](/docs/architecture/minimode).
+is done with [minimodes](/docs/architecture/minimode). We have got
+you covered if in doubt about [how to create a command](/docs/architecture/command).
 
 To view a complete implementation of a palette, take a look at
 [clipboard history palette commit](https://github.com/neurocyte/flow/commit/634a18cb5685a3c3fcfc08301306e628d33c3256)
