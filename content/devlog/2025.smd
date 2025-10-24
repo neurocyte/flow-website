@@ -19,7 +19,7 @@ devlog entries in the [archive](/devlog/).
 
 Tabs can now be reordered with the mouse by dragging them, or by the new commands `move_tab_next`
 and `move_tab_previous`. These are bound to `ctrl+shift+page_up` and `ctrl+shift+page_down` in flow
-mode. Also, saving an emphemeral buffer now replaces it's tab with the tab for the new file.
+mode. Also, saving an ephemeral buffer now replaces it's tab with the tab for the new file.
 
 
 ## [clipboard history]($section.id("2025-10-13T20:45:48+02:00"))
