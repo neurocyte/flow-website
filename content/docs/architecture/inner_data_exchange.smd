@@ -1,0 +1,125 @@
+---
+.title = "Command arguments and message passing",
+.date = @date("2025-10-27T00:00:00"),
+.author = "CJ van den Berg",
+.layout = "tutorial.shtml",
+.draft = false,
+.custom = {
+  .githubedit = "docs/architecture/inner_data_exchange.smd",
+  .prevurl = "docs/architecture/editor.zig",
+  .prevtext = "Editor",
+  .topurl = "docs/architecture",
+  .toptext = "Architecture",
+  .codepath ="src/tui/editor.zig",
+},
+---
+
+Flow uses actor model to offer an snappy experience when working with
+projects that have tens of thousands of source files, also features async
+communication with the threads that are working in independent tasks that
+contribute to have vcs, lsp and tree-sitter integration, apart from the
+directory introspection to make available what is expected from an IDE.  The
+command arguments travel to the target command and are en/decoded powered by
+[cbor](https://github.com/neurocyte/cbor), the same as the parameters that
+are sent from one thread to another. The process management is provided by
+[thespian](https://github.com/neurocyte/thespian).
+
+This chapter describes the mechanisms that flow has to pass arguments
+between components.
+
+## Library usage
+
+* The Thespian library sends and receives `thespian.message` values, which
+are strongly typed, but schema free CBOR encoded structures. It supports
+spawning, linking, killing, etc., of lightweight processes (aka the "Actor
+Model" with "Green Threads") and provides async file and network IO and
+child process management.
+* The CBOR library encodes decodes CBOR structured data to/from Zig
+variables
+  * Encoding happens via the `cbor.write*` functions. These are wrapped by
+  `command.fmt` and `thespian.message.fmt` which provide fast allocation
+  free encoding to a thread local buffer. Note that the CBOR data encoded
+  via the `*.fmt` functions will only survive until another message is
+  encoded and must be copied somewhere for more permanent storage, or
+  possibly sent somewhere via thespian.
+  * Decoding happens via the `cbor.match`, `cbor.extract` and
+  `cbor.extractAlloc` group of functions. `cbor.extract` functions do not
+  allocate and cannot be used to extract some types that require allocation.
+  `cbor.extractAlloc` functions _do_ allocate and can extract arrays and
+  structures that require allocation. Both `cbor.extract` and
+  `cbor.extractAlloc` produce strings that **reference** the original CBOR
+  data buffer. `thespian.message.match` and `thespian.extract` functions
+  are fairly simple wrappers.
+
+### Example of command argument usage
+
+The command `goto_line`, which receives as parameter an integer(in the case
+of vim and helix mode, you first type the number and then the action, gg)
+via its meta is declared as:
+
+```zig
+pub const goto_line_meta: Meta = .{ .arguments = &.{.integer} };
+```
+
+To actually receiving the integer parameter:
+
+```zig
+pub fn goto_line(self: *Self, ctx: Context) Result {
+
+    var line: usize = 0;
+    if (!try ctx.args.match(.{tp.extract(&line)}))
+        return error.InvalidGotoLineArgument;
+```
+
+Cbor features en/decoding arrays and compounds of basic types and the only
+requirement is to decode in the same order as encoding the data, more
+samples of usage can be seen in
+[cbor tests](https://github.com/neurocyte/cbor/blob/master/test/tests.zig).
+
+## Buffer scoping
+
+CBOR structures are mostly stored in a way that avoids allocation entirely.
+This is really fast, but requires that you always know where the CBOR data
+you are working with is stored.
+
+* Received messages are read directly from the thespian process (actor)
+receive buffer and remain in scope only for the duration of an actor's
+receive method call
+* `thespian.message.fmt` encoded messages are stored in the thread local
+`thespian.message_buffer` and remain in scope only until the next
+`thespian.message.fmt` call on the same thread
+* `thespian.exit_message` encoded message are stored in the thread local
+`thespian.error_message_buffer` and remain in scope only until the next
+`thespian.exit_message` call on the same thread
+* `command.fmt` encoded messages are stored in the thread local
+`command.context_buffer` and remain in scope only until the next
+`command.fmt` call on the same thread
+
+All of this implies several things worth keeping in mind:
+
+* `thespian.pid.send` will encode it's parameters to
+`thespian.message_buffer` and then send them to the destination actor's
+receive buffer. This will invalidate the contents of
+`thespian.message_buffer` and destroy any message previously encoded with
+`thespian.message.fmt` (on the same thread).
+* Calling `command.fmt` inside a command that uses `command.Context.args`
+will possibly invalidate the command's own arguments. I say _possibly_
+because the `ctx.arg` may come from somewhere else entirely, like the
+actor's receive buffer if the command was called remotely, or some other
+explicitly allocated buffer.
+* Use `*.fmtbuf` to encode to different buffer if there may be scoping
+issues. You can allocate and scope this buffer any way you want.
+* Calling `thespian.exit_message` while propagating an error up the stack
+that was previously created with `thespian.exit_message` will overwrite the
+original error
+* Don't ever try to free a CBOR buffer unless you know exactly where it came
+from.
+* Strings extracted from CBOR buffers are **references** into the original
+CBOR data and will be invalidated implicitly when the CBOR buffer they came
+from is invalidated/overwritten.
+
+## More information
+
+* [Deepwiki on cbor](https://deepwiki.com/neurocyte/cbor)
+* [Samples of cbor usage](https://github.com/neurocyte/cbor/blob/master/test/tests.zig)
+* [Deepwiki on thespian](https://deepwiki.com/neurocyte/thespian)
