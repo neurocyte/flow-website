@@ -19,40 +19,138 @@ idea to review the
 and also an
 [introduction to testing](https://pedropark99.github.io/zig-book/Chapters/03-unittests.html).
 
-
 To work with tests you will need to:
 
 * [Clone](https://github.com/neurocyte/flow) the repo
 * Have [zig installed](https://ziglang.org/download/). Highly recommended to use
 [anyzig](https://github.com/marler8997/anyzig)
 
+Flow tests are placed in the directory `test`.
+
 ## Running the tests
 
-To run the full set of tests, inside flow, use F6, which invokes
+To run the full set of tests, inside flow, use `F5`, which runs a task that
+invokes:
 
 ```
 zig build test
 ```
 
-it will work if flow was invoked from the root flow when you cloned the repo.
+it will work if flow was invoked from the project root, which is the same
+place that you would normally run the tests when on the terminal.
 
-## Run a particular test
+### Run a particular test
 
-To run a particular test use
+To run an specific test use `Dtest-filter` option with the name of your
+test, i.e., for the test called **test_block_name** use:
 
 ```
 zig build test -Dtest-filter="test_block_name"
 ```
 
+## Adding tests
+
+Tests are needed when:
+
+* There is some logic that might be difficult to understand given it's
+nature, for example, when there are a lot of branching
+* You find something that could be changed in the future affecting the
+current behavior
+* A bug is fixed
+* A defined behavior could be thought different, for example when in a mode,
+it was defined that something might diverge from other programs.
+
+Tests are placed under `test` directory.  Add your test in the file that
+exercises the functionality and makes proof of it behaving as expected.
+Maintain the logic test as simple as possible. It's possible to add
+additional functions to make the tests readable and extendable though.
+
+public functions are stratightforward tested, while there are some
+conventions for testing private functions.
+
+### Testing private functions
+
+Some internal logic of a module can be tested without the need to be
+exposed to other modules.
+
+In such cases the module that has the logic should provide a pub
+`test_internal`, by convention, exposing the target functionalities to
+be tested.
+
+For example in `src/tui/mode/helix.zig`, `test_internal` exposes the private
+function
+
+```zig
+fn move_cursor_long_word_right_end(root: Buffer.Root, cursor: *Cursor, metrics: Buffer.Metrics) error{Stop}!void
+```
+
+with
+
+```zig
+pub const test_internal = struct {
+    pub const move_cursor_long_word_right = private.move_cursor_long_word_right;
+.
+.
+.
+};
+```
+
+And in `test/tests_helix.zig`, helix is imported as
+
+```zig
+const helix = @import("tui").exports.mode.helix;
+```
+
+Later on using the function `move_cursor_long_word_right` as
+
+```zig
+try helix.test_internal.move_cursor_long_word_right_end(root, cursor, the_metrics);
+```
+
+In case there is need of a new test file for concern separation, continue
+to the next section.
+
 ## Adding a new test file
 
-Tests files are linked via `tests.zig` and if your file test requires
-to import an additional module from flow, it can be done via the
-corresponding test step in `build.zig`, look for `test_step.dependOn`
-to find out where to make the module available for your test case
-need.
+Three steps are required for adding a new test file:
 
-## I need to test something that requires importing the editor
+1. Create a new test file
+1. Include the test to the set of tests
+1. Optionally, make available a module to the build system
+for your particular test
+
+### Create the test file
+
+Place your test file under `test` directory, the name should be prefixed
+with `tests_`.
+
+For the rest of this section we will use as a sample
+`tests_project_manager.zig`.
+
+### Include the test file
+
+Tests files are linked via `test/tests.zig`, import your new test_file
+alphabetically as in our sample:
+
+```zig
+pub const project_manager = @import("tests_project_manager.zig");
+```
+
+### Import required modules when building tests
+
+In `build.zig` import the required module under `tests.root_module`, for
+the current example:
+
+```zig
+tests.root_module.addImport("project_manager", project_manager_mod);
+```
+
+[Sample](https://github.com/neurocyte/flow/commit/e053a0dcf4b4c93f1ce1fe6d14a3c04e886d393c)
+of adding a new test file for project manager.
+
+## FAQ on tests
+
+### I need to test something that requires importing the editor ¿What do I do?
 
 There are two paths from here:
 
@@ -65,6 +163,8 @@ There are two paths from here:
 Refactor the functions involved in the functionality to make them
 not rely directly with editor and other higher level componets, and
 test the lower level ones.
+
+An example of this can be seen in commands
 
 ### Use aditional tools to test a running flow session
 
