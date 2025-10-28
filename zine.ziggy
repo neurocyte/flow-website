@@ -12,5 +12,6 @@ Site {
         "public.gpg",
         "fonts/AcPlus_IBM_VGA_9x16.ttf",
         "fonts/Iosevka-Regular.woff2",
+        "fonts/SymbolsNerdFontMono-Regular.ttf",
     ],
 }

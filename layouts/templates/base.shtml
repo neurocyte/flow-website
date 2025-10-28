@@ -8,17 +8,18 @@
     <link rel="icon" type="image/png" href="$site.asset('img/flow-control.png').link()">
     <link rel="stylesheet" type="text/css" href="$site.asset('css/reset.css').link()">
     <link rel="stylesheet" type="text/css" href="$site.asset('css/index.css').link()">
+    <link rel="stylesheet" type="text/css" href="$site.asset('css/webfont.css').link()">
     <title :text="$site.title"></title>
     <super>
   </head>
   <body id="body">
-    <nav id="menu" class="centered">
-      🗃 <ctx about="$site.page('')"><a href="$ctx.about.link()" text="$ctx.about.title">home</a></ctx>
-      ⚙ <ctx about="$site.page('installation')"><a href="$ctx.about.link()" text="$ctx.about.title">install</a></ctx>
-      ☑ <ctx about="$site.page('downloads')"><a href="$ctx.about.link()" text="$ctx.about.title">download</a></ctx>
-      🖆 <ctx :if="$site.page('devlog').subpages().first?()"><a href="$if.link()">devlog</a></ctx>
-      🕮 <ctx about="$site.page('docs')"><a href="$ctx.about.link()" text="$ctx.about.title">docs</a></ctx>
-      🗣 <ctx about="$site.page('community')"><a href="$ctx.about.link()" text="$ctx.about.title">community</a></ctx>
+    <nav id="menu" class="centered"><!-- https://www.nerdfonts.com/cheat-sheet for other icons -->
+      <ctx about="$site.page('')"><a href="$ctx.about.link()"><i class="nf nf-fa-terminal"></i></a> <a href="$ctx.about.link()">home</a></ctx>
+      <ctx about="$site.page('installation')"><a href="$ctx.about.link()" ><i class="nf nf-cod-diff_added"></i></a> <a href="$ctx.about.link()" >install</a></ctx>
+      <ctx about="$site.page('downloads')"><a href="$ctx.about.link()"><i class="nf nf-oct-download"></i></a> <a href="$ctx.about.link()">download</a></ctx>
+      <ctx :if="$site.page('devlog').subpages().first?()"><a href="$if.link()"><i class="nf nf-dev-readthedocs"></i></a> <a href="$if.link()">devlog</a></ctx>
+      <ctx about="$site.page('docs')"><a href="$ctx.about.link()"><i class="nf nf-fa-readme"></i></a> <a href="$ctx.about.link()">docs</a></ctx>
+      <ctx about="$site.page('community')"><a href="$ctx.about.link()"><i class="nf nf-fa-people_carry_box"></i></a> <a href="$ctx.about.link()">community</a></ctx>
     </nav>
     <script src="$site.asset('js/index.js').link()"></script>
     <super>
