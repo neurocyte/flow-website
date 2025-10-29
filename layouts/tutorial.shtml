@@ -13,10 +13,10 @@
 			<ctx :if="$page.custom.get?('codepath')"><a href="$page.custom.get('codepath').prefix('https://github.com/neurocyte/flow/tree/master/')"><i class="nf nf-dev-zig"></i></a> <a href="$page.custom.get('codepath').prefix('https://github.com/neurocyte/flow/tree/master/')">code</a></ctx>
 			<ctx :if="$page.custom.has('codepath').not()"><a href="https://github.com/neurocyte/flow"><i class="nf nf-dev-zig"></i></a> <a href="https://github.com/neurocyte/flow">code</a></ctx>
 			<ctx :if="$page.custom.has('githubedit')">
-		<a href="$page.custom.get('githubedit').prefix('https://github.com/neurocyte/flow-website/tree/master/content')"><i class="nf nf-fa-edit"></i></a> <a href="$page.custom.get('githubedit').prefix('https://github.com/neurocyte/flow-website/tree/master/content')">fix</a>
+		<a href="$page.custom.get('githubedit').prefix('https://github.com/neurocyte/flow-website/tree/master/content')"><i class="nf nf-fa-edit"></i></a> <a href="$page.custom.get('githubedit').prefix('https://github.com/neurocyte/flow-website/tree/master/content')">edit</a>
 			</ctx>
 			<ctx :if="$page.custom.has('githubedit').not()">
-			<a href="$page.custom.getOr('githubedit', 'https://github.com/neurocyte/flow-website/')"><i class="nf nf-fa-edit"></i></a> <a href="$page.custom.getOr('githubedit', 'https://github.com/neurocyte/flow-website/')">fix</a>
+			<a href="$page.custom.getOr('githubedit', 'https://github.com/neurocyte/flow-website/')"><i class="nf nf-fa-edit"></i></a> <a href="$page.custom.getOr('githubedit', 'https://github.com/neurocyte/flow-website/')">edit</a>
 			</ctx>
 		</nav>
 	</div>
