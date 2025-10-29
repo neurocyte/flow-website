@@ -45,7 +45,7 @@ Some [custom frontmatter](https://zine-ssg.io/docs/supermd/#frontmatter) fields 
 Directs to contribute editing this documentation. Used by `layout/tutorial.shtml`.
 
 ```ziggy
-  .githubedit** = "/docs/testing.md",
+  .githubedit** = "/docs/testing.smd",
 ```
 
 ### codepath (Optional)

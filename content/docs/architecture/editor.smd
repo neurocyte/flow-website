@@ -5,13 +5,7 @@
 .layout = "tutorial.shtml",
 .draft = false,
 .custom = {
-  .githubedit = "docs/architecture/editor.md",
-  .prevurl = "docs/command",
-  .prevtext = "Commands",
-  .topurl = "docs/architecture",
-  .toptext = "Architecture",
-  .nexturl = "docs/architecture/minimode",
-  .nexttext = "Mini modes",
+  .githubedit = "docs/architecture/editor.smd",
   .codepath ="src/tui/editor.zig",
 },
 ---
@@ -24,6 +18,7 @@ read the [architecture briefing](/docs/architecture), about
 [commands](/docs/architecture/command) and
 [keybinds](/docs/architecture/keybind).
 
+[]($section.id("concepts"))
 ## Some concepts
 
 The `primary Cursor` is presented always in the `Editor`,
@@ -63,6 +58,7 @@ also sometimes receive metrics from the editor that help determine
 if a cursor is about to exit boundaries of the buffer and have
 everything "in place".
 
+[]($section.id("commands"))
 ## Editor Commands
 
 We mentioned earlier that most of the operations work on all
@@ -85,6 +81,7 @@ thinking only in the current cursor and if required, the
 operation will be applied to all the cursors, the same applies
 to selections, cursels and marks.
 
+[]($section.id("moving"))
 ## Moving
 
 For example, to move the cursors a page up, we can look at
@@ -103,6 +100,7 @@ The family of `move` functions is big, look for the methods
 whose name has the word move in them. with the command palette
 is possible to get a glimpse of them.
 
+[]($section.id("selecting"))
 ## Selections
 
 There are naming conventions for the functions that help
@@ -138,6 +136,7 @@ fn with_selection_and_view_const
 fn with_selections_and_view_const
 ```
 
+[]($section.id("modifying"))
 ## Modifying the buffer
 
 The `select` family of functions is bigger than the set of `move`
@@ -151,3 +150,10 @@ place and then applying the modification.
 [Github issues](https://github.com/neurocyte/flow/issues) are the
 main channels to do so.
 
+[]($section.id("next"))
+## Next steps
+
+* [minimodes](/docs/architecture/minimode) invoke commands defined in the editor
+* [palettes](/docs/architecture/palette) are open by commands and when selected an item, a command
+is invoked.
+* Plenty of [commands](/docs/architecture/command)  are defined in the editor.

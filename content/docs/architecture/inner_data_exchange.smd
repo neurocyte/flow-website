@@ -6,42 +6,40 @@
 .draft = false,
 .custom = {
   .githubedit = "docs/architecture/inner_data_exchange.smd",
-  .prevurl = "docs/architecture/editor.zig",
-  .prevtext = "Editor",
-  .topurl = "docs/architecture",
-  .toptext = "Architecture",
   .codepath ="src/tui/editor.zig",
 },
 ---
 
 Flow uses actor model to offer an snappy experience when working with
-projects that have tens of thousands of source files, also features async
-communication with the threads that are working in independent tasks that
-contribute to have vcs, lsp and tree-sitter integration, apart from the
-directory introspection to make available what is expected from an IDE.  The
-command arguments travel to the target command and are en/decoded powered by
-[cbor](https://github.com/neurocyte/cbor), the same as the parameters that
-are sent from one thread to another. The process management is provided by
-[thespian](https://github.com/neurocyte/thespian).
+projects that have tens of thousands of source files, also features
+async communication with the threads that are working in independent
+tasks that contribute to have vcs, lsp and tree-sitter integration,
+apart from the directory introspection to make available what is
+expected from an IDE. The command arguments travel to the target
+command and are en/decoded powered by
+[cbor](https://github.com/neurocyte/cbor), the same as the parameters
+that are sent from one thread to another. The process management is
+provided by [thespian](https://github.com/neurocyte/thespian).
 
 This chapter describes the mechanisms that flow has to pass arguments
 between components.
 
+[]($section.id('libraries'))
 ## Library usage
 
-* The Thespian library sends and receives `thespian.message` values, which
-are strongly typed, but schema free CBOR encoded structures. It supports
-spawning, linking, killing, etc., of lightweight processes (aka the "Actor
-Model" with "Green Threads") and provides async file and network IO and
-child process management.
+* The Thespian library sends and receives `thespian.message` values,
+which are strongly typed, but schema free CBOR encoded structures.
+It supports spawning, linking, killing, etc., of lightweight processes
+(aka the "Actor Model" with "Green Threads") and provides async file
+and network IO and child process management.
 * The CBOR library encodes decodes CBOR structured data to/from Zig
 variables
-  * Encoding happens via the `cbor.write*` functions. These are wrapped by
-  `command.fmt` and `thespian.message.fmt` which provide fast allocation
-  free encoding to a thread local buffer. Note that the CBOR data encoded
-  via the `*.fmt` functions will only survive until another message is
-  encoded and must be copied somewhere for more permanent storage, or
-  possibly sent somewhere via thespian.
+  * Encoding happens via the `cbor.write*` functions. These are wrapped
+  by `command.fmt` and `thespian.message.fmt` which provide fast
+  allocation free encoding to a thread local buffer. Note that the CBOR
+  data encoded via the `*.fmt` functions will only survive until another
+  message is encoded and must be copied somewhere for more permanent
+  storage, or possibly sent somewhere via thespian.
   * Decoding happens via the `cbor.match`, `cbor.extract` and
   `cbor.extractAlloc` group of functions. `cbor.extract` functions do not
   allocate and cannot be used to extract some types that require allocation.
@@ -51,31 +49,19 @@ variables
   data buffer. `thespian.message.match` and `thespian.extract` functions
   are fairly simple wrappers.
 
-### Example of command argument usage
+The most basic example on deserialization of an integer value can is shown
+in [commands](/docs/architecture/command#command_arguments).
 
-The command `goto_line`, which receives as parameter an integer(in the case
-of vim and helix mode, you first type the number and then the action, gg)
-via its meta is declared as:
-
-```zig
-pub const goto_line_meta: Meta = .{ .arguments = &.{.integer} };
-```
-
-To actually receiving the integer parameter:
-
-```zig
-pub fn goto_line(self: *Self, ctx: Context) Result {
-
-    var line: usize = 0;
-    if (!try ctx.args.match(.{tp.extract(&line)}))
-        return error.InvalidGotoLineArgument;
-```
-
-Cbor features en/decoding arrays and compounds of basic types and the only
-requirement is to decode in the same order as encoding the data, more
-samples of usage can be seen in
+Cbor features en/decoding arrays, json and compounds of basic types and the
+only requirement is to decode in the same order as encoding the data, more
+samples on using cbor can be seen in
 [cbor tests](https://github.com/neurocyte/cbor/blob/master/test/tests.zig).
 
+For example, when interacting with the clipboard, the messages sent are
+multiple chunks of information,
+
+
+[]($section.id('scoping'))
 ## Buffer scoping
 
 CBOR structures are mostly stored in a way that avoids allocation entirely.
@@ -118,6 +104,17 @@ from.
 CBOR data and will be invalidated implicitly when the CBOR buffer they came
 from is invalidated/overwritten.
 
+[]($section.id('next'))
+## Next steps
+
+Serialization and deserialization occurs almost everywhere
+
+* [Editor](/docs/architecture/editor)
+* [Commands](/docs/architecture/command)
+* [Minimodes](/docs/architecture/minimode)
+* [Architecture](/docs/architecture)
+
+[]($section.id('more'))
 ## More information
 
 * [Deepwiki on cbor](https://deepwiki.com/neurocyte/cbor)
