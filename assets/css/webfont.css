@@ -40,3 +40,9 @@
 .nf-fa-people_carry_box:before {
   content: "\eda2";
 }
+.nf-dev-zig:before {
+  content: "\e8ef";
+}
+.nf-fa-edit:before {
+  content: "\f044";
+}
