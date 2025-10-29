@@ -5,7 +5,7 @@
 .layout = "tutorial.shtml",
 .draft = false,
 .custom = {
-  .githubedit = "/docs/testing.md",
+  .githubedit = "/docs/testing.smd",
   .codepath ="test",
 },
 ---

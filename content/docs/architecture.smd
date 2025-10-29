@@ -44,27 +44,32 @@ offers services around the set of projects.
 []($section.id("commands"))
 ## Editor commands and modes
 
-When a buffer is active, it has an `Editor` attached to it; an editor
-might have associated tree-sitter support, given the file type detected,
-and offers common services that are aimed to be used by `Commands` to
-manipulate the contents of a buffer at a higher level, the selections,
-cursors, cursor selections `CurSel` and the `View`. The commands are
-used by `Modes` with `Keybindings`. The main mode is Flow and the
-keybindings can be used to map to a mode built up entirely on solely
-calling already created commands. An example of a mode created by
-command composition is `Emacs` mode, for instance, it's possible to
-create a nano mode with just keybindings. In the other hand, `Vim` and
-`Helix` modes have particular definitions for commands that interact
-with the buffers, being modal editors.
+When a buffer is active, it has an [Editor](/docs/architecture/editor)
+attached to it; an editor might have associated tree-sitter support,
+given the file type detected, and offers common services that are aimed
+to be used by `Commands` to manipulate the contents of a buffer at a
+higher level, the selections, cursors, cursor selections `CurSel` and
+the `View`. [Commands](/docs/architecture/command) are used by `Modes`
+with [Keybindings](/docs/architecture/keybind). The main mode is Flow
+and the keybindings can be used to map to a mode built up entirely on
+solely calling already created commands. An example of a mode
+created by command composition is `Emacs` mode, for instance, it's
+possible to create a nano mode with just keybindings. In the other hand,
+`Vim` and [Helix](/docs/mode/helix) modes have particular definitions
+for commands that interact with the buffers, being modal editors.
 
 []($section.id("tui"))
 ## Text user interface
 
-`Tui` governs it all offering support for `Palettes` that are known
-in other environments as pickers, as well as offering information
-through a set of `_views` (i.e. `logview`, `inputview`,
-`inspector_view`) and `status` (i.e. `tabs`, `clock`, `branch`,
-`linenum`).
+`Tui` governs it all offering support for
+[palettes](/docs/architecture/palette) that are known in other
+environments as pickers, as well as offering information through a
+set of `_views` (i.e. `logview`, `inputview`, `inspector_view`) and
+`status` (i.e. `tabs`, `clock`, `branch`, `linenum`), in the statusbar
+[minimodes](/docs/architecture/minimode) will be present too, those
+that receive more keypresses to offer additional functionality, such
+as finding in files, finding in the current buffer, open files
+and replacing a character.
 
 []($section.id("oses"))
 ## Operating systems and UI
@@ -77,16 +82,16 @@ and Android via Termux, while in Windows there is an special GUI.
 ## Communication between components
 
 [Thespian](https://github.com/neurocyte/thespian) is in charge of
-processes synchronization and allows sending messages between
-different flow components, for example, when a widget needs
-updating information from changing states of internal data and
-when components or external processes take time and need to return
-an answer, all this without blocking the user interface. Tree-sitter
-queries to highlight the current file of a particular
-language and LSPs usually take time by the nature of operations they
-perform, integration with git and running a `shell` command via a
-`task` all are coordinated thanks to the infrastructure that
-Thespian provides.
+processes synchronization and allows sending
+[messages between different flow components](/docs/architecture/inner_data_exchange),
+for example, when a widget needs updating information from changing
+states of internal data and when components or external processes take
+time and need to return an answer, all this without blocking the user
+interface. Tree-sitter queries to highlight the current file of a
+particular language and LSPs usually take time by the nature of
+operations they perform, integration with git and running a `shell`
+command via a `task` all are coordinated thanks to the infrastructure
+that Thespian provides.
 
 []($section.id("languages"))
 ## Programming languages support
@@ -111,7 +116,7 @@ feedback via `logview`.  To view logs use `f11` to toggle the
 previous messages, or alternatively, open flow with the option
 `--show-logs`.
 
-To log something import
+To log something, first import
 
 ```zig
 const log = @import("log");
@@ -135,13 +140,14 @@ logger.print("{} unsaved buffer(s) remaining", .{remaining});
 ### View key presses
 
 There are situations when you press some keys without the expected
-behavior happening, to review if flow is getting the keys, or your desktop
-environment or something else are capturing them, you will want to
-invoke flow with the option `--show-input`.
+behavior happening, to review if flow is getting the keys, or your
+desktop environment or something else are capturing them, you will want
+to invoke flow with the option `--show-input`.
 
 []($section.id("next"))
 ## Next steps
 
 * [Guidelines for contributions](/docs/contributing)
 * [Take a peek on testing](/docs/testing)
+* [Configure some keybinds](/docs/architecture/keybind)
 * [Back to docs](/docs)

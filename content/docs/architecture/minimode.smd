@@ -4,7 +4,10 @@
 .author = "Igor Támara",
 .layout = "tutorial.shtml",
 .draft = false,
-.custom = { .githubedit = "https://github.com/neurocyte/flow-website/tree/master/content/docs/architecture/minimode.md"},
+.custom = {
+  .githubedit = "/docs/architecture/minimode.smd",
+  .codepath ="src/tui/mode/mini/",
+},
 ---
 
 Minimodes can be used by other modes adding functionality
@@ -15,6 +18,7 @@ open/save a file, and, in modal modes(like vim and helix).
 An example of the latter is using numeric prefixes to
 repeat an action many times.
 
+[]($section.id("anatomy"))
 ## Anatomy of minimodes
 
 To create a minimode it's needed:
@@ -23,6 +27,7 @@ To create a minimode it's needed:
 * An Action mapping
 * A Minimode definition
 
+[]($section.id("keybind"))
 ### Keybinding
 
 When a key or a keystroke(set of keys) are pressed, the
@@ -34,6 +39,7 @@ and look for `mini_find`, where you will know which
 specific actions are triggered by the keybindings of the
 minimode.
 
+[]($section.id("mapping"))
 ### Action mapping
 
 Actions executed by each minimode are stored one per
@@ -46,6 +52,7 @@ Look for `mini` inside `tui.zig` to find out which minimodes
 are present and where to look to learn how each minimode
 does its own task.
 
+[]($section.id("definition"))
 ### Minimode definition
 
 Possibly the simplest minimode that does not require
@@ -99,6 +106,7 @@ All the keys were handled and managed by the default "invisible"
 widget that processes the keys for the minimode.  And there is
 room for custom widgets that are explained next.
 
+[]($section.id("custom_widgets"))
 ## A custom widget
 
 When there is a need for an specialized widget, it's possible to
@@ -106,7 +114,10 @@ define one, for example, the `file_browser` is used to load and
 save files, and `numeric_input` is used to set the tab width for
 example(look for it in the command palette `:`).
 
+[]($section.id("next"))
+## Next steps
 
 * Head to [architecture](/docs/architecture)
-* Learn about [commands](/docs/architecture/command)
+* Review [commands](/docs/architecture/command)
+* Deep in the [editor](/docs/architecture/editor)
 * Review [keybindings](/docs/architecture/keybind)
