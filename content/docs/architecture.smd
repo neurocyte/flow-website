@@ -8,8 +8,7 @@
   .githubedit = "/docs/architecture.smd",
 }
 ---
-Head to: [Contribution guidelines](/docs/contributing).
- b
+
 This document describes in a general way, concepts that help to
 understand how the code is organized and where to look at when starting
 to contribute developing Flow Control.  Make sure you have read
@@ -19,9 +18,11 @@ and use the editor at least in flow mode. We recommend reading the
 in depth documentation and joining
 [Discord](https://discord.com/invite/4wvteUPphx) to ask from the
 simplest.  If something does not look accurate on this documentation or
-in deepwiki. Do not hesitate to ask in the channels and open a PR to
-improve anything.
+in deepwiki. Do not hesitate to ask in the channels and
+[open a PR](https://github.com/neurocyte/flow-website/pulls) to improve
+anything.
 
+[]($section.id("internals"))
 ## Internals
 
 The foundational unit is the `Buffer` that holds the document in memory;
@@ -40,6 +41,7 @@ hierarchy, interact with lsp and git. When flow is opened, only one
 active project is loaded in the current session. The `Project Manager`
 offers services around the set of projects.
 
+[]($section.id("commands"))
 ## Editor commands and modes
 
 When a buffer is active, it has an `Editor` attached to it; an editor
@@ -55,6 +57,7 @@ create a nano mode with just keybindings. In the other hand, `Vim` and
 `Helix` modes have particular definitions for commands that interact
 with the buffers, being modal editors.
 
+[]($section.id("tui"))
 ## Text user interface
 
 `Tui` governs it all offering support for `Palettes` that are known
@@ -63,12 +66,14 @@ through a set of `_views` (i.e. `logview`, `inputview`,
 `inspector_view`) and `status` (i.e. `tabs`, `clock`, `branch`,
 `linenum`).
 
+[]($section.id("oses"))
 ## Operating systems and UI
 
 [libvaxis](https://github.com/rockorager/libvaxis) is in charge of
 rendering the text and all the interface in Linux, MacOS, FreeBSD,
-while in Windows there is an special GUI.
+and Android via Termux, while in Windows there is an special GUI.
 
+[]($section.id("thespian"))
 ## Communication between components
 
 [Thespian](https://github.com/neurocyte/thespian) is in charge of
@@ -83,6 +88,7 @@ perform, integration with git and running a `shell` command via a
 `task` all are coordinated thanks to the infrastructure that
 Thespian provides.
 
+[]($section.id("languages"))
 ## Programming languages support
 
 There are plenty of programming languages that use tree-sitter via
@@ -90,15 +96,50 @@ There are plenty of programming languages that use tree-sitter via
 language servers and formatters are configured via `file_type_lsp`.
 Currently one Language Server is supported for each language.
 
+[]($section.id("facilities"))
 ## Facilities
 
 The clipboard is used for copy, paste operations and there is also
 support to use the system clipboard, copying and pasting to/from it.
 
+[]($section.id("logging"))
+### Logging support
+
 Logging support offers various levels to give feedback for several
 actions that ease developing Flow itself and also are used to offer
-feedback via `logview`.
+feedback via `logview`.  To view logs use `f11` to toggle the
+previous messages, or alternatively, open flow with the option
+`--show-logs`.
 
+To log something import
+
+```zig
+const log = @import("log");
+```
+
+Instantiate the logger, replacing prefix with something meaningful to
+differentiate from other logging messages.
+
+```zig
+const logger = log.logger("prefix");
+defer logger.deinit();
+```
+
+Log something
+
+```zig
+logger.print("{} unsaved buffer(s) remaining", .{remaining});
+```
+
+[]($section.id("show_input"))
+### View key presses
+
+There are situations when you press some keys without the expected
+behavior happening, to review if flow is getting the keys, or your desktop
+environment or something else are capturing them, you will want to
+invoke flow with the option `--show-input`.
+
+[]($section.id("next"))
 ## Next steps
 
 * [Guidelines for contributions](/docs/contributing)

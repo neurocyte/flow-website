@@ -9,6 +9,7 @@
 }
 ---
 
+[]($section.id("request"))
 ## Asking for a feature
 
 Please [open an issue](https://github.com/neurocyte/flow/issues) that
@@ -20,13 +21,14 @@ more information.  At the end, the issues in github have more
 chance to get developed, given that there are plenty of things
 to do for this kind of software.
 
+[]($section.id("issues"))
 ## Reporting a problem
 
-If you discover a problem, or unexpected behaviour, feel free to
-join [Discord](https://discord.com/invite/4wvteUPphx) to check
-if there is a simple way to overcome the inconvenience or to get
-some guidance.  [Reporting a bug](https://github.com/neurocyte/flow/issues)
-is a good way to contribute. When reporting one, it should contain:
+If you discover a problem, or unexpected behaviour, feel free to join
+[Discord](https://discord.com/invite/4wvteUPphx) to check if there is
+a simple way to overcome the inconvenience or to get some guidance.
+[Reporting a bug](https://github.com/neurocyte/flow/issues) is a good
+way to contribute. When reporting one, it should contain:
 
 * Flow version. You get it with `flow --version`
 * What you were doing, if possible, step by step to reproduce it
@@ -41,6 +43,7 @@ quick.
 
 Spreading the word is another way to contribute to Flow Code growth.
 
+[]($section.id("developing"))
 ## Developing
 
 [Flow Control](https://flow-control.dev/) is programmed with
@@ -60,6 +63,7 @@ agreements or find guidance.
 This [summary](/docs/architecture) can help on getting started to
 follow the codebase.
 
+[]($section.id("coding_style"))
 ### Coding style
 
 Please follow what you see in the source code for functions, Structs,
@@ -67,30 +71,33 @@ variables, const names, etc...  Functions have descriptive names to
 use less time adding and maintaining comments to communicate the
 purpose and intent. Don't worry about commenting each function, module
 or parameter, there are automated tools that are currently helping
-with this, take a peek on [deepwiki](https://deepwiki.com/neurocyte/flow);
-if you find something inaccurate in this doc or others, do open an
-issue or jump in [Discord](https://discord.com/invite/4wvteUPphx)
-and comment, it's valid to
-[improve too](https://github.com/neurocyte/flow-website/tree/master/content/docs/contributing.smd").
+with this, take a peek on
+[deepwiki](https://deepwiki.com/neurocyte/flow); if you find something
+inaccurate in this doc or others, do open an issue or jump to
+[Discord](https://discord.com/invite/4wvteUPphx) and comment, it's
+valid to [improve too](https://github.com/neurocyte/flow-website/tree/master/content/docs/contributing.smd").
 
+[]($section.id("commits"))
 ### Commit comments
 
-It's better to use commits for different purposes, even if they look small and
-there is a temptation to include on the same new code, fixes and refactors. Making
-concise and self contained commits make review easier and future fixes possible,
+It's better to use commits for different purposes, even if they look
+small and there is a temptation to include on the same new code, fixes
+and refactors. Making concise and self contained commits make review
+easier and future fixes possible,
 in case of need.
 
-Use these prefixes as much as you can, doing so helps when identifying the features
-and eases the process of letting others know about what's new, fixed and help
-communicate better when releasing.
+Use these prefixes as much as you can, doing so helps when identifying
+the features and eases the process of letting others know about what's
+new, fixed and help communicate better when releasing.
 
-* `feat:` when there is a new feature, if specific to a mode, please use
-`feat: [mode]`.
-* `refactor`: when reorganizing code, usually when you make something clearer
-for future readers and commiters.
+* `feat:` when there is a new feature, if specific to a mode, please
+use `feat: [mode]`.
+* `refactor`: when reorganizing code, usually when you make something
+clearer for future readers and committers.
 * `fix:` When something changed to a more expected behaviour.
 * `build`: the commit doesn't change code at all.
 
+[]($section.id("testing"))
 ### Testing
 
 It's possible that the test set grows as the project evolves, given
@@ -99,6 +106,17 @@ opportunity to generate regressions. If you are new to zig a good
 place to start to learn about the codebase is
 [adding some tests](/docs/testing)
 
+[]($section.id("resources"))
+## Resources
+
+* [nerd fonts cheatsheet](https://www.nerdfonts.com/cheat-sheet): When
+icons are needed, you can look for them.
+* [logging](/docs/architecture#logging): When developing flow and need
+to trace some messages.
+* [showing key-presses](/docs/architecture#show_input): When the keyboard
+don't seem to work.
+
+[]($section.id("next"))
 ## Next steps
 
 * [Join Discord](https://discord.com/invite/4wvteUPphx)
