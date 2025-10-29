@@ -6,12 +6,6 @@
 .draft = false,
 .custom = {
   .githubedit = "/docs/architecture.smd",
-  .prevurl = "https://github.com/neurocyte/flow",
-  .prevtext = "Code",
-  .nexturl = "/docs/contributing",
-  .nexttext = "Contributing",
-  .topurl = "/docs/",
-  .toptext = "Docs",
 }
 ---
 Head to: [Contribution guidelines](/docs/contributing).
@@ -104,3 +98,9 @@ support to use the system clipboard, copying and pasting to/from it.
 Logging support offers various levels to give feedback for several
 actions that ease developing Flow itself and also are used to offer
 feedback via `logview`.
+
+## Next steps
+
+* [Guidelines for contributions](/docs/contributing)
+* [Take a peek on testing](/docs/testing)
+* [Back to docs](/docs)

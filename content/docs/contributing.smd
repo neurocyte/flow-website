@@ -6,12 +6,6 @@
 .draft = false,
 .custom = {
   .githubedit = "/docs/contributing.smd",
-  .nexturl = "/docs/testing",
-  .nexttext = "Testing",
-  .topurl = "/docs/",
-  .toptext = "Docs",
-  .prevurl = "/docs/architecture",
-  .prevtext = "Architecture",
 }
 ---
 
@@ -105,8 +99,9 @@ opportunity to generate regressions. If you are new to zig a good
 place to start to learn about the codebase is
 [adding some tests](/docs/testing)
 
-## Getting in touch.
+## Next steps
 
-[Discord](https://discord.com/invite/4wvteUPphx) and
-[Github issues](https://github.com/neurocyte/flow/issues) are the
-main channels to do so.
+* [Join Discord](https://discord.com/invite/4wvteUPphx)
+* [Fill an issue](https://github.com/neurocyte/flow/issues)
+* [Add some tests](/docs/testing)
+* [Back to architecture](/docs/architecture)
