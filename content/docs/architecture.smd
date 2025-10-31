@@ -44,7 +44,7 @@ offers services around the set of projects.
 []($section.id("commands"))
 ## Editor commands and modes
 
-When a buffer is active, it has an [Editor](/docs/architecture/editor)
+When a buffer is active, it has an Editor
 attached to it; an editor might have associated tree-sitter support,
 given the file type detected, and offers common services that are aimed
 to be used by `Commands` to manipulate the contents of a buffer at a

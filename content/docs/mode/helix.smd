@@ -12,6 +12,7 @@
 
 This document describes implementation of Helix Mode.
 
+[]($section.id('what'))
 ## What and what not
 
 The first and biggest difference is that Flow has a mode that emulates
@@ -26,12 +27,13 @@ make sure to review
 [other issues](https://github.com/neurocyte/flow/issues?q=is%3Aissue%20state%3Aopen%20label%3Ahelix-mode)
 to avoid repeating or see if there is anyone interested in porting on
 [Discord](https://discord.gg/kzJC9fA7) to ask if or there is a
-workaoround, remember that it's possible to bounce back to Flow mode
+workaround, remember that it's possible to bounce back to Flow mode
 if needed.
 
+[]($section.id('enhancing'))
 ## Enhancing hx mode
 
-This is a programmer editor, you are more than welcome to enhance to
+This is a programmer's editor, you are more than welcome to enhance to
 suit your needs that maybe coincide with others.
 
 Please take a look at [architecture](/docs/architecture) and
@@ -43,6 +45,7 @@ particular work to make it real is in `src/tui/mode/helix.zig`, adding
 a `command` and the corresponding `meta` is what is required.
 [More on commands](/docs/architecture/command).
 
+[]($section.id('pickers'))
 ### Pickers
 
 Flow hx mode offers most of the picker types equivalents with `panels`
@@ -53,9 +56,12 @@ files). Examples of `palettes` are `space` `b` to pick a buffer or
 editor while palettes open overlapping the working area.
 
 One medium sized project is to create a widget that has one input
-widget, two panels, on the left, the list of options and, on the right,
-the preview of the selected option and offer various keybindings to
-manipulate the objects inside both panels with filtering.
+widget with two panels, on the left, the list of options and, on the
+right, the preview of the selected option and offer various keybindings
+to manipulate the objects inside both panels with filtering.
+
+[]($section.id('next'))
+## Next steps
 
 Said all of this, it's possible to start contributing via pull
 requesting [keybinds](/docs/architecture/keybind),
@@ -65,3 +71,6 @@ mentioned previously.
 
 More about the [architecture](/docs/architecture) or jump to
 [contribution guidelines](/docs/contributing).
+
+Join the [#helix-mode channel](https://discord.gg/sxdejrAA) and get in
+touch with other hx users. 

@@ -11,23 +11,26 @@
 ---
 
 Commands are actions triggered to operate on buffers primarily. They are
-present in `editor`, `tui`, `mode` and `minimodes`, it's possible to find
-commands in other places, which will become evident when the need arises.
+present in `editor`, `tui`, `mode` and `minimodes`, it's possible to
+find commands in other places, which will become evident when the need
+arises.
 
 []($section.id('notes'))
 ## Previous notes
 
 Note: Flow is programmed with [zig](https://ziglang.org/), if you are
-familiar with C, C++, Rust, there are differences and reasonings that might
-find useful when [learning Zig](https://ziglang.org/learn/). If you are
-coming from higher level programming languages such as Python, Ruby, C#,
-Java, Golang, Typescript it will be an opportunity to learn about trades of
-managing memory and fast responses and some lower level concepts present in
-Zig. If you are brand new to programming, some general concepts will be
-needed and practice in another language before getting into flow development.
+familiar with C, C++, Rust, there are differences and reasonings that
+might find useful when [learning Zig](https://ziglang.org/learn/). If
+you are coming from higher level programming languages such as Python,
+Ruby, C#, Java, Golang, Typescript it will be an opportunity to learn
+about trades of managing memory and fast responses and some lower level
+concepts present in Zig. If you are brand new to programming, some
+general concepts will be needed and practice in another language before
+getting into flow development.
 
 If you are new to Zig, it's a good idea to take a look at
-[ziglings](https://ziglings.org/) to practice, as you learn the language.
+[ziglings](https://ziglings.org/) to practice, as you learn the
+language.
 
 Maybe there is a [shell command invoked](/docs/architecture/keybind#shell)
 with a keybinding that can help in the task you are aiming at before
@@ -49,20 +52,20 @@ pub const copy_meta: Meta = .{ .description = "Copy selection to clipboard" };
 ```
 
 `copy` command is defined in `editor.zig`, which copies the current
-selections into the pimp internal clipboard. Commands are available to all
-the modes if defined as pub.
+selections into the pimp internal clipboard. Commands are available to
+all the modes if defined as `pub`.
 
-`meta` holds the description appearing in the command palette and optionally
-has arguments, the most common, an integer, that usually constitutes a
-repetition parameter, targeting vim, emacs and helix modes. As you dig in,
-there might be particularities on the parameters accepted for a given
-command.
+`meta` holds the description appearing in the command palette and
+optionally has arguments, the most common, an integer, that usually
+constitutes a repetition parameter, targeting vim, emacs and helix
+modes. As you dig in, there might be particularities on the parameters
+accepted for a given command.
 
 []($section.id('calling'))
 ## Invoking another command
 
-Commands can be bound to mnemonics in modes by convention. For example, in
-Vim Mode `vim.zig`, `q` corresponds to (quit), the most famous one.
+Commands can be bound to mnemonics in modes by convention. For example,
+in Vim Mode `vim.zig`, `q` corresponds to (quit), the most famous one.
 
 ```zig
 pub fn q(_: *void, _: Ctx) Result {
@@ -71,16 +74,17 @@ pub fn q(_: *void, _: Ctx) Result {
 pub const q_meta: Meta = .{ .description = "q (quit)" };
 ```
 
-Looking more closely, the first parameter in this case is of `*void` type,
-given that this command is defined in `vim.zig` which is calling the `quit`
-command defined in `editor.zig`. `cmd` takes care of routing and finding
-the command wherever it is defined.
+Looking more closely, the first parameter in this case is of `*void`
+type, given that this command is defined in `vim.zig` which is calling
+the `quit` command defined in `editor.zig`. `cmd` takes care of routing
+and finding the command wherever it is defined.
 
 []($section.id('tldr'))
 ## Chaining commands
 
-Chaining commands is also common, and, by the way, swift. This is a sample
-of applying first `save_file` command and then, the command `quit`.
+Chaining commands is also common, and, by the way, swift. This is a
+sample of applying first `save_file` command and then, the command
+`quit`.
 
 ```zig
 pub fn wq(_: *void, _: Ctx) Result {
@@ -89,20 +93,23 @@ pub fn wq(_: *void, _: Ctx) Result {
 pub const wq_meta: Meta = .{ .description = "wq (write file and quit)" };
 ```
 
-Sometimes [keybinding](/docs/architecture/keybind) is enough to accomplish
-a compound of already present commands, in others, zig programming is the
-path to be taken.
+`cmd` is in charge of finding a command given its name, and parameters
+sent to commands vary for each command.
+
+Sometimes [keybinding](/docs/architecture/keybind) is enough to
+accomplish a compound of already present commands.
 
 []($section.id('deepen'))
-## More in depth commands
+## Code organization
 
-Is common to define private functions in a given module that are invoked
-from commands, as usual, functions are meant to be reused and help organize
-code.
+Is common to define private functions in a given module that are
+invoked from commands, as usual, functions are meant to be reused and
+help organize code.
 
-For example, in hx mode `helix.zig` the `select_to_char_left_helix` command
-uses the functions `helix_with_selections_const_arg` which iterates over all
-cursels and applies the `select_cursel_to_char_left_helix` function.
+For example, in hx mode `helix.zig` the `select_to_char_left_helix`
+command uses the functions `helix_with_selections_const_arg` which
+iterates over all cursels and applies the
+`select_cursel_to_char_left_helix` function.
 
 ```zig
 pub fn select_to_char_left_helix(_: *void, ctx: Ctx) Result {
@@ -113,18 +120,16 @@ pub fn select_to_char_left_helix(_: *void, ctx: Ctx) Result {
 []($section.id('command_arguments'))
 ### Sending parameters to commands
 
-`cmd` is in charge of finding a command given its name, and parameters sent
-to commands vary for each command.
-
-The command `goto_line`, which receives as parameter an integer(in the case
-of vim and helix mode, you first type the number and then the action, gg)
-as stated in its meta:
+`goto_line` (in the case of vim and helix mode, you first type the
+number and then the action, `gg`) is a command that exemplifies
+receiving an integer parameter as stated in its meta:
 
 ```zig
 pub const goto_line_meta: Meta = .{ .arguments = &.{.integer} };
 ```
 
-and to actually receiving the integer parameter:
+and to actually receiving the integer parameter, `goto_line` will
+extract it like this:
 
 ```zig
 pub fn goto_line(self: *Self, ctx: Context) Result {
@@ -134,16 +139,28 @@ pub fn goto_line(self: *Self, ctx: Context) Result {
         return error.InvalidGotoLineArgument;
 ```
 
+To send a parameter to a command, make sure that the type is exactly
+the same when retrieving it. We will refer as encode and decode. Hence
+for our terminology to send an integer parameter to a command, we
+will encode it using `command.fmt` like in
+
+```zig
+var the_line: usize = 43;
+try ed.goto_line(command.fmt(.{the_line - 1}));
+```
+
+It's possible to pass multiple parameters to commands, including arrays
+and json, they all will be packed in Command.Context.
+
+A deeper explanation of the rules about parameter passing is exposed in
+[inner data exchange](/docs/architecture/inner_data_exchange).
+
 []($section.id('next'))
 ## Next steps
 
-There are more advanced topics related to commands that are covered in
-the [editor](/docs/architecture/editor), that deeps in specific details
-of the editor and its interaction with cursors, selections and buffers
-modifications, among others.
-
-Learning about interactions with the buffer and editor is present in
-[minimodes](/docs/architecture/minimode).
-
-* [Add tests](/docs/testing) to harden your  code
+* [minimode](/docs/architecture/minimode) shows argument passing to
+commands in reaction to keypresses.
+* [Palettes](/docs/architecture/palette) invoke commands and pass
+parameters to them.
+* [Add tests](/docs/testing) to harden your code
 * [Back to architecture](/docs/architecture)

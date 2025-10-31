@@ -9,8 +9,9 @@
   .codepath ="test",
 },
 ---
-Currently flow tests are aimed to work as unit tests, it always is a good
-idea to review the
+Currently flow tests are aimed to work as unit tests.
+
+If new to zig, it always is a good idea to review the
 [zig tests documentation](https://ziglang.org/documentation/master/#Zig-Test)
 and also an
 [introduction to testing](https://pedropark99.github.io/zig-book/Chapters/03-unittests.html).
@@ -26,7 +27,7 @@ Flow tests are placed in the directory `test`.
 []($section.id("running_tests"))
 ## Running the tests
 
-To run the full set of tests, inside flow, use `F5`, which runs a task that
+To run the full set of tests, inside flow, use `f5`, which runs a task that
 invokes:
 
 ```
@@ -56,8 +57,8 @@ nature, for example, when there are a lot of branching
 * You find something that could be changed in the future affecting the
 current behavior
 * A bug is fixed
-* A defined behavior could be thought different, for example when in a mode,
-it was defined that something might diverge from other programs.
+* A defined behavior could be thought different, for example when in a
+mode, it was defined that something might diverge from other programs.
 
 Tests are placed under `test` directory.  Add your test in the file that
 exercises the functionality and makes proof of it behaving as expected.
@@ -77,8 +78,8 @@ In such cases the module that has the logic should provide a pub
 `test_internal`, by convention, exposing the target functionalities to
 be tested.
 
-For example in `src/tui/mode/helix.zig`, `test_internal` exposes the private
-function
+For example in `src/tui/mode/helix.zig`, `test_internal` exposes the
+private function
 
 ```zig
 fn move_cursor_long_word_right_end(root: Buffer.Root, cursor: *Cursor, metrics: Buffer.Metrics) error{Stop}!void
@@ -156,7 +157,8 @@ of adding a new test file for project manager.
 ## FAQ on tests
 
 []($section.id("import_editor"))
-### I need to test something that requires importing the editor ¿What do I do?
+### I need to test something that requires importing the editor ¿What
+do I do?
 
 There are two paths from here:
 
@@ -171,7 +173,26 @@ Refactor the functions involved in the functionality to make them
 not rely directly with editor and other higher level components, and
 test the lower level ones.
 
-An example of this can be seen in commands
+For example, in `vim NORMAL` mode, the key `F` looks for a character to
+the left in the same line, if the character is not found it goes to the
+beginning of the line. In the case of `hx NOR` mode, the `F` key looks
+for a character to the beginning of the file, if found, makes a
+selection from the initial cursor position to the character found, if
+not, no selection is made and the cursor is not moved at all.
+
+
+Given that Helix has that movement and selection functionality, finding
+the character was the first action and hence the search function is
+the one tested in `test/tests_helix.zig`, given that positioning the
+selection is rather simple compared to looking for the character. It
+was decided to test the search functionality making it not depend
+on editor, but only on the cursor, buffer, metrics and context, all
+of them do not require graphic elements at all.
+
+The group of functions `beyond_eol` can be seen in
+[this commit](https://github.com/neurocyte/flow/pull/330/commits/baac14b3ae5243cef6461df42dae6fcf5ea15201)
+and whose tests are
+[here](https://github.com/neurocyte/flow/pull/330/commits/38a08aed49f4fbba18aab9ccbd3c8b9758414221).
 
 []($section.id("end_to_end"))
 ### Use additional tools to test a running flow session
@@ -187,5 +208,6 @@ If in doubt about how to do something,
 ## Next steps
 
 * [How to contribute](/docs/contributing)
-* [User Documentation](/docs)
+* [Personalizing keybindings](/docs/architecture/keybind)
+* [Enhance flow with commands](/docs/architecture/command)
 * [Other Flow topics](/docs/architecture)
