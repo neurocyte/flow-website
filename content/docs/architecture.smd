@@ -140,14 +140,17 @@ logger.print("{} unsaved buffer(s) remaining", .{remaining});
 ### View key presses
 
 There are situations when you press some keys without the expected
-behavior happening, to review if flow is getting the keys, or your
-desktop environment or something else are capturing them, you will want
-to invoke flow with the option `--show-input`.
+behavior happening, to review if flow is getting the keys, the
+[keybindings are associated](/docs/architecture/keybind), and are
+executing the [desired command](/docs/architecture/command), or maybe
+your desktop environment or something else is capturing them, you will
+want to invoke flow with the option `--show-input`.
 
 []($section.id("next"))
 ## Next steps
 
-* [Guidelines for contributions](/docs/contributing)
-* [Take a peek on testing](/docs/testing)
 * [Configure some keybinds](/docs/architecture/keybind)
+* [Guidelines for contributions](/docs/contributing)
+* [Create your own commands](/docs/architecture/command)
+* [Take a peek on testing](/docs/testing)
 * [Back to docs](/docs)

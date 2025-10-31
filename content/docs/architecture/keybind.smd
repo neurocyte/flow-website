@@ -12,29 +12,38 @@
 
 If you are here, maybe is because you want to make flow behave according
 to your key presses preferences or possibly you already have edited your
-own keybinds to suit your needs and are looking for some advanced
-topics to cope your use cases and make everything easier, faster and
-fluid when in Flow.
+own keybinds to suit your use cases and make everything easier, faster
+and more fluid when in flow.
+
+First make sure you are aware of the
+[existence of ctrl+f2 palette](/docs#key_controls) which
+exposes a list of commands available for you to use, and when you select
+a command, it's pasted in your current cursor position.
 
 Using the command palette `Ctrl+Shift+p` and typing **Edit key
-bindings**, takes you to a json file to extend Flow, configuring
-keybindings to suit your needs. According to the mode you are in, the
-corresponding file will be opened. The palette can also be reached left
-clicking on the current mode in the status bar.
+bindings**, takes you to a json file to extend flow, configuring
+keybindings to suit your needs. According to the mode you are in, your
+personal mode's file configuration will be opened. Explore the
+the file to discover how commands are bound to some combos, key presses
+and the different [imodes](#hierarchy) present.
+
+Command palette can also be reached left clicking on the current
+mode in the status bar.
 
 []($section.id('tldr'))
 ## ;TLDR;
 
-Once you open the corresponding json file, locate inside the imode
-(internal mode) that will accept the key or key/combos and add an array,
-where the first element is the combination to map to the commands that
-will be invoked, the array accepts strings like in
+Once you open the corresponding json file, locate inside the
+[imode](#hierarchy)(internal mode) that will accept the key or
+key/combos and add an array, where the first element is the combination
+to map to the commands that will be invoked, the array accepts strings
+like in
 
 ```js
 ["ctrl+alt+shift+p", "open_command_palette"]
 ```
 
-To avoid screwing up the combinations, and putting Flow in an unusable
+To avoid screwing up the combinations, and putting flow in an unusable
 state derived from a wrong mapping of key combinations, read on.
 
 []($section.id('defaults'))
@@ -154,11 +163,12 @@ consider using more keybindings or running tasks for your projects.
 
 If you realized that there is a handy combination that others can
 benefit from or that a mode lacks the combination and it might be
-included in flow, look at the [contribution guidelines](/docs/contributing)
-to submit your findings and solution.
+included in flow, look at the
+[contribution guidelines](/docs/contributing) to submit your findings
+and solutions.
 
 Probably binding commands is good, but maybe there is a feature in other
-text editors that you miss and would love to have it at your fingertips.
+text editors that you miss and would love to have at your fingertips.
 Then it's Zig time: [Adding commands](/docs/architecture/command) to
 flow.
 
