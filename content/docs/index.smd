@@ -15,7 +15,7 @@ command. The manual is included here for convenience.
 
 * [Flow Control online help](/docs/help)
 
-
+[]($section.id("basic_usage"))
 ## Basic Usage
 ```bash
 flow file.zig:42                    # Open at line 42
@@ -24,7 +24,7 @@ flow --list-languages               # Show all supported languages
 flow --help                         # List of command line options
 ```
 
-
+[]($section.id("key_controls"))
 ## Key Controls
 | Command                   | Action               |
 |---------------------------|----------------------|
