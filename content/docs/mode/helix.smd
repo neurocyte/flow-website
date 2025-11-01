@@ -10,7 +10,7 @@
 },
 ---
 
-This document describes implementation of Helix Mode.
+This document describes Helix Mode implementation.
 
 []($section.id('what'))
 ## What and what not
@@ -19,16 +19,21 @@ The first and biggest difference is that Flow has a mode that emulates
 Helix, or at least has equivalent of the worthiest actions that can be
 done with Helix. The conversely is not true.
 
+When entering to Helix Mode through `F4`, you land on `NOR`
+[imode](/docs/architecture/keybind#hierarchy), there are `SEL` and
+`INS` imodes implemented.
+
 `:` opens up Flow's rich command palette that might have
 functionalities Helix users are used to have, if you find something
 missing, it's possible to
-[open a Feature Request](https://github.com/neurocyte/flow/issues),
+[open a feature request](https://github.com/neurocyte/flow/issues),
 make sure to review
 [other issues](https://github.com/neurocyte/flow/issues?q=is%3Aissue%20state%3Aopen%20label%3Ahelix-mode)
-to avoid repeating or see if there is anyone interested in porting on
-[Discord](https://discord.gg/kzJC9fA7) to ask if or there is a
-workaround, remember that it's possible to bounce back to Flow mode
-if needed.
+to avoid repeating or see in [Discord](https://discord.gg/kzJC9fA7)
+to ask if there is a workaround, or anyone else is interested in
+porting your requirement, adding a reaction to an issue offers
+awareness on what to implement or to get higher priority, remember that
+it's possible to bounce back to Flow(f4) mode if needed.
 
 []($section.id('enhancing'))
 ## Enhancing hx mode
@@ -36,29 +41,31 @@ if needed.
 This is a programmer's editor, you are more than welcome to enhance to
 suit your needs that maybe coincide with others.
 
-Please take a look at [architecture](/docs/architecture) and
+Take a look at [architecture](/docs/architecture) and
 [contributing](/docs/contributing) for an overview and the mechanics
-of getting your changes into Flow.
+of getting your changes into flow.
 
 hx mode is modal kind, the same as vim mode, and the file that has the
-particular work to make it real is in `src/tui/mode/helix.zig`, adding
+particular work to make it real is `src/tui/mode/helix.zig`, adding
 a `command` and the corresponding `meta` is what is required.
 [More on commands](/docs/architecture/command).
 
 []($section.id('pickers'))
 ### Pickers
 
-Flow hx mode offers most of the picker types equivalents with `panels`
-and [palettes](/docs/architecture/palette).  Example of panels are
-the `g` `r` (go to reference from lsp) and `space` `/` (a.k.a find in
-files). Examples of `palettes` are `space` `b` to pick a buffer or
+Flow hx mode offers most of the Helix pickers functionalities with
+`panels` and [palettes](/docs/architecture/palette).  Example of panels
+are the `g` `r` (go to reference from lsp) and `space` `/` (a.k.a find
+in files). Examples of `palettes` are `space` `b` to pick a buffer or
 `space` `f` to open a file in your project. Panels open below the
 editor while palettes open overlapping the working area.
 
-One medium sized project is to create a widget that has one input
-widget with two panels, on the left, the list of options and, on the
-right, the preview of the selected option and offer various keybindings
-to manipulate the objects inside both panels with filtering.
+One medium sized project is to create a **Helix picker** widget that
+has one input widget with two panels, on the left, the list of options
+and, on the right, the preview of the selected option. The input
+widget reacts to various keybindings to manipulate the objects inside
+both panels with filtering. `src/tui/mode/overlay/palette.zig`
+implements much of the required functionality.
 
 []($section.id('next'))
 ## Next steps
@@ -66,11 +73,10 @@ to manipulate the objects inside both panels with filtering.
 Said all of this, it's possible to start contributing via pull
 requesting [keybinds](/docs/architecture/keybind),
 [commands](/docs/architecture/command),
-[palettes](/docs/architecture/palette), or the special widget
-mentioned previously.
+[palettes](/docs/architecture/palette), or the **hx picker**.
 
 More about the [architecture](/docs/architecture) or jump to
 [contribution guidelines](/docs/contributing).
 
 Join the [#helix-mode channel](https://discord.gg/sxdejrAA) and get in
-touch with other hx users. 
+touch with other hx mode and helix interested users.

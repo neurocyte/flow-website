@@ -10,15 +10,8 @@
 }
 
 :root {
-  // --font-family: "Pixel Code", monospace;
-  // --font-family: "Maple Mono", monospace;
-  // --font-family: "JetBrains Mono", monospace;
-  --font-family: "Iosevka", monospace;
-  // --font-family-alt: "Pixel Code", monospace;
-  // --font-family-alt: "AcPlus IBM VGA 9x16", monospace;
-  --font-family-titles: "AcPlus IBM VGA 9x16", monospace;
-  // --font-family-titles: "Maple Mono", monospace;
-  // --font-family-titles: "Pixel Code", monospace;
+  --font-family: "Iosevka", "NerdFontsSymbols Nerd Font", monospace;
+  --font-family-titles: "AcPlus IBM VGA 9x16", "NerdFontsSymbols Nerd Font", monospace;
   --line-height: 2.00rem;
   --border-thickness: 2px;
   --text-color: #333;
@@ -26,7 +19,6 @@
   --text-color-accent: #000;
   --background-color: #fff;
   --background-color-alt: #eee;
-  // --transform: uppercase;
 
   --font-weight-normal: 500;
   --font-weight-medium: 600;
@@ -98,7 +90,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: 6rem;
+  font-size: 4rem;
   line-height: calc(2 * var(--line-height));
   margin-bottom: calc(var(--line-height) * 2);
   text-transform: var(--transform);
@@ -106,13 +98,23 @@ h1 {
   font-weight: var(--font-weight-titles);
 }
 h2 {
+  font-size: 3rem;
+  font-family: var(--font-family-titles);
+  font-weight: var(--font-weight-titles);
+  text-transform: var(--transform);
+}
+h3 {
   font-size: 2rem;
   font-family: var(--font-family-titles);
   font-weight: var(--font-weight-titles);
   text-transform: var(--transform);
-  // margin-left: calc(var(--line-height) * 1);
 }
-  text-transform: var(--transform)
+h4 {
+  font-size: 1.6rem;
+  font-family: var(--font-family-titles);
+  font-weight: var(--font-weight-titles);
+  text-transform: var(--transform);
+}
 hr {
   position: relative;
   display: block;
@@ -141,7 +143,7 @@ a:link, a:visited {
 }
 
 p {
-  margin-bottom: var(--line-height);
+  margin-top: var(--line-height);
 }
 
 strong {
@@ -252,8 +254,8 @@ details :last-child {
 pre {
   white-space: pre;
   overflow-x: auto;
-  margin: 10px;
-  padding: 10px;
+  margin: -6px;
+  padding: 8px 6px 8px;
   background: var(--background-color-alt);
   overflow-y: hidden;
   color: var(--text-color-alt);
@@ -264,10 +266,17 @@ figure pre {
 
 pre, code {
   font-family: var(--font-family-alt);
+  line-height: calc(var(--line-height) * 0.7);
+  font-size: 1em;
+}
+
+em > strong > code {
+    font-size: 1.4em;
+    background: var(--background-color);
 }
 
 code {
-  font-weight: var(--font-weight-medium);
+  color: var(--text-color-accent);
 }
 
 figure {
@@ -284,7 +293,7 @@ figcaption {
 
 ul, ol {
   padding: 0;
-  margin: 0 0 var(--line-height);
+  margin: var(--line-height) 0 var(--line-height);
 }
 
 ul {
@@ -306,7 +315,7 @@ ul ul {
 ol li:before { 
   content: counters(item, ".") ". ";
   counter-increment: item;
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-bold);
 }
 
 li {
@@ -319,7 +328,7 @@ li::marker {
 }
 
 ::-webkit-scrollbar {
-    height: var(--line-height);
+  height: var(--line-height);
 }
 
 input, button, textarea {
@@ -339,6 +348,7 @@ input, button, textarea {
   -webkit-font-smoothing: inherit;
   -moz-osx-font-smoothing: inherit;
   -webkit-appearance: none;
+  appearance: none;
 }
 
 input[type=checkbox] {
