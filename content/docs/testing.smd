@@ -21,6 +21,7 @@ To work with tests you will need to:
 * [Clone](https://github.com/neurocyte/flow) the repository
 * Have [zig installed](https://ziglang.org/download/). Highly recommended to use
 [anyzig](https://github.com/marler8997/anyzig)
+* [Get zls](https://github.com/zigtools/zls) to let flow help you in the process
 
 Flow tests are placed in the directory `test`.
 
@@ -157,8 +158,7 @@ of adding a new test file for project manager.
 ## FAQ on tests
 
 []($section.id("import_editor"))
-### I need to test something that requires importing the editor ¿What
-do I do?
+### I need to test something that requires the editor ¿What do I do?
 
 There are two paths from here:
 
@@ -207,7 +207,7 @@ If in doubt about how to do something,
 []($section.id("next"))
 ## Next steps
 
-* [How to contribute](/docs/contributing)
-* [Personalizing keybindings](/docs/architecture/keybind)
 * [Enhance flow with commands](/docs/architecture/command)
+* [Personalizing keybindings](/docs/architecture/keybind)
+* [How to contribute](/docs/contributing)
 * [Other Flow topics](/docs/architecture)
