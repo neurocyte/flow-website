@@ -6,15 +6,75 @@
   --light-red: #e06c75;
   --dark-red: #be5046;
   --comment-gray: #5c6370;
-  --magenta: #c678dd;
+  --green-light: #c678dd;
+  --comment-color: var(--comment-gray);
+  --string-color: var(--text-color-accent);
+  --variable-color: var(--light-yellow);
+  --field-color: var(--light-yellow);
+  --keyword-function-color: var(--text-color-accent);
+  --keyword-color: var(--text-color-accent);
+  --punctuation-bracket-color: var(--cyan);
+  --type-color: var(--light-red);
+  --variable-parameter-color: var(--blue);
+  --function-call-color: var(--blue);
+  ---builtin-color: var(--green-light);
+  --operator-color: var(--light-red);
+  --qualifier-color: var(--light-red);
+  --attribute-color: var(--light-red);
 }
 
 code .comment {
-  color: var(--comment-gray);
+  color: var(--comment-color);
 }
 
+code.zig .string {
+  color: var(--string-color);
+}
 
-code.html {}
+code.zig .variable {
+  color: var(--variable-color);
+}
+
+code.zig .variable.variable_parameter {
+  color: var(--variable-parameter-color);
+}
+
+code.zig .field {
+  color: var(--field-color);
+}
+
+code.zig .keyword_function {
+  color: var(--keyword-function-color);
+}
+
+code.zig .keyword {
+  color: var(--keyword-color);
+}
+
+code.zig .punctuation_bracket {
+  color: var(--punctuation-bracket-color);
+}
+
+code.zig .function_call {
+  color: var(--function-call-color);
+}
+
+code.zig .builtin {
+  color: var(--builtin-color);
+}
+
+code.zig .operator {
+  color: var(--operator-color);
+}
+
+code.zig .qualifier {
+  color: var(--qualifier-color);
+}
+
+code.zig .attribute {
+  color: var(--attribute-color);
+}
+
 
 code.html .string {
   color: var(--dark-yellow);
@@ -35,8 +95,6 @@ code.html .attribute {
 code.html .punctuation {
   color: var(--cyan);
 }
-
-code.superhtml {}
 
 code.superhtml .string.markup_link_url {
   text-decoration: underline;
@@ -67,41 +125,6 @@ code.superhtml .punctuation {
   color: var(--cyan);
 }
 
-
-code.zig {}
-
-code.zig .string {
-  color: var(--dark-yellow);
-}
-
-code.zig .variable,
-code.zig .field {
-  color: var(--light-yellow);
-}
-
-code.zig .keyword.function {
-  color: var(--light-red);
-}
-
-code.zig .bracket {
-  color: var(--cyan);
-}
-
-code.zig .function {
-  color: var(--blue);
-}
-
-code.zig .builtin {
-  color: var(--magenta);
-}
-
-code.zig .operator,
-code.zig .qualifier,
-code.zig .attribute {
-  color: var(--light-red);
-}
-
-
 code.ziggy {
   color: var(--cyan);
 }
@@ -122,7 +145,6 @@ code.ziggy .numeric.constant {
 code.ziggy .function {
   color: var(--blue);
 }
-
 
 code.ziggy-schema {
   color: var(--cyan);
@@ -149,7 +171,6 @@ code.ziggy-schema .function {
 code.markdown {
   color: #ccc;
 }
-
 
 code.markdown .text.title {
   color: var(--light-red);
@@ -179,9 +200,6 @@ code.toml .numeric.constant {
 code.toml .punctuation {
   color: var(--blue);
 }
-
-
-code.lua {}
 
 code.lua .string {
   color: var(--dark-yellow);
