@@ -8,11 +8,12 @@
   --comment-gray: #5c6370;
   --green-light: #c678dd;
   --comment-color: var(--comment-gray);
-  --string-color: var(--text-color-accent);
+  --string-color: var(--text-color);
   --variable-color: var(--light-yellow);
   --field-color: var(--light-yellow);
   --keyword-function-color: var(--text-color-accent);
-  --keyword-color: var(--text-color-accent);
+  --keyword-color: var(--green-light);
+  --keyword-modifier-color: var(--light-red);
   --punctuation-bracket-color: var(--cyan);
   --type-color: var(--light-red);
   --variable-parameter-color: var(--blue);
@@ -45,6 +46,10 @@ code.zig .field {
 
 code.zig .keyword_function {
   color: var(--keyword-function-color);
+}
+
+code.zig .keyword_modifier {
+  color: var(--keyword-modifier-color);
 }
 
 code.zig .keyword {
