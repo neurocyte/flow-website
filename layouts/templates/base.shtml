@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="$site.asset('css/reset.css').link()">
     <link rel="stylesheet" type="text/css" href="$site.asset('css/index.css').link()">
     <link rel="stylesheet" type="text/css" href="$site.asset('css/webfont.css').link()">
+    <link rel="stylesheet" type="text/css" href="$site.asset('css/highlight.css').link()">
     <title :text="$site.title"></title>
     <super>
   </head>
