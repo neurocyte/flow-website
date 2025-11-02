@@ -90,7 +90,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: 4rem;
+  font-size: 6rem;
   line-height: calc(2 * var(--line-height));
   margin-bottom: calc(var(--line-height) * 2);
   text-transform: var(--transform);
@@ -143,7 +143,7 @@ a:link, a:visited {
 }
 
 p {
-  margin-top: var(--line-height);
+  margin-bottom: var(--line-height);
 }
 
 strong {
@@ -254,8 +254,8 @@ details :last-child {
 pre {
   white-space: pre;
   overflow-x: auto;
-  margin: -6px;
-  padding: 8px 6px 8px;
+  margin: 10px;
+  padding: 10px;
   background: var(--background-color-alt);
   overflow-y: hidden;
   color: var(--text-color-alt);
@@ -266,17 +266,10 @@ figure pre {
 
 pre, code {
   font-family: var(--font-family-alt);
-  line-height: calc(var(--line-height) * 0.7);
-  font-size: 1em;
-}
-
-em > strong > code {
-    font-size: 1.4em;
-    background: var(--background-color);
 }
 
 code {
-  color: var(--text-color-accent);
+  font-weight: var(--text-weight-medium);
 }
 
 figure {
@@ -315,7 +308,7 @@ ul ul {
 ol li:before { 
   content: counters(item, ".") ". ";
   counter-increment: item;
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-medium);
 }
 
 li {
