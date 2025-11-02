@@ -99,24 +99,6 @@ sent to commands vary for each command.
 Sometimes [keybinding](/docs/architecture/keybind) is enough to
 accomplish a compound of already present commands.
 
-[]($section.id('deepen'))
-## Code organization
-
-Is common to define private functions in a given module that are
-invoked from commands, as usual, functions are meant to be reused and
-help organize code.
-
-For example, in hx mode `helix.zig` the `select_to_char_left_helix`
-command uses the functions `helix_with_selections_const_arg` which
-iterates over all cursels and applies the
-`select_cursel_to_char_left_helix` function.
-
-```zig
-pub fn select_to_char_left_helix(_: *void, ctx: Ctx) Result {
-    try helix_with_selections_const_arg(ctx, &select_cursel_to_char_left_helix);
-}
-```
-
 []($section.id('command_arguments'))
 ### Sending parameters to commands
 
@@ -133,7 +115,6 @@ extract from the context like this:
 
 ```zig
 pub fn goto_line(self: *Self, ctx: Context) Result {
-
     var line: usize = 0;
     if (!try ctx.args.match(.{tp.extract(&line)}))
         return error.InvalidGotoLineArgument;
@@ -162,15 +143,39 @@ and json, packing all of them in Command.Context.
 
 A deeper explanation of the rules about parameter passing is exposed in
 [inner data exchange](/docs/architecture/inner_data_exchange), given
-that parameters can be sent not only to commands, but other broather
+that parameters can be sent not only to commands, but other broader
 use cases.
+
+[]($section.id('deepen'))
+## Code organization
+
+Is common to define private functions in a given module meant to be
+invoked from commands. As usual, reusing code with functions
+help organize code.
+
+For example, in hx mode `src/tui/mode/helix.zig` the
+`select_to_char_left_helix` command uses the functions
+`helix_with_selections_const_arg` which iterates over all cursels and
+applies the `select_cursel_to_char_left_helix` function.
+
+```zig
+pub fn select_to_char_left_helix(_: *void, ctx: Ctx) Result {
+    try helix_with_selections_const_arg(ctx, &select_cursel_to_char_left_helix);
+}
+```
 
 []($section.id('next'))
 ## Next steps
 
-* [minimode](/docs/architecture/minimode) shows argument passing to
-commands in reaction to keypresses.
-* [Palettes](/docs/architecture/palette) invoke commands and pass
-parameters to them.
+[Minimodes](/docs/architecture/minimode) pass arguments to the editor,
+if you wonder how to go beyond the current buffer window, when there
+are actions like going to a specific line or when searching or
+replacing a character,this is the place.
+
+[Palettes](/docs/architecture/palette) are built to open files, change
+buffers and also pass parameters to commands. Diving out from the
+buffer and editor.
+
 * [Add tests](/docs/testing) to harden your code
+* [Sending parameters across](/docs/architecture/inner_data_exchange)
 * [Back to architecture](/docs/architecture)

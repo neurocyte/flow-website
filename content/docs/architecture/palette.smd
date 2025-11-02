@@ -18,9 +18,9 @@ the elements, and having special elements that trigger different
 actions, for example, the task palette.
 
 Examples of palettes are `command_palette`, `clipboard_palette`, they
-all are based on `src/tui/mode/overlay/palette.zig that does all the
-heavy lifting and sets the framework to create new palettes as simple
-as possible.
+all are based on `src/tui/mode/overlay/palette.zig` doing all the heavy
+lifting and sets the framework to create new palettes as simple as
+possible.
 
 Palettes are an special case of [minimode] and for instance a mode, they
 receive inputs from the keyboard and execute the beforehand mentioned
