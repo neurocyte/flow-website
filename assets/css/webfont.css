@@ -46,3 +46,6 @@
 .nf-fa-edit:before {
   content: "\f044";
 }
+.nf-fa-clipboard_list:before {
+  content: "\ed7b";
+}
