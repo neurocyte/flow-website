@@ -116,7 +116,7 @@ feedback via `logview`.  To view logs use `f11` to toggle the
 previous messages, or alternatively, open flow with the option
 `--show-logs`.
 
-To log something, first import
+To log something, first, `import log`
 
 ```zig
 const log = @import("log");

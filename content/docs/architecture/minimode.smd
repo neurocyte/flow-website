@@ -10,12 +10,11 @@
 },
 ---
 
-Minimodes commitment is to add functionality to the editor, are opened
-for short periods of time and have their own set of keybindings to
-execute an specific action, i.e. find something in the current buffer
-or in project files, open/save a file, and, in modal modes(like vim
-and helix), as receiving a number as a prefix to repeat an action many
-times.
+Minimodes add functionality to the editor, are opened for short periods
+of time and have their own set of keybindings to execute an specific
+action, i.e. find something in the current buffer or in project files,
+open/save a file, and, in modal modes(like vim and helix), as receiving
+a number as a prefix to repeat an action many times.
 
 []($section.id("anatomy"))
 ## Anatomy of minimodes
@@ -111,6 +110,7 @@ example(look for it in the command palette `:`).
 []($section.id("next"))
 ## Next steps
 
-* Head to [architecture](/docs/architecture)
+* Create [palettes](/docs/architecture/palette)
 * Review [commands](/docs/architecture/command)
-* Review [keybindings](/docs/architecture/keybind)
+* Adjust [keybindings](/docs/architecture/keybind)
+* To [architecture](/docs/architecture)
