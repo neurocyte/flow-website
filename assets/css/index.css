@@ -10,15 +10,8 @@
 }
 
 :root {
-  // --font-family: "Pixel Code", monospace;
-  // --font-family: "Maple Mono", monospace;
-  // --font-family: "JetBrains Mono", monospace;
-  --font-family: "Iosevka", monospace;
-  // --font-family-alt: "Pixel Code", monospace;
-  // --font-family-alt: "AcPlus IBM VGA 9x16", monospace;
-  --font-family-titles: "AcPlus IBM VGA 9x16", monospace;
-  // --font-family-titles: "Maple Mono", monospace;
-  // --font-family-titles: "Pixel Code", monospace;
+  --font-family: "Iosevka", "NerdFontsSymbols Nerd Font", monospace;
+  --font-family-titles: "AcPlus IBM VGA 9x16", "NerdFontsSymbols Nerd Font", monospace;
   --line-height: 2.00rem;
   --border-thickness: 2px;
   --text-color: #333;
@@ -26,7 +19,6 @@
   --text-color-accent: #000;
   --background-color: #fff;
   --background-color-alt: #eee;
-  // --transform: uppercase;
 
   --font-weight-normal: 500;
   --font-weight-medium: 600;
@@ -106,13 +98,23 @@ h1 {
   font-weight: var(--font-weight-titles);
 }
 h2 {
+  font-size: 3rem;
+  font-family: var(--font-family-titles);
+  font-weight: var(--font-weight-titles);
+  text-transform: var(--transform);
+}
+h3 {
   font-size: 2rem;
   font-family: var(--font-family-titles);
   font-weight: var(--font-weight-titles);
   text-transform: var(--transform);
-  // margin-left: calc(var(--line-height) * 1);
 }
-  text-transform: var(--transform)
+h4 {
+  font-size: 1.6rem;
+  font-family: var(--font-family-titles);
+  font-weight: var(--font-weight-titles);
+  text-transform: var(--transform);
+}
 hr {
   position: relative;
   display: block;
@@ -284,7 +286,7 @@ figcaption {
 
 ul, ol {
   padding: 0;
-  margin: 0 0 var(--line-height);
+  margin: var(--line-height) 0 var(--line-height);
 }
 
 ul {
@@ -319,7 +321,7 @@ li::marker {
 }
 
 ::-webkit-scrollbar {
-    height: var(--line-height);
+  height: var(--line-height);
 }
 
 input, button, textarea {
@@ -339,6 +341,7 @@ input, button, textarea {
   -webkit-font-smoothing: inherit;
   -moz-osx-font-smoothing: inherit;
   -webkit-appearance: none;
+  appearance: none;
 }
 
 input[type=checkbox] {
