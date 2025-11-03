@@ -49,3 +49,9 @@
 .nf-fa-clipboard_list:before {
   content: "\ed7b";
 }
+.nf-fa-grip_vertical:before {
+  content: "\f142";
+}
+.nf-oct-kebab_horizontal:before {
+  content: "\uf4eb";
+}
