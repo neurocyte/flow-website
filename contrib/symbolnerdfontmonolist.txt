@@ -7,3 +7,5 @@ U+eda4
 U+e8ef
 U+f044
 U+ed7b
+U+f142
+U+f4eb
