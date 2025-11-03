@@ -80,27 +80,59 @@ Some terminology
 
 In general a keybinding json shows this hierarchy:
 
-```
-Mode > Imode > press > Key and commands
-map  > map   > array > array(array(string,numbers),strings,numbers)
-```
+>[]($block.attrs('tree'))
+>`flow.json` `<-- keybindings for flow mode`
+>`{`
+>* "project": {   `<-- imode`
+>    * "press": [ `<-- react when press`
+>      * ["ctrl+alt+shift+r", "restart"], `<-- the keys with commands`
+>      * 
+>    * ]
+>* },
+>* "normal": [    `<-- imode`
+>    * "inherit": "project" `<-- Inherits all the keypresses and reactions from project`
+>    * "press": [ `<- custom actions for normal imode`
+>      * ["ctrl+z", "undo"],
+>      * 
+>    * ],
+>    * "release": [ `<-- normal imode also reacts when some keys are released`
+>      * ["left_control", "disable_jump_mode"], `<-- no more jumping when left control is released`
+>    * ]
+>* ],
+>* "select": {  "cursor":"block"  }, `<-- imode with a cursor change`
+>* "home": {   "on_match_failure": "ignore"   }, `<-- imode`
+>* "overlay/palette": {   } `<-- keys are handled by a palette`
+>* "mini/numeric": {   } `<-- minimodes also handle actions`
+>*  `}`
 
-`Mode` is the json file that holds a map, where each entry has a map
-called `press` that is an array of arrays.
 
-`project` is the main imode in `flow.json` and it can be noticed that
-`normal` imode `inherits` from `project`, some modes have `release`,
-usually one will be using only `press` inside `normal` imode or the
-specific mode if inside `vim`, `helix` or `emacs` modes.
+`project` is the main imode in `flow.json`, mapping many combo key down
+presses.
+
+Notice that `normal` imode `inherits` from `project`, meaning all the
+key presses handled by project react the same way in normal, which also
+extends with other keypresses. `normal` also captures key
+releases, we show a sample when the control key is released,
+stopping jumping mode inside flow.json.
+
+`SELECT` imode inherits from normal and shows a different cursor to
+remind it is the current one.
+
+`home` mode is shown when no buffer is open and if the user presses
+keys that are not explicitly handled to bring mental peace to the
+user.
+
+`overlay/palette` gets active when a
+[palette](/docs/architecture) is active.
 
 Looking further, it can be seen that
 [minimodes](/docs/architecture/minimode) have their own keybinding
-mappings defined in a particular imode.
+mappings defined in a particular imode, the same as palettes.
 
 As stated previously, there is a mode hierarchy, the main mode is flow
-and other modes inherit from it. We remind that also imodes have a
-hierarchy and it's common for major imodes to be descendants from
-`project`.
+and other modes inherit from it. Each mode inherits, extends and
+overrides actions and define their internal imodes extending as
+required each minimode.
 
 []($section.id('adding'))
 ## Adding a Keybinding
@@ -134,7 +166,7 @@ the `f5` key.
 `create_scratchbuffer` is invoked receiving the parameter `*test*`
 which results in creating a scratch buffer if didn't exist. And then
 executing the command `shell_execute_insert` that receives the
-paramaters `zig`, `build`, `test`. This latter command is executing
+parameters `zig`, `build`, `test`. This latter command is executing
 a shell command called `zig` with the parameters `build` and `test`;
 if you don't have zig installed, it will not work, and you might
 want to remap `f5` to a different shell command.
