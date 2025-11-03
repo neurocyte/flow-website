@@ -405,14 +405,23 @@ label input {
   width: 100%;
 }
 
-.tree, .tree ul {
+.tree p {
+    margin-bottom: 0px;
+}
+.tree {
+  padding: 10px;
   position: relative;
-  padding-left: 0;
   list-style-type: none;
   line-height: var(--line-height);
+  background: var(--background-color-alt);
 }
 .tree ul {
   margin: 0;
+  padding: 0;
+  position: relative;
+  list-style-type: none;
+  line-height: var(--line-height);
+  background: var(--background-color-alt);
 }
 .tree ul li {
   position: relative;
