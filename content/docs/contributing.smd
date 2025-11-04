@@ -38,10 +38,22 @@ way to contribute. When reporting one, it should contain:
 platform allows to add that information.
 
 Issues later on are tagged with proposed version to solve them, in case
-it's a low hanging fruit, it's possible that it can be solved pretty
+of low hanging fruit, it's possible that it can be solved pretty
 quick.
 
-Spreading the word is another way to contribute to Flow Code growth.
+[]($section.id("showcase"))
+## Help others and share your workflows
+
+We are happy when you [share your workflows](https://discord.gg/XeYatDhh)
+or when someone asks something and gets a helpful answer, for example, a
+30 sec video is really helpful because it exactly shows how something can
+be achieved. Use [asciinema] or whatever allows others to see how to get
+things done.
+
+Spreading the word is another way to contribute to Flow Code growth,
+making blog entries and sharing with others what you can build or achieve
+with flow; battle testing flow on daily basis helps its improvement and
+bring ideas from other places too.
 
 []($section.id("developing"))
 ## Developing
@@ -49,10 +61,11 @@ Spreading the word is another way to contribute to Flow Code growth.
 [Flow Control](https://flow-control.dev/) is programmed with
 [zig](https://ziglang.org/).
 
-[Fork](https://github.com/neurocyte/flow/fork), no worries, if you
-happen to use [codeberg](https://codeberg.org/neurocyte/flow), or
+[Fork](https://github.com/neurocyte/flow/fork), no worries in case there
+is something with gh, if you happen to use
+[codeberg](https://codeberg.org/neurocyte/flow), or
 [sourcehut](https://git.sr.ht/~neurocyte/flow), it's possible to
-fork and contribute via those services too.
+contribute via those services too.
 
 Using [Discord](https://discord.com/invite/4wvteUPphx) is a good
 starting point to discuss about what you are about to offer, or if
