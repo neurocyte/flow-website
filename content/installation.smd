@@ -6,13 +6,13 @@
 .draft = false,
 ---
 
-- [Linux, MacOS, FreeBSD and Termux](#posix)
-- [Windows](#windows)
-- [Source](#source)
-- [Tarball install](#tarball)
+- [ Linux,  MacOS,  FreeBSD and  Termux](#posix)
+- [ Windows](#windows)
+- [ Source](#source)
+- [ Tarball install](#tarball)
 
 []($section.id("posix"))
-## Linux, MacOS, FreeBSD and Termux
+##  Linux,  MacOS,  FreeBSD and  Termux
 
 Fetch and install the latest release with the installation helper script:
 
@@ -49,9 +49,10 @@ update-flow
 At the top of the installer are variables to pre-answer the installation
 questions. Configure them to your liking.
 
+We have some tips for [Android](/docs/platform/android)
 
 []($section.id("windows"))
-## Windows
+##  Windows
 
 For Windows the installer scripts are a little different.
 
@@ -78,14 +79,14 @@ just run `update-flow` in a terminal to update to the latest release or nightly.
 
 
 []($section.id("source"))
-## Build from Source
+##  Build from Source
 
 See the [Building section of `README.md`](https://git.flow-control.dev/neurocyte/flow/src/branch/master/README.md#building)
 in the source repository for build instructions.
 
 
 []($section.id("tarball"))
-## Manual install from tarballs or zip files
+##  Manual install from tarballs or zip files
 
 See the [downloads](/downloads) page for binaries that you can manually install.
 Just download, unpack, and place the binary anywhere you want. There are no
