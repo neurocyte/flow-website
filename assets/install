@@ -204,7 +204,7 @@ if [ "$debug" -eq 1 ]; then
 fi
 url="https://github.com/$repo/releases/download/$version/$filename.$ext"
 
-tmp_path="$(mktemp -t -d "flow-control-installer.XXXXX")"
+tmp_path="$(mktemp -d "${TMPDIR:-/tmp}/flow-control-installer.XXXXXXXXX")"
 
 if [ -z "$tmp_path" ] || [ "$tmp_path" = "/" ]; then
     echo "failed to create a temporary download directory"
