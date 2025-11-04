@@ -85,7 +85,7 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-weight: var(--font-weight-bold);
   margin: calc(var(--line-height) * 2) 0 var(--line-height);
-  line-height: var(--line-height);
+  line-height: 1.2em;
   color: var(--text-color-accent);
 }
 
