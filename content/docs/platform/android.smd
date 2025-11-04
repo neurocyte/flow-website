@@ -1,0 +1,33 @@
+---
+.title = "Android",
+.date = @date("2025-11-04T12:24:45+02:00"),
+.author = "Igor Támara",
+.layout = "index.shtml",
+.draft = true,
+---
+
+flow can be used in Android under [termux](), when in termux, follow
+[installation instructions], just copy paste and you are up and running.
+
+
+## Fonts
+
+Recommended to install monospaced fonts and icons to have the most
+comfortable experience.
+
+[Termux-nf](https://githu.com/arnavgr/termux-nf/) offers various fonts
+to choose from, install the fonts installer and the choose your desired
+font, for example the same fonts of this website:
+
+```
+curl -fsSL https://raw.githubusercontent.com/arnavgr/termux-nf/main/install.sh | bash
+getnf -i NerdFontsSymbolsOnly
+getnf -i Iosevka
+```
+
+If you run into issues with font installation, install termux-nf
+required packages `pkg install curl ncurses-utils` or consult their
+[website](https://github.com/arnavgr/termux-nf).
+
+* [Back to basic usage](/docs/)
+* [Share your screenshots](https://discord.gg/XeYatDhh) and [small videos](/docs/contributing#showcase).
