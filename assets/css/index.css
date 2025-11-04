@@ -83,7 +83,8 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-weight: var(--font-weight-bold);
+  font-family: var(--font-family-titles);
+  font-weight: var(--font-weight-titles);
   margin: calc(var(--line-height) * 2) 0 var(--line-height);
   line-height: 1.2em;
   color: var(--text-color-accent);
@@ -93,27 +94,15 @@ h1 {
   font-size: 6rem;
   line-height: calc(2 * var(--line-height));
   margin-bottom: calc(var(--line-height) * 2);
-  text-transform: var(--transform);
-  font-family: var(--font-family-titles);
-  font-weight: var(--font-weight-titles);
 }
 h2 {
   font-size: 3rem;
-  font-family: var(--font-family-titles);
-  font-weight: var(--font-weight-titles);
-  text-transform: var(--transform);
 }
 h3 {
   font-size: 2rem;
-  font-family: var(--font-family-titles);
-  font-weight: var(--font-weight-titles);
-  text-transform: var(--transform);
 }
 h4 {
   font-size: 1.6rem;
-  font-family: var(--font-family-titles);
-  font-weight: var(--font-weight-titles);
-  text-transform: var(--transform);
 }
 hr {
   position: relative;
@@ -380,7 +369,6 @@ button::-moz-focus-inner {
 }
 
 button {
-  text-transform: var(--transform);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
 }
