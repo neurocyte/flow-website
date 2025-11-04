@@ -32,7 +32,7 @@ with debug symbols:
 curl -fsSL https://flow-control.dev/install | sh -s -- --nightly --debug
 ```
 
-See all avalable options for the installer script:
+See all available options for the installer script:
 
 ```
 curl -fsSL https://flow-control.dev/install | sh -s -- --help
@@ -49,7 +49,7 @@ update-flow
 At the top of the installer are variables to pre-answer the installation
 questions. Configure them to your liking.
 
-We have some tips for [Android](/docs/platform/android)
+We have some tips for [Android](/docs/platform/android/)
 
 []($section.id("windows"))
 ##  Windows

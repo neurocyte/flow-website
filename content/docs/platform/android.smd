@@ -3,11 +3,12 @@
 .date = @date("2025-11-04T12:24:45+02:00"),
 .author = "Igor Támara",
 .layout = "index.shtml",
-.draft = true,
+.draft = false,
 ---
 
-flow can be used in Android under [termux](), when in termux, follow
-[installation instructions], just copy paste and you are up and running.
+flow can be used in Android under [termux](https://termux.dev), inside termux, follow
+[installation instructions](/installation),i.e., just copy paste and you are up and
+running.
 
 
 ## Fonts
