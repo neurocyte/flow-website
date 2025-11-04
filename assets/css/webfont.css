@@ -55,3 +55,21 @@
 .nf-oct-kebab_horizontal:before {
   content: "\uf4eb";
 }
+.nf-dev-windows:before {
+  content: "\ue70f";
+}
+.nf-linux-tux:before {
+  content: "\uf31a";
+}
+.nf-linux-apple:before {
+  content: "\uf302";
+}
+.nf-linux-freebsd:before {
+  content: "\uf30c";
+}
+.nf-oct-terminal:before {
+  content: "\uf489";
+}
+.nf-fa-folder_tree:before {
+  content: "\uef81";
+}

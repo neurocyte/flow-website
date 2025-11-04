@@ -9,3 +9,9 @@ U+f044
 U+ed7b
 U+f142
 U+f4eb
+U+e70f
+U+f31a
+U+f302
+U+f30c
+U+f489
+U+ef81
