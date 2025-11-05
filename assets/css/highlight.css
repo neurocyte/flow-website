@@ -6,22 +6,25 @@
   --light-red: #e06c75;
   --dark-red: #be5046;
   --comment-gray: #5c6370;
-  --green-light: #c678dd;
+  --dark-green: #3c2330;
+  --fucsia-light: #c678dd;
   --comment-color: var(--comment-gray);
   --string-color: var(--text-color);
   --variable-color: var(--light-yellow);
   --field-color: var(--light-yellow);
   --keyword-function-color: var(--text-color-accent);
-  --keyword-color: var(--green-light);
+  --keyword-color: var(--fucsia-light);
   --keyword-modifier-color: var(--light-red);
   --punctuation-bracket-color: var(--cyan);
   --type-color: var(--light-red);
   --variable-parameter-color: var(--blue);
   --function-call-color: var(--blue);
-  ---builtin-color: var(--green-light);
+  ---builtin-color: var(--fucsi-light);
   --operator-color: var(--light-red);
   --qualifier-color: var(--light-red);
   --attribute-color: var(--light-red);
+  --line-number-color: var(--dark-green);
+  --line-number-hover-color: var(--dark-yellow);
 }
 
 code .comment {
@@ -78,4 +81,33 @@ code.zig .qualifier {
 
 code.zig .attribute {
   color: var(--attribute-color);
+}
+
+.line-numbers-js {
+  /* Initialize CSS counter for each specific pre block */
+  counter-reset: line;
+}
+
+.line-numbers-js span.ln {
+  display: block;
+  line-height: 0;
+}
+
+.line-numbers-js span.ln:hover::before {
+  color: var(--line-number-hover-color);
+}
+
+.line-numbers-js span.ln::before {
+  /* Increment the 'line' counter for every span encountered */
+  counter-increment: line;
+  content: counter(line);
+  position: absolute;
+  right: 30px;
+  width: 20px;
+  text-align: right;
+  color: var(--line-number-color);
+
+  /* Prevent copying line number when selecting */
+  -webkit-user-select: none;
+  user-select: none;
 }

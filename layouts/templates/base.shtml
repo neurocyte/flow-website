@@ -23,6 +23,8 @@
       <ctx about="$site.page('community')"><a href="$ctx.about.link()"><i class="nf nf-fa-people_carry_box"></i></a> <a href="$ctx.about.link()">community</a></ctx>
     </nav>
     <script src="$site.asset('js/index.js').link()"></script>
+    <script src="$site.asset('js/highlight.js').link()"></script>
+	<script>document.addEventListener('DOMContentLoaded', addLineNumbersRobust);</script>
     <super>
   </body>
 </html>
