@@ -6,154 +6,209 @@
 .draft = true,
 .custom = {
   .githubedit = "docs/architecture/editor.smd",
-  .codepath ="src/tui/editor.zig",
+  .codepath = "src/tui/editor.zig",
 },
 ---
 
-The `editor` coordinates visualization and modification of
-buffer contents, multiple cursors, selections and marks.
-
-To get the most of this section, it's recommended to have
-read the [architecture briefing](/docs/architecture), about
+To get the most of this section, it's recommended to have read the
+[architecture briefing](/docs/architecture), about
 [commands](/docs/architecture/command) and
 [keybinds](/docs/architecture/keybind).
 
 []($section.id("concepts"))
 ## Some concepts
 
-The `primary Cursor` is presented always in the `Editor`,
-signaling the part of the `Buffer` that can be modified and
-manipulated as you see it. It scrolls on the current visible
-portion of the buffer.
+The [editor](#editor_concept) coordinates visualization and
+modification of buffer contents, multiple cursors, selections and
+marks.
 
-Other cursors can be in the `View` or in regions outside the
-current view, depending on the size of both the buffer and
+We will delve in editor concepts, buffer inner manipulation with ropes
+is not covered here.
+
+[]($section.id("tui_editor"))
+### Editor and TUI
+
+During this section we will refer to the concept of the editor as the
+one capable of modifying buffer contents, the visible gutters and
+line numbers as other terminal user interface (TUI) is covered in
+another chapter.
+
+[]($section.id("view_concept"))
+### View
+
+`View` holds the information about the area of the buffer that is
+currently visible in the screen by the user. Is related to the
+[primary cursor](#cursor_concept).
+
+[]($section.id("cursor_concept"))
+### Cursor
+
+The `primary Cursor` holds a position in the Buffer, the `Editor`
+makes the link between both of them, signaling the part of the `Buffer`
+that can be modified and manipulated as you see it. It scrolls on the
+current visible portion [view](#view_concept) of the buffer, when
+manipulated with the keyboard, the mouse can change the move the view
+while the primary mouse is offscreen; when keystrokes arrive to the
+editor, the view focuses to the primary cursor to make it visible and
+available to be used.
+
+Flow has multiple cursors each one holding the relative position to the
+buffer with `row`, `col` and `target`, the last one used to make the
+cursor jump to a possibly next movement,for example, when moving
+between lines, this is a way to "remember" where to jump back.  When
+creating multiple cursors they signal many buffer places and a subset
+is seen inside the [view](#view_concept).
+
+Cursors visibility depends on the size of both the buffer contents and
 the editor in your device.
 
-A `Selection` has two cursors that are not visible, they mark
-the begin and the end of the selection, and CurSels are actually
-what allow to have the concept of a cursor with a selection. A
-`Cursel` is composed by a cursor and optionally a Selection.
+Most of editors operations act on the set of CurSels and the Primary
+Cursor is a [CurSel](#cursel_concept).
 
-Most of editors operations act on the set of CurSels and the
-Primary Cursor is a particular case of the general case. And
-as a note, the Primary Cursor is in fact a CurSel.
+[]($section.id("selection_concept"))
+### Selection
 
-To complete the editor scenario, `Marks` have the potential
-to become selections; the marks become evident to the eye
-when in search mode, they are seen as the primary cursor
-is positioned over an occurrence with a different color
-according to the theme.
+A selection is represented by begin and end [cursors](#cursor_concept)
+and offers basic functions that will consitute the changes needed with
+deletions, insert replacements handled by the[editor](#tui_editor)
+services and [commands](/docs/architecture/command).
 
-The Editor will be acting on Buffer.Root which is the root of
-the tree representing the document that is being edited. The API
-of the Buffer.Root is stable and offers the necessary to insert,
-delete and move along the buffer, knowing if the end or the
-beginning of the document have been reached when interacting
-with a Cursor.
+A `Selection` has two cursors that are not visible, they mark the begin
+and the end of the selection.
 
-Cursors, Selections and Cursels don't know about the buffer, and
-they need to receive a reference to them to have positions and
-also sometimes receive metrics from the editor that help determine
-if a cursor is about to exit boundaries of the buffer and have
-everything "in place".
+
+[]($section.id("cursel_concept"))
+### CurSel
+
+The CurSel is what is presented to user, holding a
+[cursor](#cursor_concept) and optionally a
+[selection](#selection_concept).
+
+
+[]($section.id("mark_concept"))
+### Mark
+what allow to have the concept of a cursor with a selection. A `Cursel`
+is composed by a cursor and optionally a Selection.
+
+To complete the editor scenario, `Marks` have the potential to become
+selections; the marks become evident to the eye when in search mode,
+they are seen as the primary cursor is positioned over an occurrence
+with a different color according to the theme.
+
+[]($section.id("editor_concept"))
+### Editor
+The Editor will be acting on Buffer.Root which is the root of the tree
+representing the document that is being edited. API Buffer.Root is
+stable and offers the necessary to insert, delete and move along the
+buffer, knowing if the end or the beginning of the document have been
+reached when interacting with a Cursor.
+
+Cursors, Selections and Cursels don't know about the buffer, and they
+need to receive a reference to them to have positions and also
+sometimes receive metrics from the editor that help determine if a
+cursor is about to exit boundaries of the buffer and have everything
+"in place".
 
 []($section.id("commands"))
 ## Editor Commands
 
-We mentioned earlier that most of the operations work on all
-the cursors and selections, moreover, there are various
-commands acting over the set of cursors, selections, cursels
-or marks. Given said this, we will be using functions as
-parameters in most of the situations. Functional programming
-languages are popular in these scenarios, to name a prominent
-one, Emacs and emacs lisp.
+We mentioned earlier that most of the operations work on all the
+cursors and selections, moreover, there are various commands acting
+over the set of cursors, selections, cursels or marks. Given said
+this, we will be using functions as parameters in most of the
+situations. Functional programming languages are popular in these
+scenarios, to name a prominent one, Emacs and emacs lisp.
 
-If the buffer is not to be modified, we will be using the
-method `buf_root` to get the root of the buffer to find and
-position the cursors. In the other hand, we will use
-`buf_for_update()` when the buffer is to be modified.
+If the buffer is not to be modified, we will be using the method
+`buf_root` to get the root of the buffer to find and position the
+cursors. In the other hand, we will use `buf_for_update` when the
+buffer is to be modified.
 
-The benefit of sending functions as parameters is that code
-is reused and the codebase can grow without much sacrifice
-when adding new functionalities, because one would be
-thinking only in the current cursor and if required, the
-operation will be applied to all the cursors, the same applies
-to selections, cursels and marks.
+The benefit of sending functions as parameters is that code is reused
+and the codebase can grow without much sacrifice when adding new
+functionalities, because one would be thinking only in the current
+cursor and if required, the operation will be applied to all the
+cursors, the same applies to selections, cursels and marks.
 
 []($section.id("moving"))
 ## Moving
 
-For example, to move the cursors a page up, we can look at
-the command `move_page_up`, which uses the method
-`with_cursors_and_view_const` sending the function
-`move_cursor_page_up`.
+For example, to move the cursors a page up, we can look at the command
+`move_page_up`, which uses the method `with_cursors_and_view_const`
+sending the function `move_cursor_page_up`.
 
-Looking inside `with_cursors_and_view_const`, it iterates
-over all the cursors and invokes `with_cursor_and_view_const`,
-sending a cursor as a parameter, that function, will invoke
-`move_cursor_page_up` whose commitment is to use the method
-`move_page_up` from the cursor, sending the view and the
-metrics of the editor.
+Looking inside `with_cursors_and_view_const`, it iterates over all the
+cursors and invokes `with_cursor_and_view_const`, sending a cursor as
+a parameter, that function, will invoke `move_cursor_page_up` whose
+commitment is to use the method `move_page_up` from the cursor,
+sending the view and the metrics of the editor.
 
-The family of `move` functions is big, look for the methods
-whose name has the word move in them. with the command palette
-is possible to get a glimpse of them.
+The family of `move` functions is big, look for the methods whose name
+has the word move in them. with the command palette is possible to get
+a glimpse of them.
 
 []($section.id("selecting"))
 ## Selections
 
-There are naming conventions for the functions that help
-understanding what each one is doing, there has been taken
-great deal of care to maintain consistency that needs to be
-followed to make it easier to continue extending on
-functionalities.
+There are naming conventions for the functions that help understanding
+what each one is doing, there has been taken great deal of care to
+maintain consistency that needs to be followed to make it easier to
+continue extending on functionalities.
 
-Look at the following set of functions, all of them act on
-cursors, cursels and selections, in singular and plural, and
-some of them receive arguments, the repeat functions act
-many times over the set of the group that they are intended
-to do so.  The parameters and following the calls from one
-to another will let you navigate and get the hang of their
-usage.
+Look at the following set of functions, all of them act on cursors,
+cursels and selections, in singular and plural, and some of them
+receive arguments, the repeat functions act many times over the set of
+the group that they are intended to do so.  The parameters and
+following the calls from one to another will let you navigate and get
+the hang of their usage.
 
-```zig
-fn with_cursor_const
-fn with_cursel_const
-fn with_cursels_const
-fn with_selection_const
-fn with_cursor_const_arg
-fn with_cursors_const_arg
-fn with_cursors_const_once
-fn with_selection_const_arg
-fn with_cursors_const_repeat
-fn with_selections_const_arg
-fn with_cursor_and_view_const
-fn with_selections_const_once
-fn with_cursors_and_view_const
-fn with_selections_const_repeat
-fn with_selection_and_view_const
-fn with_selections_and_view_const
-```
 
 []($section.id("modifying"))
 ## Modifying the buffer
 
 The `select` family of functions is bigger than the set of `move`
-functions, in contrast, the `cut`, `delete`, `insert`, `paste`
-looks smaller, and this is accomplished making composition of
-functions.  Usually when modifying something, first there is
-a process to locate the cursor, cursel o selection in the proper
-place and then applying the modification.
+functions, in contrast, the `cut`, `delete`, `insert`, `paste` looks
+smaller, and this is accomplished making composition of functions.
+Usually when modifying something, first there is a process to locate
+the cursor, cursel o selection in the proper place and then applying
+the modification.
 
 [Discord](https://discord.com/invite/4wvteUPphx) and
-[Github issues](https://github.com/neurocyte/flow/issues) are the
-main channels to do so.
+[Github issues](https://github.com/neurocyte/flow/issues) are the main
+channels to do so.
+
+## Helper function
+
+When creating commands and services for the editor, sometimes is handy
+where are the cursels. It's possible to use `log_cursel`:
+
+>[]($block.attrs('line-numbers-js'))
+>```zig
+>pub fn log_cursel(self: *Self, cursel: CurSel) void {
+>    if (cursel.selection) |sel| {
+>        self.logger.print("[{}:{}.{}] {}:{}.{} - {}:{}.{}", .{
+>            cursel.cursor.row, cursel.cursor.col, cursel.cursor.target,
+>            sel.begin.row, sel.begin.col, sel.begin.target,
+>            sel.end.row, sel.end.col, sel.end.target,
+>        });
+>    } else {
+>        self.logger.print("[{}:{}.{}] no selection", .{
+>            cursel.cursor.row,
+>            cursel.cursor.col,
+>            cursel.cursor.target
+>        });
+>    }
+>}
+>```
 
 []($section.id("next"))
 ## Next steps
 
-* [minimodes](/docs/architecture/minimode) invoke commands defined in the editor
-* [palettes](/docs/architecture/palette) are open by commands and when selected an item, a command
-is invoked.
-* Plenty of [commands](/docs/architecture/command)  are defined in the editor.
+* [minimodes](/docs/architecture/minimode) invoke
+[commands](/docs/architecture/minimode) defined in the editor
+* [palettes](/docs/architecture/palette) are open by commands and when
+selected an item, a command is invoked
+* Plenty of [commands](/docs/architecture/command) are defined in the
+editor
+* [Passing parameters](/docs/architecture/inner_data_exchange) between
+commands and functions
