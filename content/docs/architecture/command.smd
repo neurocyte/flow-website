@@ -113,13 +113,12 @@ pub const goto_line_meta: Meta = .{ .arguments = &.{.integer} };
 and to actually receiving the integer parameter, `goto_line` will
 extract from the context like this:
 
->[]($block.attrs('line-numbers-js'))
->```zig
->pub fn goto_line(self: *Self, ctx: Context) Result {
->    var line: usize = 0;
->    if (!try ctx.args.match(.{tp.extract(&line)}))
->        return error.InvalidGotoLineArgument;
->```
+```zig
+pub fn goto_line(self: *Self, ctx: Context) Result {
+    var line: usize = 0;
+    if (!try ctx.args.match(.{tp.extract(&line)}))
+        return error.InvalidGotoLineArgument;
+```
 
 To send a parameter to a command, make sure that the type is exactly
 the same when retrieving it. We will refer as encode and decode when
