@@ -24,7 +24,7 @@
     </nav>
     <script src="$site.asset('js/index.js').link()"></script>
     <script src="$site.asset('js/highlight.js').link()"></script>
-	<script>document.addEventListener('DOMContentLoaded', addLineNumbersRobust);</script>
+	<script>document.addEventListener('DOMContentLoaded', addLineNumbersToPre);</script>
     <super>
   </body>
 </html>
