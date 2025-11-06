@@ -1,0 +1,39 @@
+---
+.title = "Best practices",
+.date = @date("2025-11-06T12:24:45+02:00"),
+.author = "Igor Támara",
+.layout = "tutorial.shtml",
+.draft = true,
+.custom = {
+  .githubedit = "/docs/architecture/command.smd",
+}
+---
+
+In all proects we have agreements and the communication process and
+integrating anything is faster when we use the learnings to make
+everything repeatable.  Things can be improved and what is considered
+best today, tomorrow can change, we offer some advises in this section.
+
+## Use enums instead of booleans on message parameters
+
+enums are expressive and allow to understand the intent, take a look
+at [this refactor](https://github.com/neurocyte/flow/pull/343/commits/5827f58414c1f31151433ce88dcc2ead28a4b876)
+which enhances a line selection, to include end of line or exclude it,
+afterwards, it was implemented an option to maintain cursor position
+when selecting a line.
+
+## Use if possible keybinds over programming
+
+It's possible that certain action can be achieved composing
+various previous commands, if unsure if something is already
+implemented given that the source code is not clear at some
+point, [please ask](https://discord.com/invite/4wvteUPphx).
+
+If you find something that worths be here, please
+[edit this page](https://github.com/neurocyte/flow-website/tree/master/content/docs/architecture/command.smd).
+
+## Next Steps
+
+* Join our [Discord server](https://discord.com/invite/4wvteUPphx)
+* or discuss on [GitHub Discussions](https://github.com/neurocyte/flow/discussions)
+* More on [contributing](/docs/contributing)
