@@ -83,7 +83,7 @@ code.zig .attribute {
   color: var(--attribute-color);
 }
 
-.line-numbers-js {
+.line-numbers-js pre code {
   /* Initialize CSS counter for each specific pre block */
   counter-reset: line;
 }
