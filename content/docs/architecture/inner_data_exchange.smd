@@ -25,8 +25,7 @@ management is provided by
 This chapter describes the mechanisms that flow has to pass arguments
 between components.
 
-[]($section.id('libraries'))
-## Library usage
+## [Library usage]($section.id('libraries'))
 
 * The Thespian library sends and receives `thespian.message` values,
 which are strongly typed, but schema free CBOR encoded structures.
@@ -61,9 +60,7 @@ data, more samples on using cbor can be seen in
 For example, when interacting with the clipboard, the messages sent are
 multiple chunks of information,
 
-
-[]($section.id('scoping'))
-## Buffer scoping
+## [Buffer scoping]($section.id('scoping'))
 
 CBOR structures are mostly stored in a way that avoids allocation
 entirely. This is really fast, but requires that you always know where
@@ -105,15 +102,13 @@ came from.
 original CBOR data and will be invalidated implicitly when the CBOR
 buffer they came from is invalidated/overwritten.
 
-[]($section.id('next'))
-## Next steps
+## [Next steps]($section.id('next'))
 
 * [Commands](/docs/architecture/command)
 * [Minimodes](/docs/architecture/minimode)
 * [Architecture](/docs/architecture)
 
-[]($section.id('more'))
-## More information
+## [More information]($section.id('more'))
 
 * [Deepwiki on cbor](https://deepwiki.com/neurocyte/cbor)
 * [Samples of cbor usage](https://github.com/neurocyte/cbor/blob/master/test/tests.zig)
