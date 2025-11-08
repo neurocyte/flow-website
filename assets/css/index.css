@@ -498,3 +498,55 @@ div nav {
 div.tutnav p {
     text-align: center;
 }
+
+div.toc a {
+    text-decoration: none;
+}
+
+div.toc > ul > li, div.toc > ul  {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+div.toc > ul > li::marker {
+    content: "";
+}
+
+div.toc li::marker {
+    content: "» ";
+    font-weight: bold;
+}
+
+.vertical-text {
+    margin-top: 35px;
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+}
+
+.vertical-text a {
+    text-decoration: none;
+}
+
+.toc-container {
+    display: flex;
+    gap: 20px;
+    margin:0px;
+    padding:0px;
+}
+
+.top-container {
+    margin:0px;
+    padding:0px;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    width: 300px;
+}
+
+.top-container h1 {
+    margin:0px;
+    padding:0px;
+    padding-left: 5px;
+    padding-top: 10px;
+}
