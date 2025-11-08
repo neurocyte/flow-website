@@ -15,8 +15,7 @@ present in `editor`, `tui`, `mode` and `minimodes`, it's possible to
 find commands in other places, which will become evident when the need
 arises.
 
-[]($section.id('notes'))
-## Previous notes
+## Prev[ious notes]($section.id('notes'))
 
 Note: Flow is programmed with [zig](https://ziglang.org/), if you are
 familiar with C, C++, Rust, there are differences and reasonings that
@@ -36,8 +35,7 @@ Maybe there is a [shell command invoked](/docs/architecture/keybind#shell)
 with a keybinding that can help in the task you are aiming at before
 developing flow itself.
 
-[]($section.id('creating'))
-## Understanding and creating commands
+## [Understanding and creating commands]($section.id('creating'))
 
 A command is a function with a type like
 
@@ -61,8 +59,7 @@ constitutes a repetition parameter, targeting vim, emacs and helix
 modes. As you dig in, there might be particularities on the parameters
 accepted for a given command.
 
-[]($section.id('calling'))
-## Invoking another command
+## [Invoking another command]($section.id('calling'))
 
 Commands can be bound to mnemonics in modes by convention. For example,
 in Vim Mode `vim.zig`, `q` corresponds to (quit), the most famous one.
@@ -79,8 +76,7 @@ type, given that this command is defined in `vim.zig` which is calling
 the `quit` command defined in `editor.zig`. `cmd` takes care of routing
 and finding the command wherever it is defined.
 
-[]($section.id('tldr'))
-## Chaining commands
+## [Chaining commands]($section.id('tldr'))
 
 Chaining commands is also common, and, by the way, swift. This is a
 sample of applying first `save_file` command and then, the command
@@ -99,8 +95,7 @@ sent to commands vary for each command.
 Sometimes [keybinding](/docs/architecture/keybind) is enough to
 accomplish a compound of already present commands.
 
-[]($section.id('command_arguments'))
-### Sending parameters to commands
+### [Sending parameters to commands]($section.id('command_arguments'))
 
 `goto_line` (in the case of vim and helix mode, you first type the
 number and then the action, `gg`) is a command that exemplifies
@@ -146,8 +141,7 @@ A deeper explanation of the rules about parameter passing is exposed in
 that parameters can be sent not only to commands, but other broader
 use cases.
 
-[]($section.id('deepen'))
-## Code organization
+## [Code organization]($section.id('deepen'))
 
 Is common to define private functions in a given module meant to be
 invoked from commands. As usual, reusing code with functions
@@ -164,8 +158,7 @@ pub fn select_to_char_left_helix(_: *void, ctx: Ctx) Result {
 }
 ```
 
-[]($section.id('next'))
-## Next steps
+## [Next steps]($section.id('next'))
 
 [Minimodes](/docs/architecture/minimode) pass arguments to the editor,
 if you wonder how to go beyond the current buffer window, when there

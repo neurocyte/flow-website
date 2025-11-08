@@ -1,6 +1,6 @@
 ---
 .title = "Contributing",
-.date = @date("2025-07-06T00:00:00"),
+.date = @date("2025-11-06T00:00:00"),
 .author = "Igor Támara",
 .layout = "tutorial.shtml",
 .draft = false,
@@ -9,8 +9,7 @@
 }
 ---
 
-[]($section.id("request"))
-## Asking for a feature
+## [Asking for a feature]($section.id("request"))
 
 Please [open an issue](https://github.com/neurocyte/flow/issues) that
 explains what is the requirement, being as descriptive as
@@ -21,8 +20,7 @@ more information.  At the end, the issues in github have more
 chance to get developed, given that there are plenty of things
 to do for this kind of software.
 
-[]($section.id("issues"))
-## Reporting a problem
+## [Reporting a problem]($section.id("issues"))
 
 If you discover a problem, or unexpected behaviour, feel free to join
 [Discord](https://discord.com/invite/4wvteUPphx) to check if there is
@@ -41,8 +39,7 @@ Issues later on are tagged with proposed version to solve them, in case
 of low hanging fruit, it's possible that it can be solved pretty
 quick.
 
-[]($section.id("showcase"))
-## Help others and share your workflows
+## [Help others and share your workflows]($section.id("showcase"))
 
 We are happy when you [share your workflows](https://discord.gg/XeYatDhh)
 or when someone asks something and gets a helpful answer, for example, a
@@ -55,8 +52,8 @@ making blog entries and sharing with others what you can build or achieve
 with flow; battle testing flow on daily basis helps its improvement and
 bring ideas from other places too.
 
-[]($section.id("developing"))
-## Developing
+
+## [Developing]($section.id("developing"))
 
 [Flow Control](https://flow-control.dev/) is programmed with
 [zig](https://ziglang.org/).
@@ -76,8 +73,7 @@ agreements or find guidance.
 This [summary](/docs/architecture) can help on getting started to
 follow the codebase.
 
-[]($section.id("coding_style"))
-### Coding style
+### [Coding style]($section.id("coding_style"))
 
 Please follow what you see in the source code for functions, Structs,
 variables, const names, etc...  Functions have descriptive names to
@@ -90,8 +86,8 @@ inaccurate in this doc or others, do open an issue or jump to
 [Discord](https://discord.com/invite/4wvteUPphx) and comment, it's
 valid to [improve too](https://github.com/neurocyte/flow-website/tree/master/content/docs/contributing.smd").
 
-[]($section.id("commits"))
-### Commit comments
+
+### [Commit comments]($section.id("commits"))
 
 It's better to use commits for different purposes, even if they look
 small and there is a temptation to include on the same new code, fixes
@@ -110,8 +106,8 @@ clearer for future readers and committers.
 * `fix:` When something changed to a more expected behaviour.
 * `build`: the commit doesn't change code at all.
 
-[]($section.id("testing"))
-### Testing
+
+### [Testing]($section.id("testing"))
 
 It's possible that the test set grows as the project evolves, given
 that the amount of relationships among components increase the
@@ -119,8 +115,7 @@ opportunity to generate regressions. If you are new to zig a good
 place to start to learn about the codebase is
 [adding some tests](/docs/testing)
 
-[]($section.id("resources"))
-## Resources
+## [Resources]($section.id("resources"))
 
 * [nerd fonts cheatsheet](https://www.nerdfonts.com/cheat-sheet): When
 icons are needed, you can look for them.
@@ -129,8 +124,7 @@ to trace some messages.
 * [showing key-presses](/docs/architecture#show_input): When the keyboard
 don't seem to work.
 
-[]($section.id("next"))
-## Next steps
+## [Next steps]($section.id("next"))
 
 * [Join Discord](https://discord.com/invite/4wvteUPphx)
 * [Fill an issue](https://github.com/neurocyte/flow/issues)
