@@ -15,7 +15,7 @@ present in `editor`, `tui`, `mode` and `minimodes`, it's possible to
 find commands in other places, which will become evident when the need
 arises.
 
-## Prev[ious notes]($section.id('notes'))
+## Previous notes[]($section.id('notes'))
 
 Note: Flow is programmed with [zig](https://ziglang.org/), if you are
 familiar with C, C++, Rust, there are differences and reasonings that
