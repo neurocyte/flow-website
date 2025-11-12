@@ -13,7 +13,11 @@
 To get the most of this section, it's recommended to have read the
 [architecture briefing](/docs/architecture), about
 [commands](/docs/architecture/command) and
-[keybinds](/docs/architecture/keybind).
+[keybinds](/docs/architecture/keybind) at least.
+
+A word of warning: Flow code evolves and it is possible that some code
+exposed here is older than the current one. Always refer to
+[master](https://github.com/neurocyte/flow) in doubt.
 
 []($section.id("concepts"))
 ## Some concepts
@@ -365,6 +369,15 @@ fn with_cursel_mut(self: *Self, root: Buffer.Root, op: cursel_operator_mut, curs
 
 As seen, the only task for `with_cursel_mut` is providing the required
 elements to let `to_upper_cursel` do what was described previously.
+
+## Adding functionalities to the editor
+
+As shown, the basics to manipulate the buffer via the editor involves
+reviewing if cursors, marks, selections are to be modified, changed or
+if the contents are.  Picking functions for it and focusing on the
+task for a single cursel, cursor or selection is key and the use of the
+already present functions will allow to act on multiple elements at
+once.
 
 []($section.id("next"))
 ## Next steps
