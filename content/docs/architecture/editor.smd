@@ -3,7 +3,7 @@
 .date = @date("2025-10-19T00:00:00"),
 .author = "Igor Támara",
 .layout = "tutorial.shtml",
-.draft = true,
+.draft = false,
 .custom = {
   .githubedit = "docs/architecture/editor.smd",
   .codepath = "src/tui/editor.zig",
@@ -48,7 +48,7 @@ makes the link between both of them, signaling the part of the `Buffer`
 that can be modified and manipulated as you see it. It scrolls on the
 current visible portion [view](#view_concept) of the buffer, when
 manipulated with the keyboard, the mouse can change the move the view
-while the primary mouse is offscreen; when keystrokes arrive to the
+while the primary mouse is off-screen; when keystrokes arrive to the
 editor, the view focuses to the primary cursor to make it visible and
 available to be used.
 
@@ -69,7 +69,7 @@ Cursor is a [CurSel](#cursel_concept).
 ### Selection
 
 A selection is represented by begin and end [cursors](#cursor_concept)
-and offers basic functions that will consitute the changes needed with
+and offers basic functions that will constitute the changes needed with
 deletions, insert replacements handled by the[editor](#tui_editor)
 services and [commands](/docs/architecture/command).
 
@@ -104,10 +104,10 @@ buffer, knowing if the end or the beginning of the document have been
 reached when interacting with a Cursor.
 
 Cursors, Selections and Cursels don't know about the buffer, and they
-need to receive a reference to them to have positions and also
-sometimes receive metrics from the editor that help determine if a
-cursor is about to exit boundaries of the buffer and have everything
-"in place".
+need to receive a reference to it in order to be aware of the
+restrictions and usually receive `metrics` from the editor that help
+determine if a cursor is about to exit the boundaries of the buffer
+and be inside bounds.
 
 []($section.id("commands"))
 ## Editor Commands
@@ -117,7 +117,8 @@ cursors and selections, moreover, there are various commands acting
 over the set of cursors, selections, cursels or marks. Given said
 this, we will be using functions as parameters in most of the
 situations. Functional programming languages are popular in these
-scenarios, to name a prominent one, Emacs and emacs lisp.
+scenarios, to name a prominent one, Emacs and emacs lisp. Flow is
+inspired on it and others.
 
 If the buffer is not to be modified, we will be using the method
 `buf_root` to get the root of the buffer to find and position the
@@ -134,34 +135,130 @@ cursors, the same applies to selections, cursels and marks.
 ## Moving
 
 For example, to move the cursors a page up, we can look at the command
-`move_page_up`, which uses the method `with_cursors_and_view_const`
-sending the function `move_cursor_page_up`.
+`move_page_up`,
 
-Looking inside `with_cursors_and_view_const`, it iterates over all the
-cursors and invokes `with_cursor_and_view_const`, sending a cursor as
-a parameter, that function, will invoke `move_cursor_page_up` whose
-commitment is to use the method `move_page_up` from the cursor,
-sending the view and the metrics of the editor.
+>[]($block.attrs('line-numbers-js'))
+>```zig
+>pub fn move_page_up(self: *Self, _: Context) Result {
+>    try self.send_editor_jump_source();
+>    const root = try self.buf_root();
+>    try self.with_cursors_and_view_const(root, move_cursor_page_up, &self.view);
+>    self.clamp();
+>}
+>pub const move_page_up_meta: Meta = .{ .description = "Move cursor page up" };
+>```
 
-The family of `move` functions is big, look for the methods whose name
-has the word move in them. with the command palette is possible to get
-a glimpse of them.
+which uses the method `with_cursors_and_view_const` sending the function
+`move_cursor_page_up`.
+
+Looking inside `with_cursors_and_view_const`
+
+>[]($block.attrs('line-numbers-js'))
+>```zig
+>fn with_cursors_and_view_const(self: *Self, root: Buffer.Root, move: cursor_view_operator_const, view: *const View) error{Stop}!void {
+>    var someone_stopped = false;
+>    for (self.cursels.items) |*cursel_| if (cursel_.*) |*cursel|
+>        with_cursor_and_view_const(root, move, cursel, view, self.metrics) catch {
+>            someone_stopped = true;
+>        };
+>    self.collapse_cursors();
+>    return if (someone_stopped) error.Stop else {};
+>}
+>```
+
+It iterates over all the cursors and invokes
+`with_cursor_and_view_const`, sending the `move` function, a cursor,
+remember that the function passed was `move_cursor_page_up` as seen 
+previously.
+
+The commitment of `move_cursor_page_up` is to use the method
+`move_page_up` from Cursor, sending editor `view` and `metrics`.
+
+```zig
+fn move_cursor_page_up(root: Buffer.Root, cursor: *Cursor, view: *const View, metrics: Buffer.Metrics) !void {
+    cursor.move_page_up(root, view, metrics);
+}
+```
+
+The `move` functions set is numerous, look for the methods whose name
+have the word `move` in them. with the command palette is possible to get
+a glimpse of the available functions present(ctrl+f2).
 
 []($section.id("selecting"))
 ## Selections
 
-There are naming conventions for the functions that help understanding
-what each one is doing, there has been taken great deal of care to
-maintain consistency that needs to be followed to make it easier to
-continue extending on functionalities.
+Function naming conventions help understand the purpose of each one,
+there has been taken great deal of care to maintain consistency, it's
+unlikely that there is need for new functions, in case of need, add
+it following what is already present.
 
-Look at the following set of functions, all of them act on cursors,
-cursels and selections, in singular and plural, and some of them
-receive arguments, the repeat functions act many times over the set of
-the group that they are intended to do so.  The parameters and
-following the calls from one to another will let you navigate and get
-the hang of their usage.
+Follows an example of a functionality that receives a repetition
+parameter, the `select_up` command, which given a number, takes all
+the current cursors and selections and select lines above them the
+ number of times specified.
 
+```zig
+pub fn select_up(self: *Self, ctx: Context) Result {
+    const root = try self.buf_root();
+    try self.with_selections_const_repeat(root, move_cursor_up, ctx);
+    self.clamp();
+}
+pub const select_up_meta: Meta = .{ .description = "Select up", .arguments = &.{.integer} };
+```
+It's meta is guiding about the integer argument that the command can
+make use of.  Invokes `with_selections_const_repeat` passing the
+function `move_cursor_up` as parameter and also the context, which
+actually holds the integer parameter holding the repetition information.
+
+
+>[]($block.attrs('line-numbers-js'))
+>```zig
+>pub fn with_selections_const_repeat(self: *Self, root: Buffer.Root, move: cursor_operator_const, ctx: Context) error{Stop}!void {
+>    var someone_stopped = false;
+>    var repeat: usize = 1;
+>    _ = ctx.args.match(.{tp.extract(&repeat)}) catch false;
+>    while (repeat > 0) : (repeat -= 1) {
+>        for (self.cursels.items) |*cursel_| if (cursel_.*) |*cursel|
+>            with_selection_const(root, move, cursel, self.metrics) catch {
+>                someone_stopped = true;
+>            };
+>        self.collapse_cursors();
+>        if (someone_stopped) break;
+>    }
+>    return if (someone_stopped) error.Stop else {};
+>}
+>```
+
+Factor repetition is taken from the context in line XX, being used in
+the `while`, then for each repetition, the set of cursels is iterated,
+cursels hold cursors and selections, applying `with_selection_const`
+function, passing `root`(the buffer), `move_cursor_up` function, cursel
+and metrics as parameters. Note that after the function is applied to
+each cursel, self.collapse_cursors() is invoked, given that it's
+possible that some cursors in the operation have overlapped. With each
+cursel operation there is also a tracking of possible fails, continuing
+gracefully, one of such fails can be happening because come cursels
+might have been reaching the beginning of the buffer and there might be
+other cursels that have not yet reached the beginning of the file.
+
+```zig
+pub fn with_selection_const(root: Buffer.Root, move: cursor_operator_const, cursel: *CurSel, metrics: Buffer.Metrics) error{Stop}!void {
+    const sel = try cursel.enable_selection(root, metrics);
+    try move(root, &sel.end, metrics);
+    cursel.cursor = sel.end;
+    cursel.check_selection(root, metrics);
+}
+```
+
+If there are cursels that are not yet selections, their respective
+selections are activated with `cursel.enable_selection`, finally
+`move_cursor_up` (`move`s value is a pointer to the `move_cursor_up`)
+is applied, passing the end marker of the selection; with its new
+value, the cursor is positioned and finally a sanity check on cursel is
+applied with its method `check_selection`.
+
+Flow allows navigating the code with `goto_definition` and `references`
+commands to deepen the understanding and following the different calls.
 
 []($section.id("modifying"))
 ## Modifying the buffer
@@ -170,36 +267,104 @@ The `select` family of functions is bigger than the set of `move`
 functions, in contrast, the `cut`, `delete`, `insert`, `paste` looks
 smaller, and this is accomplished making composition of functions.
 Usually when modifying something, first there is a process to locate
-the cursor, cursel o selection in the proper place and then applying
-the modification.
+the cursor, cursel or selection in the proper place and then applying
+the modification.  There are cases when there is need to locate and
+act right away.
 
-[Discord](https://discord.com/invite/4wvteUPphx) and
-[Github issues](https://github.com/neurocyte/flow/issues) are the main
-channels to do so.
-
-## Helper function
-
-When creating commands and services for the editor, sometimes is handy
-where are the cursels. It's possible to use `log_cursel`:
+When additions, changes and removal of buffer contents, editor offers
+the method `buf_for_update`; we will look first to the method
+`to_upper_cursel`, which by default in Flow, takes a CurSel, if it has
+no selection, the word that it is stepped on, if any, is selected and
+gets uppercased.
 
 >[]($block.attrs('line-numbers-js'))
 >```zig
->pub fn log_cursel(self: *Self, cursel: CurSel) void {
->    if (cursel.selection) |sel| {
->        self.logger.print("[{}:{}.{}] {}:{}.{} - {}:{}.{}", .{
->            cursel.cursor.row, cursel.cursor.col, cursel.cursor.target,
->            sel.begin.row, sel.begin.col, sel.begin.target,
->            sel.end.row, sel.end.col, sel.end.target,
->        });
->    } else {
->        self.logger.print("[{}:{}.{}] no selection", .{
->            cursel.cursor.row,
->            cursel.cursor.col,
->            cursel.cursor.target
->        });
->    }
+>fn to_upper_cursel(self: *Self, root_: Buffer.Root, cursel: *CurSel, allocator: Allocator) error{Stop}!Buffer.Root {
+>    var root = root_;
+>    const saved = cursel.*;
+>    const sel = if (cursel.selection) |*sel| sel else ret: {
+>        var sel = cursel.enable_selection(root, self.metrics) catch return error.Stop;
+>        move_cursor_word_begin(root, &sel.begin, self.metrics) catch return error.Stop;
+>        move_cursor_word_end(root, &sel.end, self.metrics) catch return error.Stop;
+>        break :ret sel;
+>    };
+>    var sfa = std.heap.stackFallback(4096, self.allocator);
+>    const sfa_allocator = sfa.get();
+>    const cut_text = copy_selection(root, sel.*, sfa_allocator, self.metrics) catch return error.Stop;
+>    defer sfa_allocator.free(cut_text);
+>    const ucased = Buffer.unicode.get_letter_casing().toUpperStr(sfa_allocator, cut_text) catch return error.Stop;
+>    defer sfa_allocator.free(ucased);
+>    root = try self.delete_selection(root, cursel, allocator);
+>    root = self.insert(root, cursel, ucased, allocator) catch return error.Stop;
+>    cursel.* = saved;
+>    return root;
 >}
 >```
+
+Lines through 4 to 9 implement the selection description sketched
+previously, selecting the word if no selection was present to apply
+uppercasing.
+
+And to reflect the changes in the buffer from lines 10 to 19:
+
+1. copy contents,
+1. uppercase
+1. remove the selection,
+1. and add the uppercased in the position where the cut was made.
+making sure the cursel is positioned in the expected place.
+1. A `buffer`(`root`) is received, modified and finally returned.
+
+As we saw, the method `to_upper_cursel` acts on a cursel, used by the
+`to_upper` command, which acts on all the present cursels, getting the
+buffer with the method `buf_for_update` to make modifications on it.
+
+```zig
+pub fn to_upper(self: *Self, _: Context) Result {
+    const b = try self.buf_for_update();
+    const root = try self.with_cursels_mut_once(b.root, to_upper_cursel, b.allocator);
+    try self.update_buf(root);
+    self.clamp();
+}
+pub const to_upper_meta: Meta = .{ .description = "Convert selection or word to upper case" };
+```
+
+via `with_cursels_mut_once` receives a buffer that will be modified
+and returns one with modifications, updating what is presented with
+the method `update_buf` and an allocator.  The previously described
+`to_upper_cursel` is sent
+
+>[]($block.attrs('line-numbers-js'))
+>```zig
+>  fn with_cursels_mut_once(self: *Self, root_: Buffer.Root, move: cursel_operator_mut, allocator: Allocator) error{Stop}!Buffer.Root {
+>      var root = root_;
+>      var someone_stopped = false;
+>      for (self.cursels.items) |*cursel_| if (cursel_.*) |*cursel| {
+>          root = self.with_cursel_mut(root, move, cursel, allocator) catch ret: {
+>              someone_stopped = true;
+>              break :ret root;
+>          };
+>      };
+>      self.collapse_cursors();
+>      return if (someone_stopped) error.Stop else root;
+>  }
+>```
+
+Worth to note that the modified `root` is being passed to the function
+`with_cursel_mut` on each iteration over the cursels along with the
+allocator and as described previously in selection functions, tracking
+if there is some fail an error is popped up, whilst everything was
+successful, the modified `root` is returned. Now time to see the
+method `with_cursel_mut` that receives the pointer to `to_upper_cursel`
+along with root, cursel and allocator.
+
+```zig
+fn with_cursel_mut(self: *Self, root: Buffer.Root, op: cursel_operator_mut, cursel: *CurSel, allocator: Allocator) error{Stop}!Buffer.Root {
+    return op(self, root, cursel, allocator);
+}
+```
+
+As seen, the only task for `with_cursel_mut` is providing the required
+elements to let `to_upper_cursel` do what was described previously.
 
 []($section.id("next"))
 ## Next steps
