@@ -3,7 +3,7 @@
 .date = @date("2025-11-06T12:24:45+02:00"),
 .author = "Igor Támara",
 .layout = "tutorial.shtml",
-.draft = true,
+.draft = false,
 .custom = {
   .githubedit = "/docs/architecture/command.smd",
 }
