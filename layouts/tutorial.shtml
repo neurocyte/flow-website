@@ -14,6 +14,22 @@
 
 	<div :html="$page.content()"></div>
 
+	<div class="bottom-container" >
+	     <ul>
+		<li><a href="$site.page('docs/contributing').link()">contributing</a></li>
+		<li><a href="$site.page('docs/testing').link()">testing</a></li>
+		<li><a href="$site.page('docs/architecture').link()">architeture</a></li>
+		<li><ul>
+		<li><a href="$site.page('docs/architecture/keybind').link()">keybind</a></li>
+		<li><a href="$site.page('docs/architecture/command').link()">command</a></li>
+		<!-- <li><a href="$site.page('docs/architecture/editor').link()">editor</a></li> -->
+		<li><a href="$site.page('docs/architecture/minimode').link()">minimode</a></li>
+		<li><a href="$site.page('docs/architecture/palette').link()">palette</a></li>
+		<li><a href="$site.page('docs/architecture/inner_data_exchange').link()">exchanging data</a></li></ul></li>
+		<li><a href="https://deepwiki.com/neurocyte/flow" target="_alt">deepwiki</a></li>
+	     </ul>
+	</div>
+
 	<div>
 		<nav id="menu" class="nav">
 			<ctx about="$site.page('')"><a href="$ctx.about.link()"><i class="nf nf-fa-terminal"></i></a> <a href="$ctx.about.link()">home</a></ctx>

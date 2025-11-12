@@ -1,12 +1,12 @@
 @font-face {
-    font-family: 'Iosevka';
-    src: url('../fonts/Iosevka-Regular.woff2') format('woff2');
+  font-family: 'Iosevka';
+  src: url('../fonts/Iosevka-Regular.woff2') format('woff2');
 }
 
 @font-face {
-    font-family: 'AcPlus IBM VGA 9x16';
-    src: url('../fonts/AcPlus_IBM_VGA_9x16.ttf') format('truetype');
-    font-weight: 600;
+  font-family: 'AcPlus IBM VGA 9x16';
+  src: url('../fonts/AcPlus_IBM_VGA_9x16.ttf') format('truetype');
+  font-weight: 600;
 }
 
 :root {
@@ -48,7 +48,7 @@
 }
 
 
-* + * {
+*+* {
   margin-top: var(--line-height);
 }
 
@@ -77,12 +77,28 @@ body {
   :root {
     font-size: 14px;
   }
+
   body {
     padding: var(--line-height) 1ch;
   }
 }
 
-h1, h2, h3, h4, h5, h6 {
+@media screen and (max-width: 1300px) {
+  .top-container {
+    display: none;
+  }
+
+  .bottom-container {
+    display: none;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-family-titles);
   font-weight: var(--font-weight-titles);
   margin: calc(var(--line-height) * 2) 0 var(--line-height);
@@ -95,19 +111,22 @@ h1 {
   line-height: calc(2 * var(--line-height));
   margin-bottom: calc(var(--line-height) * 2);
 }
+
 h2 {
   font-size: 3rem;
 }
+
 h3 {
   font-size: 2rem;
 }
+
 h4 {
   font-size: 1.6rem;
 }
 
 :is(h1, h2, h3, h4, h5, h6) a {
-    text-decoration: none;
-    cursor: default;
+  text-decoration: none;
+  cursor: default;
 }
 
 hr {
@@ -118,6 +137,7 @@ hr {
   border: none;
   color: var(--text-color);
 }
+
 hr:after {
   display: block;
   content: "";
@@ -133,7 +153,8 @@ a {
   text-decoration-thickness: var(--border-thickness);
 }
 
-a:link, a:visited {
+a:link,
+a:visited {
   color: var(--text-color);
 }
 
@@ -144,6 +165,7 @@ p {
 strong {
   font-weight: var(--font-weight-bold);
 }
+
 em {
   font-style: italic;
 }
@@ -166,18 +188,17 @@ table {
   margin: 0 0 calc(var(--line-height) * 2);
 }
 
-th, td {
+th,
+td {
   border: var(--border-thickness) solid var(--text-color);
-  padding: 
-    calc((var(--line-height) / 2))
-    calc(1ch - var(--border-thickness) / 2)
-    calc((var(--line-height) / 2) - (var(--border-thickness)))
-  ;
+  padding:
+    calc((var(--line-height) / 2)) calc(1ch - var(--border-thickness) / 2) calc((var(--line-height) / 2) - (var(--border-thickness)));
   line-height: var(--line-height);
   vertical-align: top;
   text-align: left;
 }
-table tbody tr:first-child > * {
+
+table tbody tr:first-child>* {
   padding-top: calc((var(--line-height) / 2) - var(--border-thickness));
 }
 
@@ -185,9 +206,11 @@ table tbody tr:first-child > * {
 th {
   font-weight: 700;
 }
+
 .width-min {
   width: 0%;
 }
+
 .width-auto {
   width: 100%;
 }
@@ -195,9 +218,11 @@ th {
 .header {
   margin-bottom: calc(var(--line-height) * 2);
 }
+
 .header h1 {
   margin: 0;
 }
+
 .header tr td:last-child {
   text-align: right;
 }
@@ -208,12 +233,14 @@ p {
   hyphens: auto;
 }
 
-img, video {
+img,
+video {
   display: block;
   width: 100%;
   object-fit: contain;
   overflow: hidden;
 }
+
 img {
   font-style: italic;
   color: var(--text-color-alt);
@@ -229,6 +256,7 @@ summary {
   font-weight: var(--font-weight-medium);
   cursor: pointer;
 }
+
 details[open] summary {
   margin-bottom: var(--line-height);
 }
@@ -238,6 +266,7 @@ details ::marker {
   content: '▶';
   margin: 0;
 }
+
 details[open] ::marker {
   content: '▼';
 }
@@ -255,11 +284,13 @@ pre {
   overflow-y: hidden;
   color: var(--text-color-alt);
 }
+
 figure pre {
   margin: 0;
 }
 
-pre, code {
+pre,
+code {
   font-family: var(--font-family-alt);
 }
 
@@ -279,7 +310,8 @@ figcaption {
   margin-top: var(--line-height);
 }
 
-ul, ol {
+ul,
+ol {
   padding: 0;
   margin: var(--line-height) 0 var(--line-height);
 }
@@ -288,11 +320,13 @@ ul {
   list-style-type: square;
   padding: 0 0 0 2ch;
 }
+
 ol {
   list-style-type: none;
   counter-reset: item;
   padding: 0;
 }
+
 ol ul,
 ol ol,
 ul ol,
@@ -300,7 +334,8 @@ ul ul {
   padding: 0 0 0 3ch;
   margin: 0;
 }
-ol li:before { 
+
+ol li:before {
   content: counters(item, ".") ". ";
   counter-increment: item;
   font-weight: var(--font-weight-medium);
@@ -319,11 +354,12 @@ li::marker {
   height: var(--line-height);
 }
 
-input, button, textarea {
+input,
+button,
+textarea {
   border: var(--border-thickness) solid var(--text-color);
-  padding: 
-    calc(var(--line-height) / 2 - var(--border-thickness))
-    calc(1ch - var(--border-thickness));
+  padding:
+    calc(var(--line-height) / 2 - var(--border-thickness)) calc(1ch - var(--border-thickness));
   margin: 0;
   font: inherit;
   font-weight: inherit;
@@ -347,6 +383,7 @@ input[type=checkbox] {
   height: var(--line-height);
   cursor: pointer;
 }
+
 input[type=checkbox]:checked:before {
   content: "";
   width: 1ch;
@@ -354,7 +391,8 @@ input[type=checkbox]:checked:before {
   background: var(--text-color);
 }
 
-button:focus, input:focus {
+button:focus,
+input:focus {
   --border-thickness: 3px;
   outline: none;
 }
@@ -362,13 +400,16 @@ button:focus, input:focus {
 input {
   width: calc(round(down, 100%, 1ch));
 }
+
 ::placeholder {
   color: var(--text-color-alt);
   opacity: 1;
 }
+
 ::-ms-input-placeholder {
   color: var(--text-color-alt);
 }
+
 button::-moz-focus-inner {
   padding: 0;
   border: 0
@@ -382,6 +423,7 @@ button {
 button:hover {
   background: var(--background-color-alt);
 }
+
 button:active {
   transform: translate(2px, 2px);
 }
@@ -400,8 +442,9 @@ label input {
 }
 
 .tree p {
-    margin-bottom: 0px;
+  margin-bottom: 0px;
 }
+
 .tree {
   padding: 10px;
   position: relative;
@@ -409,6 +452,7 @@ label input {
   line-height: var(--line-height);
   background: var(--background-color-alt);
 }
+
 .tree ul {
   margin: 0;
   padding: 0;
@@ -417,12 +461,14 @@ label input {
   line-height: var(--line-height);
   background: var(--background-color-alt);
 }
+
 .tree ul li {
   position: relative;
   padding-left: 1.5ch;
   margin-left: 1.5ch;
   border-left: var(--border-thickness) solid var(--text-color);
 }
+
 .tree ul li:before {
   position: absolute;
   display: block;
@@ -432,9 +478,11 @@ label input {
   width: 1ch;
   border-bottom: var(--border-thickness) solid var(--text-color);
 }
+
 .tree ul li:last-child {
   border-left: none;
 }
+
 .tree ul li:last-child:after {
   position: absolute;
   display: block;
@@ -453,19 +501,46 @@ label input {
   margin-bottom: var(--line-height);
 }
 
-.grid > *,
-.grid > input {
+.grid>*,
+.grid>input {
   flex: 0 0 calc(round(down, (100% - (1ch * (var(--grid-cells) - 1))) / var(--grid-cells), 1ch));
 }
-.grid:has(> :last-child:nth-child(1)) { --grid-cells: 1; }
-.grid:has(> :last-child:nth-child(2)) { --grid-cells: 2; }
-.grid:has(> :last-child:nth-child(3)) { --grid-cells: 3; }
-.grid:has(> :last-child:nth-child(4)) { --grid-cells: 4; }
-.grid:has(> :last-child:nth-child(5)) { --grid-cells: 5; }
-.grid:has(> :last-child:nth-child(6)) { --grid-cells: 6; }
-.grid:has(> :last-child:nth-child(7)) { --grid-cells: 7; }
-.grid:has(> :last-child:nth-child(8)) { --grid-cells: 8; }
-.grid:has(> :last-child:nth-child(9)) { --grid-cells: 9; }
+
+.grid:has(> :last-child:nth-child(1)) {
+  --grid-cells: 1;
+}
+
+.grid:has(> :last-child:nth-child(2)) {
+  --grid-cells: 2;
+}
+
+.grid:has(> :last-child:nth-child(3)) {
+  --grid-cells: 3;
+}
+
+.grid:has(> :last-child:nth-child(4)) {
+  --grid-cells: 4;
+}
+
+.grid:has(> :last-child:nth-child(5)) {
+  --grid-cells: 5;
+}
+
+.grid:has(> :last-child:nth-child(6)) {
+  --grid-cells: 6;
+}
+
+.grid:has(> :last-child:nth-child(7)) {
+  --grid-cells: 7;
+}
+
+.grid:has(> :last-child:nth-child(8)) {
+  --grid-cells: 8;
+}
+
+.grid:has(> :last-child:nth-child(9)) {
+  --grid-cells: 9;
+}
 
 /* DEBUG UTILITIES */
 
@@ -493,60 +568,115 @@ label input {
 }
 
 div nav {
-    text-align: right;
+  text-align: right;
 }
+
 div.tutnav p {
-    text-align: center;
+  text-align: center;
 }
 
 div.toc a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
-div.toc > ul > li, div.toc > ul  {
-    list-style-type: none;
-    padding: 0px;
-    margin: 0px;
+div.toc a:hover {
+  color: var(--text-color-accent);
 }
 
-div.toc > ul > li::marker {
-    content: "";
+div.toc>ul>li,
+div.toc>ul {
+  list-style-type: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+div.toc>ul>li::marker {
+  content: "";
 }
 
 div.toc li::marker {
-    content: "» ";
-    font-weight: bold;
+  content: "» ";
+  font-weight: bold;
 }
 
 .vertical-text {
-    margin-top: 35px;
-    writing-mode: vertical-lr;
-    text-orientation: upright;
+  margin-top: 35px;
+  writing-mode: vertical-lr;
+  text-orientation: upright;
+  white-space: nowrap;
+  color: var(--color-accent);
+  font-size: 1.6em;
+  font-family: 'AcPlus IBM VGA 9x16';
 }
 
 .vertical-text a {
-    text-decoration: none;
+  text-decoration: none;
+}
+
+.vertical-text a:hover {
+  color: var(--text-color-accent);
 }
 
 .toc-container {
-    display: flex;
-    gap: 20px;
-    margin:0px;
-    padding:0px;
+  display: flex;
+  gap: 10px;
+  margin: 0px;
+  padding: 0px;
 }
 
 .top-container {
-    margin:0px;
-    padding:0px;
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    width: 300px;
+  margin: 0px;
+  padding: 0px;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  width: 280px;
+}
+
+.bottom-container {
+  position: fixed;
+  bottom: 0;
+  left: 850px;
+  display: flex;
+  flex-direction: column-reverse;
+  /* Stacks items from bottom up */
+  align-items: flex-end;
+  padding: 10px;
+  max-height: 80vh;
+  /* Limits the container height to prevent it from overflowing the viewport */
+  width: 300px;
+  overflow-y: auto;
+}
+
+.bottom-container ul {
+  float: right;
+  /* Right-aligns the entire list */
+  list-style: none;
+  /* Removes default bullets */
+  padding-left: 0;
+  /* Removes default indentation */
+}
+
+.bottom-container li {
+  margin-bottom: 0.5em;
+  /* Spacing between list items */
+  padding-right: 1em;
+  /* Spacing for potential custom right-aligned bullets */
+  text-align: right;
+  /* Aligns text within each list item to the right */
+}
+
+.bottom-container a {
+  text-decoration: none;
+}
+
+.bottom-container a:hover {
+  color: var(--text-color-accent);
 }
 
 .top-container h1 {
-    margin:0px;
-    padding:0px;
-    padding-left: 5px;
-    padding-top: 10px;
+  margin: 0px;
+  padding: 0px;
+  padding-left: 5px;
+  padding-top: 10px;
 }
