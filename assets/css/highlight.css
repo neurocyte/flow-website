@@ -86,6 +86,7 @@ code.zig .attribute {
 .line-numbers-js pre code {
   /* Initialize CSS counter for each specific pre block */
   counter-reset: line;
+  padding: 2px;
 }
 
 .line-numbers-js span.ln {
