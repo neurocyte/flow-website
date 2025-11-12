@@ -16,8 +16,7 @@ action, i.e. find something in the current buffer or in project files,
 open/save a file, and, in modal modes(like vim and helix), as receiving
 a number as a prefix to repeat an action many times.
 
-[]($section.id("anatomy"))
-## Anatomy of minimodes
+## [Anatomy of minimodes]($section.id("anatomy"))
 
 To create a minimode it's needed:
 
@@ -25,8 +24,7 @@ To create a minimode it's needed:
 * An Action mapping
 * A Minimode definition
 
-[]($section.id("keybind"))
-### Keybinding
+### [Keybinding]($section.id("keybind"))
 
 When a key or a keystroke(set of keys) are pressed, the associated
 minimode gets activated and will start to capture the key/strokes
@@ -35,8 +33,7 @@ the minimode. Head to `src/keybind/builtin/flow.json`(flow keybinds)
 and look for `mini_find`, where you will know which specific actions
 are triggered by the keybindings of the `find` minimode.
 
-[]($section.id("mapping"))
-### Action mapping
+### [Action mapping]($section.id("mapping"))
 
 Actions executed by each minimode are stored one per file under
 `src/tui/mode/mini/`. The command that opens the door to the minimode
@@ -46,8 +43,7 @@ when needed.
 Look for `mini` inside `tui.zig` to find out which minimodes are present
 and where to look, to learn how each minimode does its own task.
 
-[]($section.id("definition"))
-### Minimode definition
+### [Minimode definition]($section.id("definition"))
 
 Possibly the simplest minimode that does not require defining a
 particular widget is the `replace` minimode, used in
@@ -99,16 +95,14 @@ All the keys were handled and managed by the default "invisible" widget
 that processes the keys for the minimode.  And there is room for custom
 widgets.
 
-[]($section.id("custom_widgets"))
-## A custom widget
+## [A custom widget]($section.id("custom_widgets"))
 
 When there is a need for an specialized widget, it's possible to
 define one, for example, the `file_browser` is used to load and
 save files, and `numeric_input` is used to set the tab width for
 example(look for it in the command palette `:`).
 
-[]($section.id("next"))
-## Next steps
+## [Next steps]($section.id("next"))
 
 * Create [palettes](/docs/architecture/palette)
 * Review [commands](/docs/architecture/command)

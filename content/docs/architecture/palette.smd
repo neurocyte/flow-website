@@ -30,8 +30,7 @@ To get the most of this section, it's recommended to have read about
 [commands](/docs/architecture/command), and optionally,
 [minimodes](/docs/architecture/minimode).
 
-[]($section.id("anatomy"))
-## Defining the palette
+## [Defining the palette]($section.id("anatomy"))
 
 Palettes are under `tui/overlay` and use the facilities offered by
 `palette.zig` to perform all the operations.
@@ -45,8 +44,7 @@ options to execute an action on the given selection. To maintain as
 readable as possible the code and thus extensible, the data to be used
 should be prepared previously.
 
-[]($section.id("basic"))
-### Fields
+### [Fields]($section.id("basic"))
 
 Basic fields that give hints to the user and need to be set are:
 
@@ -57,8 +55,7 @@ pub const description = "clipboard";
 pub const icon = "  ";
 ```
 
-[]($section.id("entries"))
-### Defining the list of elements in the palette
+### [Defining the list of elements in the palette]($section.id("entries"))
 
 `load_entries` is in charge of populating the visible entries, each one
 with an index.
@@ -87,8 +84,7 @@ try palette.menu.add_item_with_handler(value, select);
 Which will apply the `select` function when the value is selected.
 
 
-[]($section.id("select"))
-### Acting on selection
+### [Acting on selection]($section.id("select"))
 
 When the selection happens, it is time to invoke the command with the
 selection making sure to close the palette. Those actions will be
@@ -102,8 +98,7 @@ Other common operations in the palettes can be inspected looking at the
 source code of the palettes, all of them import `palette.zig`.  Once the
 palette is ready, it's time to make the palette available as a command.
 
-[]($section.id("register"))
-## Registering the palette
+## [Registering the palette]($section.id("register"))
 
 Commands that open the palette are defined in `tui.zig` in a similar way
 it is done with [minimodes](/docs/architecture/minimode). We have got
@@ -113,9 +108,9 @@ you covered if in doubt about
 To view a complete implementation of a palette, take a look at
 [clipboard history palette commit](https://github.com/neurocyte/flow/commit/634a18cb5685a3c3fcfc08301306e628d33c3256)
 
-[]($section.id("next"))
-## Next steps
+## [Next steps]($section.id("next"))
 
 * [Minimodes](/docs/architecture/minimode)
 * [On commands](/docs/architecture/command)
+* [Exchanging messages](/docs/architecture/inner_data_exchange)
 * [Architecture](/docs/architecture)

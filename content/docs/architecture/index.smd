@@ -22,8 +22,7 @@ in deepwiki. Do not hesitate to ask in the channels and
 [open a PR](https://github.com/neurocyte/flow-website/pulls) to improve
 anything.
 
-[]($section.id("internals"))
-## Internals
+## [Internals]($section.id("internals"))
 
 The foundational unit is the `Buffer` that holds the document in memory;
 there might be various opened files, each one loaded in a buffer.
@@ -41,8 +40,7 @@ hierarchy, interact with lsp and git. When flow is opened, only one
 active project is loaded in the current session. The `Project Manager`
 offers services around the set of projects.
 
-[]($section.id("commands"))
-## Editor commands and modes
+## [Editor commands and modes]($section.id("commands"))
 
 When a buffer is active, it has an Editor
 attached to it; an editor might have associated tree-sitter support,
@@ -58,8 +56,7 @@ possible to create a nano mode with just keybindings. In the other hand,
 `Vim` and [Helix](/docs/mode/helix) modes have particular definitions
 for commands that interact with the buffers, being modal editors.
 
-[]($section.id("tui"))
-## Text user interface
+## [Text user interface]($section.id("tui"))
 
 `Tui` governs it all offering support for
 [palettes](/docs/architecture/palette) that are known in other
@@ -71,15 +68,14 @@ that receive more keypresses to offer additional functionality, such
 as finding in files, finding in the current buffer, open files
 and replacing a character.
 
-[]($section.id("oses"))
-## Operating systems and UI
+
+## [Operating systems and UI]($section.id("oses"))
 
 [libvaxis](https://github.com/rockorager/libvaxis) is in charge of
 rendering the text and all the interface in Linux, MacOS, FreeBSD,
 and Android via Termux, while in Windows there is an special GUI.
 
-[]($section.id("thespian"))
-## Communication between components
+## [Communication between components]($section.id("thespian"))
 
 [Thespian](https://github.com/neurocyte/thespian) is in charge of
 processes synchronization and allows sending
@@ -93,22 +89,19 @@ operations they perform, integration with git and running a `shell`
 command via a `task` all are coordinated thanks to the infrastructure
 that Thespian provides.
 
-[]($section.id("languages"))
-## Programming languages support
+## [Programming languages support]($section.id("languages"))
 
 There are plenty of programming languages that use tree-sitter via
 [flow-syntax](https://github.com/neurocyte/flow-syntax) and whose
 language servers and formatters are configured via `file_type_lsp`.
 Currently one Language Server is supported for each language.
 
-[]($section.id("facilities"))
-## Facilities
+## [Facilities]($section.id("facilities"))
 
 The clipboard is used for copy, paste operations and there is also
 support to use the system clipboard, copying and pasting to/from it.
 
-[]($section.id("logging"))
-### Logging support
+### [Logging support]($section.id("logging"))
 
 Logging support offers various levels to give feedback for several
 actions that ease developing Flow itself and also are used to offer
@@ -136,8 +129,7 @@ Log something
 logger.print("{} unsaved buffer(s) remaining", .{remaining});
 ```
 
-[]($section.id("show_input"))
-### View key presses
+### [View key presses]($section.id("show_input"))
 
 There are situations when you press some keys without the expected
 behavior happening, to review if flow is getting the keys, the
@@ -146,8 +138,7 @@ executing the [desired command](/docs/architecture/command), or maybe
 your desktop environment or something else is capturing them, you will
 want to invoke flow with the option `--show-input`.
 
-[]($section.id("next"))
-## Next steps
+## [Next steps]($section.id("next"))
 
 * [Configure some keybinds](/docs/architecture/keybind)
 * [Guidelines for contributions](/docs/contributing)

@@ -24,8 +24,7 @@ To work with tests you will need to:
 
 Flow tests are placed in the directory `test`.
 
-[]($section.id("running_tests"))
-## Running the tests
+## [Running the tests]($section.id("running_tests"))
 
 To run the full set of tests, inside flow, use `f5`, which runs a task that
 invokes:
@@ -37,8 +36,7 @@ zig build test
 it will work if flow was invoked from the project root, which is the same
 place that you would normally run the tests when on the terminal.
 
-[]($section.id("running_a_test"))
-### Run a particular test
+### [Run a particular test]($section.id("running_a_test"))
 
 To run an specific test use `Dtest-filter` option with the name of your
 test, i.e., for the test called **test_block_name** use:
@@ -47,8 +45,7 @@ test, i.e., for the test called **test_block_name** use:
 zig build test -Dtest-filter="test_block_name"
 ```
 
-[]($section.id("first_test"))
-## Adding tests
+## [Adding tests]($section.id("first_test"))
 
 Tests are needed when:
 
@@ -68,8 +65,7 @@ additional functions to make the tests readable and extendable though.
 public functions are straightforward tested, while there are some
 conventions for testing private functions.
 
-[]($section.id("private_functions_testing"))
-### Testing private functions
+### [Testing private functions]($section.id("private_functions_testing"))
 
 Some internal logic of a module can be tested without the need to be
 exposed to other modules.
@@ -111,8 +107,7 @@ try helix.test_internal.move_cursor_long_word_right_end(root, cursor, the_metric
 In case there is need of a new test file for concern separation, continue
 to the next section.
 
-[]($section.id("new_test_file"))
-## Adding a new test file
+## [Adding a new test file]($section.id("new_test_file"))
 
 Three steps are required for adding a new test file:
 
@@ -121,8 +116,7 @@ Three steps are required for adding a new test file:
 1. Optionally, make available a module to the build system
 for your particular test
 
-[]($section.id("create_test_file"))
-### Create the test file
+### [Create the test file]($section.id("create_test_file"))
 
 Place your test file under `test` directory, the name should be prefixed
 with `tests_`.
@@ -130,8 +124,7 @@ with `tests_`.
 For the rest of this section we will use as a sample
 `tests_project_manager.zig`.
 
-[]($section.id("linking_tests"))
-### Include the test file
+### [Include the test file]($section.id("linking_tests"))
 
 Tests files are linked via `test/tests.zig`, import your new test_file
 alphabetically as in our sample:
@@ -140,8 +133,7 @@ alphabetically as in our sample:
 pub const project_manager = @import("tests_project_manager.zig");
 ```
 
-[]($section.id("import_in_build_zig"))
-### Import required modules when building tests
+### [Import required modules when building tests]($section.id("import_in_build_zig"))
 
 In `build.zig` import the required module under `tests.root_module`, for
 the current example:
@@ -153,21 +145,16 @@ tests.root_module.addImport("project_manager", project_manager_mod);
 [Sample](https://github.com/neurocyte/flow/commit/e053a0dcf4b4c93f1ce1fe6d14a3c04e886d393c)
 of adding a new test file for project manager.
 
-[]($section.id("faq"))
-## FAQ on tests
+## [FAQ on tests]($section.id("faq"))
 
-[]($section.id("import_editor"))
-### I need to test something that requires importing the editor ¿What
-do I do?
+### [I need to test something that requires importing the editor ¿What do I do?]($section.id("import_editor"))
 
 There are two paths from here:
 
 1. Refactor your code to test the lower level functions
 1. Extend the tests to automate via external tools
 
-
-[]($section.id("lower_level"))
-### Refactor to test lower level functions
+### [Refactor to test lower level functions]($section.id("lower_level"))
 
 Refactor the functions involved in the functionality to make them
 not rely directly with editor and other higher level components, and
@@ -194,8 +181,7 @@ The group of functions `beyond_eol` can be seen in
 and whose tests are
 [here](https://github.com/neurocyte/flow/pull/330/commits/38a08aed49f4fbba18aab9ccbd3c8b9758414221).
 
-[]($section.id("end_to_end"))
-### Use additional tools to test a running flow session
+### [Use additional tools to test a running flow session]($section.id("end_to_end"))
 
 Use additional tools to invoke the built editor and send keys to
 it, modify a file and then compare the initial contents of the file
@@ -204,8 +190,7 @@ and the resulting contents of your file and the expected ones.
 If in doubt about how to do something,
 [please ask](https://discord.com/invite/4wvteUPphx).
 
-[]($section.id("next"))
-## Next steps
+## [Next steps]($section.id("next"))
 
 * [How to contribute](/docs/contributing)
 * [Personalizing keybindings](/docs/architecture/keybind)
