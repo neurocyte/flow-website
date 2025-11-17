@@ -15,6 +15,15 @@ them.
 You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')) and find more
 devlog entries in the [archive](/devlog/).
 
+## [centered view]($section.id("2025-11-17T20:56:38+01:00"))
+
+For very wide screens you can now center the view with `ctrl+k x`, or the command
+`toggle_centered_view`. The width of the centered view is configurable with the
+option `centered_view_width`.
+
+[]($video.asset('2025-11-17_centered_view.mp4').controls(true))
+
+
 ## [more tabbar improvements]($section.id("2025-10-25T00:15:46+02:00"))
 
 Tabs can now be reordered with the mouse by dragging them, or by the new commands `move_tab_next`
