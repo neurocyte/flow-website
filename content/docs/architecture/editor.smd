@@ -16,15 +16,15 @@ To get the most of this section, it's recommended to have read the
 [keybinds](/docs/architecture/keybind) at least.
 
 A word of warning: Flow code evolves and it is possible that some code
-exposed here is older than the current one. Always refer to
-[master](https://github.com/neurocyte/flow) in doubt.
+exposed here is older than the current one. If in doubt, always refer to
+[master](https://github.com/neurocyte/flow).
 
 []($section.id("concepts"))
 ## Some concepts
 
 The [editor](#editor_concept) coordinates visualization and
-modification of buffer contents, multiple cursors, selections and
-marks.
+modification of buffer contents, multiple [cursors](#cursor_concept),
+[selections](#selection_concept) and [marks](#mark_concept).
 
 We will delve in editor concepts, buffer inner manipulation with ropes
 is not covered here.
@@ -51,7 +51,7 @@ The `primary Cursor` holds a position in the Buffer, the `Editor`
 makes the link between both of them, signaling the part of the `Buffer`
 that can be modified and manipulated as you see it. It scrolls on the
 current visible portion [view](#view_concept) of the buffer, when
-manipulated with the keyboard, the mouse can change the move the view
+manipulated with the keyboard, the mouse on its own can move the view
 while the primary mouse is off-screen; when keystrokes arrive to the
 editor, the view focuses to the primary cursor to make it visible and
 available to be used.
@@ -67,7 +67,7 @@ Cursors visibility depends on the size of both the buffer contents and
 the editor in your device.
 
 Most of editors operations act on the set of CurSels and the Primary
-Cursor is a [CurSel](#cursel_concept).
+Cursor is really a [CurSel](#cursel_concept).
 
 []($section.id("selection_concept"))
 ### Selection
@@ -80,19 +80,16 @@ services and [commands](/docs/architecture/command).
 A `Selection` has two cursors that are not visible, they mark the begin
 and the end of the selection.
 
-
 []($section.id("cursel_concept"))
 ### CurSel
 
 The CurSel is what is presented to user, holding a
 [cursor](#cursor_concept) and optionally a
-[selection](#selection_concept).
-
+[selection](#selection_concept) which allows to have the concept of a
+cursor with a selection.
 
 []($section.id("mark_concept"))
 ### Mark
-what allow to have the concept of a cursor with a selection. A `Cursel`
-is composed by a cursor and optionally a Selection.
 
 To complete the editor scenario, `Marks` have the potential to become
 selections; the marks become evident to the eye when in search mode,
@@ -104,7 +101,7 @@ with a different color according to the theme.
 The Editor will be acting on Buffer.Root which is the root of the tree
 representing the document that is being edited. API Buffer.Root is
 stable and offers the necessary to insert, delete and move along the
-buffer, knowing if the end or the beginning of the document have been
+buffer, knowing if the end or the beginning of the document has been
 reached when interacting with a Cursor.
 
 Cursors, Selections and Cursels don't know about the buffer, and they
@@ -121,7 +118,7 @@ cursors and selections, moreover, there are various commands acting
 over the set of cursors, selections, cursels or marks. Given said
 this, we will be using functions as parameters in most of the
 situations. Functional programming languages are popular in these
-scenarios, to name a prominent one, Emacs and emacs lisp. Flow is
+scenarios, to name a prominent one, emacs lisp from Emacs. Flow is
 inspired on it and others.
 
 If the buffer is not to be modified, we will be using the method
@@ -138,7 +135,8 @@ cursors, the same applies to selections, cursels and marks.
 []($section.id("moving"))
 ## Moving
 
-For example, to move the cursors a page up, we can look at the command
+For example, to move the cursors a page up, we can look at the
+[command](docs/architecture/command)
 `move_page_up`,
 
 >[]($block.attrs('line-numbers-js'))
@@ -171,8 +169,8 @@ Looking inside `with_cursors_and_view_const`
 >```
 
 It iterates over all the cursors and invokes
-`with_cursor_and_view_const`, sending the `move` function, a cursor,
-remember that the function passed was `move_cursor_page_up` as seen 
+`with_cursor_and_view_const`, sending the `move` function, a cursor;
+remember that the function passed was `move_cursor_page_up` as shown 
 previously.
 
 The commitment of `move_cursor_page_up` is to use the method
@@ -185,7 +183,7 @@ fn move_cursor_page_up(root: Buffer.Root, cursor: *Cursor, view: *const View, me
 ```
 
 The `move` functions set is numerous, look for the methods whose name
-have the word `move` in them. with the command palette is possible to get
+have the word `move` in them. With the command palette is possible to get
 a glimpse of the available functions present(ctrl+f2).
 
 []($section.id("selecting"))
@@ -209,6 +207,7 @@ pub fn select_up(self: *Self, ctx: Context) Result {
 }
 pub const select_up_meta: Meta = .{ .description = "Select up", .arguments = &.{.integer} };
 ```
+
 It's meta is guiding about the integer argument that the command can
 make use of.  Invokes `with_selections_const_repeat` passing the
 function `move_cursor_up` as parameter and also the context, which
@@ -238,12 +237,14 @@ the `while`, then for each repetition, the set of cursels is iterated,
 cursels hold cursors and selections, applying `with_selection_const`
 function, passing `root`(the buffer), `move_cursor_up` function, cursel
 and metrics as parameters. Note that after the function is applied to
-each cursel, self.collapse_cursors() is invoked, given that it's
-possible that some cursors in the operation have overlapped. With each
-cursel operation there is also a tracking of possible fails, continuing
-gracefully, one of such fails can be happening because come cursels
-might have been reaching the beginning of the buffer and there might be
-other cursels that have not yet reached the beginning of the file.
+each cursel, `self.collapse_cursors()` is invoked, given that it's
+possible that some cursors in the operation have overlapped.
+
+With each cursel operation there is also a tracking of possible fails,
+continuing gracefully, one of such fails can be happening because some
+cursels might have been reaching the beginning of the buffer and there
+might be other cursels that have not yet reached the beginning of the
+file.
 
 ```zig
 pub fn with_selection_const(root: Buffer.Root, move: cursor_operator_const, cursel: *CurSel, metrics: Buffer.Metrics) error{Stop}!void {
@@ -268,8 +269,9 @@ commands to deepen the understanding and following the different calls.
 ## Modifying the buffer
 
 The `select` family of functions is bigger than the set of `move`
-functions, in contrast, the `cut`, `delete`, `insert`, `paste` looks
-smaller, and this is accomplished making composition of functions.
+functions, in contrast, the `cut`, `delete`, `insert`, `paste` set
+looks smaller, and this is accomplished making composition of functions.
+
 Usually when modifying something, first there is a process to locate
 the cursor, cursel or selection in the proper place and then applying
 the modification.  There are cases when there is need to locate and
@@ -277,7 +279,7 @@ act right away.
 
 When additions, changes and removal of buffer contents, editor offers
 the method `buf_for_update`; we will look first to the method
-`to_upper_cursel`, which by default in Flow, takes a CurSel, if it has
+`to_upper_cursel`, which by default in Flow, takes a CurSel; if it has
 no selection, the word that it is stepped on, if any, is selected and
 gets uppercased.
 
@@ -332,10 +334,10 @@ pub fn to_upper(self: *Self, _: Context) Result {
 pub const to_upper_meta: Meta = .{ .description = "Convert selection or word to upper case" };
 ```
 
-via `with_cursels_mut_once` receives a buffer that will be modified
+`with_cursels_mut_once` receives a buffer that will be modified
 and returns one with modifications, updating what is presented with
 the method `update_buf` and an allocator.  The previously described
-`to_upper_cursel` is sent
+function `to_upper_cursel` is sent
 
 >[]($block.attrs('line-numbers-js'))
 >```zig
@@ -357,9 +359,10 @@ Worth to note that the modified `root` is being passed to the function
 `with_cursel_mut` on each iteration over the cursels along with the
 allocator and as described previously in selection functions, tracking
 if there is some fail an error is popped up, whilst everything was
-successful, the modified `root` is returned. Now time to see the
-method `with_cursel_mut` that receives the pointer to `to_upper_cursel`
-along with root, cursel and allocator.
+successful, the modified `root` is returned.
+
+Now time to see the method `with_cursel_mut` that receives the pointer
+to `to_upper_cursel` along with root, cursel and allocator.
 
 ```zig
 fn with_cursel_mut(self: *Self, root: Buffer.Root, op: cursel_operator_mut, cursel: *CurSel, allocator: Allocator) error{Stop}!Buffer.Root {
