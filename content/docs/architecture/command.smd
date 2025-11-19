@@ -11,9 +11,9 @@
 ---
 
 Commands are actions triggered to operate on buffers primarily. They are
-present in `editor`, `tui`, `mode` and `minimodes`, it's possible to
-find commands in other places, which will become evident when the need
-arises.
+present in [editor](/docs/architecture/editor), `tui`, `mode` and
+`minimodes`, it's possible to find commands in other places, which
+will become evident when the need arises.
 
 ## Previous notes[]($section.id('notes'))
 
@@ -159,6 +159,11 @@ pub fn select_to_char_left_helix(_: *void, ctx: Ctx) Result {
 ```
 
 ## [Next steps]($section.id('next'))
+
+[Editor](/docs/architecture/editor) has a walkthrough when working with
+selections, modifying the contents of the editor and deepens in concepts
+that allow understand how the internal interactions happen when editing
+a document.
 
 [Minimodes](/docs/architecture/minimode) pass arguments to the editor,
 if you wonder how to go beyond the current buffer window, when there

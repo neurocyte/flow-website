@@ -18,7 +18,7 @@
 	     <ul>
 		<li><a href="$site.page('docs/contributing').link()">contributing</a></li>
 		<li><a href="$site.page('docs/testing').link()">testing</a></li>
-		<li><a href="$site.page('docs/architecture').link()">architeture</a></li>
+		<li><a href="$site.page('docs/architecture').link()">architecture</a></li>
 		<li><ul>
 		<li><a href="$site.page('docs/architecture/keybind').link()">keybind</a></li>
 		<li><a href="$site.page('docs/architecture/command').link()">command</a></li>
