@@ -15,6 +15,17 @@ them.
 You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')) and find more
 devlog entries in the [archive](/devlog/).
 
+## [textDocument/documentSymbol]($section.id("2025-11-19T10:39:21+01:00"))
+
+Flow now has a symbol browser for the current document based on the LSP `textDocument/documentSymbol`
+request. Open it in flow mode with `ctrl+shift+\`. As usual the list can be filtered with a fuzzy
+query. Navigating in the list will preview the location of the symbol in the document. Selecting
+a symbol will jump to it. The preview function is nice to quickly view another symbol without
+jumping away for your current file location.
+
+[]($image.asset('2025-11-19.png'))
+
+
 ## [centered view]($section.id("2025-11-17T20:56:38+01:00"))
 
 For very wide screens you can now center the view with `ctrl+k x`, or the command
