@@ -19,8 +19,7 @@ A word of warning: Flow code evolves and it is possible that some code
 exposed here is older than the current one. If in doubt, always refer to
 [master](https://github.com/neurocyte/flow).
 
-[]($section.id("concepts"))
-## Some concepts
+## [Some concepts]($section.id("concepts"))
 
 The [editor](#editor_concept) coordinates visualization and
 modification of buffer contents, multiple [cursors](#cursor_concept),
@@ -29,23 +28,20 @@ modification of buffer contents, multiple [cursors](#cursor_concept),
 We will delve in editor concepts, buffer inner manipulation with ropes
 is not covered here.
 
-[]($section.id("tui_editor"))
-### Editor and TUI
+### [Editor and TUI]($section.id("tui_editor"))
 
 During this section we will refer to the concept of the editor as the
 one capable of modifying buffer contents, the visible gutters and
 line numbers as other terminal user interface (TUI) is covered in
 another chapter.
 
-[]($section.id("view_concept"))
-### View
+### [View]($section.id("view_concept"))
 
 `View` holds the information about the area of the buffer that is
 currently visible in the screen by the user. Is related to the
 [primary cursor](#cursor_concept).
 
-[]($section.id("cursor_concept"))
-### Cursor
+### [Cursor]($section.id("cursor_concept"))
 
 The `primary Cursor` holds a position in the Buffer, the `Editor`
 makes the link between both of them, signaling the part of the `Buffer`
@@ -69,8 +65,7 @@ the editor in your device.
 Most of editors operations act on the set of CurSels and the Primary
 Cursor is really a [CurSel](#cursel_concept).
 
-[]($section.id("selection_concept"))
-### Selection
+### [Selection]($section.id("selection_concept"))
 
 A selection is represented by begin and end [cursors](#cursor_concept)
 and offers basic functions that will constitute the changes needed with
@@ -80,24 +75,21 @@ services and [commands](/docs/architecture/command).
 A `Selection` has two cursors that are not visible, they mark the begin
 and the end of the selection.
 
-[]($section.id("cursel_concept"))
-### CurSel
+### [CurSel]($section.id("cursel_concept"))
 
 The CurSel is what is presented to user, holding a
 [cursor](#cursor_concept) and optionally a
 [selection](#selection_concept) which allows to have the concept of a
 cursor with a selection.
 
-[]($section.id("mark_concept"))
-### Mark
+### [Mark]($section.id("mark_concept"))
 
 To complete the editor scenario, `Marks` have the potential to become
 selections; the marks become evident to the eye when in search mode,
 they are seen as the primary cursor is positioned over an occurrence
 with a different color according to the theme.
 
-[]($section.id("editor_concept"))
-### Editor
+### [Editor]($section.id("editor_concept"))
 The Editor will be acting on Buffer.Root which is the root of the tree
 representing the document that is being edited. API Buffer.Root is
 stable and offers the necessary to insert, delete and move along the
@@ -110,8 +102,7 @@ restrictions and usually receive `metrics` from the editor that help
 determine if a cursor is about to exit the boundaries of the buffer
 and be inside bounds.
 
-[]($section.id("commands"))
-## Editor Commands
+## [Editor Commands]($section.id("commands"))
 
 We mentioned earlier that most of the operations work on all the
 cursors and selections, moreover, there are various commands acting
@@ -132,11 +123,10 @@ functionalities, because one would be thinking only in the current
 cursor and if required, the operation will be applied to all the
 cursors, the same applies to selections, cursels and marks.
 
-[]($section.id("moving"))
-## Moving
+## [Moving]($section.id("moving"))
 
 For example, to move the cursors a page up, we can look at the
-[command](docs/architecture/command)
+[command](/docs/architecture/command)
 `move_page_up`,
 
 >[]($block.attrs('line-numbers-js'))
@@ -186,8 +176,7 @@ The `move` functions set is numerous, look for the methods whose name
 have the word `move` in them. With the command palette is possible to get
 a glimpse of the available functions present(ctrl+f2).
 
-[]($section.id("selecting"))
-## Selections
+## [Selections]($section.id("selecting"))
 
 Function naming conventions help understand the purpose of each one,
 there has been taken great deal of care to maintain consistency, it's
@@ -265,8 +254,7 @@ applied with its method `check_selection`.
 Flow allows navigating the code with `goto_definition` and `references`
 commands to deepen the understanding and following the different calls.
 
-[]($section.id("modifying"))
-## Modifying the buffer
+## [Modifying the buffer]($section.id("modifying"))
 
 The `select` family of functions is bigger than the set of `move`
 functions, in contrast, the `cut`, `delete`, `insert`, `paste` set
@@ -373,17 +361,17 @@ fn with_cursel_mut(self: *Self, root: Buffer.Root, op: cursel_operator_mut, curs
 As seen, the only task for `with_cursel_mut` is providing the required
 elements to let `to_upper_cursel` do what was described previously.
 
-## Adding functionalities to the editor
+## [Adding functionalities to the editor]($section.id("adding"))
 
 As shown, the basics to manipulate the buffer via the editor involves
 reviewing if cursors, marks, selections are to be modified, changed or
 if the contents are.  Picking functions for it and focusing on the
 task for a single cursel, cursor or selection is key and the use of the
 already present functions will allow to act on multiple elements at
-once.
+once. By convention functions with name `mut` will modify the buffer while
+`const` will not.
 
-[]($section.id("next"))
-## Next steps
+## [Next steps]($section.id("next"))
 
 * [minimodes](/docs/architecture/minimode) invoke
 [commands](/docs/architecture/minimode) defined in the editor

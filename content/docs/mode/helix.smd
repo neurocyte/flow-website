@@ -12,8 +12,7 @@
 
 This document describes Helix Mode implementation.
 
-[]($section.id('what'))
-## What and what not
+## [What and what not]($section.id('what'))
 
 The first and biggest difference is that Flow has a mode that emulates
 Helix, or at least has equivalent of the worthiest actions that can be
@@ -31,12 +30,11 @@ make sure to review
 [other issues](https://github.com/neurocyte/flow/issues?q=is%3Aissue%20state%3Aopen%20label%3Ahelix-mode)
 to avoid repeating or see in [Discord](https://discord.gg/kzJC9fA7)
 to ask if there is a workaround, or anyone else is interested in
-porting your requirement, adding a reaction to an issue offers
+porting your requirement; adding a reaction to an issue offers
 awareness on what to implement or to get higher priority, remember that
-it's possible to bounce back to Flow(f4) mode if needed.
+it is possible to bounce back to Flow(f4) mode if needed.
 
-[]($section.id('enhancing'))
-## Enhancing hx mode
+## [Enhancing hx mode]($section.id('enhancing'))
 
 This is a programmer's editor, you are more than welcome to enhance to
 suit your needs that maybe coincide with others.
@@ -50,8 +48,7 @@ particular work to make it real is `src/tui/mode/helix.zig`, adding
 a `command` and the corresponding `meta` is what is required.
 [More on commands](/docs/architecture/command).
 
-[]($section.id('pickers'))
-### Pickers
+### [Pickers]($section.id('pickers'))
 
 Flow hx mode offers most of the Helix pickers functionalities with
 `panels` and [palettes](/docs/architecture/palette).  Example of panels
@@ -60,20 +57,12 @@ in files). Examples of `palettes` are `space` `b` to pick a buffer or
 `space` `f` to open a file in your project. Panels open below the
 editor while palettes open overlapping the working area.
 
-One medium sized project is to create a **Helix picker** widget that
-has one input widget with two panels, on the left, the list of options
-and, on the right, the preview of the selected option. The input
-widget reacts to various keybindings to manipulate the objects inside
-both panels with filtering. `src/tui/mode/overlay/palette.zig`
-implements much of the required functionality.
-
-[]($section.id('next'))
-## Next steps
+## [Next steps]($section.id('next'))
 
 Said all of this, it's possible to start contributing via pull
 requesting [keybinds](/docs/architecture/keybind),
 [commands](/docs/architecture/command),
-[palettes](/docs/architecture/palette), or the **hx picker**.
+[palettes](/docs/architecture/palette), or anything you wish were here.
 
 More about the [architecture](/docs/architecture) or jump to
 [contribution guidelines](/docs/contributing).
