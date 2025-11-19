@@ -43,18 +43,27 @@ offers services around the set of projects.
 ## [Editor commands and modes]($section.id("commands"))
 
 When a buffer is active, it has an Editor
-attached to it; an editor might have associated tree-sitter support,
-given the file type detected, and offers common services that are aimed
-to be used by `Commands` to manipulate the contents of a buffer at a
-higher level, the selections, cursors, cursor selections `CurSel` and
-the `View`. [Commands](/docs/architecture/command) are used by `Modes`
+attached to it; an [editor](/docs/architecture/editor) might have
+associated tree-sitter support, given the file type detected, and
+offers common services that are aimed to be used by `Commands` to
+manipulate the contents of a buffer at a higher level, the
+[selections](/docs/architecture/editor#selection_concept),
+[cursors](/docs/architecture/editor#cursor_concept),
+cursor selections
+([CurSel](/docs/architecture/editor#cursel_concept)),
+[markers](/docs/architecture/editor#mark_concept) and the
+[view](/docs/architecture/editor#view_concept).
+
+[Commands](/docs/architecture/command) are used by `Modes`
 with [Keybindings](/docs/architecture/keybind). The main mode is Flow
 and the keybindings can be used to map to a mode built up entirely on
-solely calling already created commands. An example of a mode
-created by command composition is `Emacs` mode, for instance, it's
-possible to create a nano mode with just keybindings. In the other hand,
-`Vim` and [Helix](/docs/mode/helix) modes have particular definitions
-for commands that interact with the buffers, being modal editors.
+solely calling already created commands.
+
+An example of a mode created by command composition is `Emacs` mode,
+for instance, it's possible to create a nano mode with just keybindings.
+In the other hand, `Vim` and [Helix](/docs/mode/helix) modes have
+particular definitions for commands that interact with the buffers,
+being modal editors.
 
 ## [Text user interface]($section.id("tui"))
 
