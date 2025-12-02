@@ -15,6 +15,15 @@ them.
 You can [subscribe to this page via RSS]($link.page('devlog').alternative('rss')) and find more
 devlog entries in the [archive](/devlog/).
 
+## [keybind hints]($section.id("2025-12-02T15:39:21+01:00"))
+
+I've added a keybind hints overlay windows. This is globally bound to `ctrl+?` and will show you the
+active keybindings for the current context. A filtered view of the keybinds available for the
+current keybind prefix will popup when using keybinds with multiple keys in a sequence.
+
+[]($video.asset('2025-12-02_keyhints.mp4').controls(true))
+
+
 ## [textDocument/documentSymbol]($section.id("2025-11-19T10:39:21+01:00"))
 
 Flow now has a symbol browser for the current document based on the LSP `textDocument/documentSymbol`
