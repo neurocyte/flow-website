@@ -17,7 +17,7 @@ devlog entries in the [archive](/devlog/).
 
 ## [keybind hints]($section.id("2025-12-02T15:39:21+01:00"))
 
-I've added a keybind hints overlay windows. This is globally bound to `ctrl+?` and will show you the
+I've added a keybind hints overlay window. This is globally bound to `ctrl+?` and will show you the
 active keybindings for the current context. A filtered view of the keybinds available for the
 current keybind prefix will popup when using keybinds with multiple keys in a sequence.
 
