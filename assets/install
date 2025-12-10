@@ -151,9 +151,9 @@ i386) arch="x86" ;;
 esac
 
 # get latest version tag from github releases api
-version=$(curl -s "https://api.github.com/repos/$repo/releases/latest" | jq -r .tag_name)
+version=$(curl -s https://codeberg.org/api/v1/repos/neurocyte/flow-nightly/releases/latest | jq -r .tag_name)
 [ -z "$version" ] || [ "$version" = "null" ] && {
-    version=$(curl -s https://codeberg.org/api/v1/repos/neurocyte/flow-nightly/releases/latest | jq -r .tag_name)
+    version=$(curl -s "https://api.github.com/repos/$repo/releases/latest" | jq -r .tag_name)
     [ -z "$version" ] || [ "$version" = "null" ] && {
         version=$(curl -s https://git.flow-control.dev/api/v1/repos/$repo/releases/latest | jq -r .tag_name)
         [ -z "$version" ] || [ "$version" = "null" ] && {
@@ -205,7 +205,8 @@ fi
 if [ "$debug" -eq 1 ]; then
     filename="$filename-debug"
 fi
-url="https://github.com/$repo/releases/download/$version/$filename.$ext"
+# url="https://github.com/$repo/releases/download/$version/$filename.$ext"
+url="https://codeberg.org/$repo/releases/download/$version/$filename.$ext"
 
 tmp_path="$(mktemp -d "${TMPDIR:-/tmp}/flow-control-installer.XXXXXXXXX")"
 
