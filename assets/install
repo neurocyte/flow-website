@@ -151,7 +151,7 @@ i386) arch="x86" ;;
 esac
 
 # get latest version tag from github releases api
-version=$(curl -s https://codeberg.org/api/v1/repos/neurocyte/flow-nightly/releases/latest | jq -r .tag_name)
+version=$(curl -s https://codeberg.org/api/v1/repos/$repo/releases/latest | jq -r .tag_name)
 [ -z "$version" ] || [ "$version" = "null" ] && {
     version=$(curl -s "https://api.github.com/repos/$repo/releases/latest" | jq -r .tag_name)
     [ -z "$version" ] || [ "$version" = "null" ] && {
