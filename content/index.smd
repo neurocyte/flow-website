@@ -15,38 +15,56 @@ Flow Control is under active development, but very stable.
 
 ## 🚀 Features
 
-- **Lightning Fast** TUI with ≤6ms frame times, **low latency** input handling
-  and smooth **animated scrolling**
-- Intuitive UI with **tabs**, **scrollbars** and **palettes** with full
-  **mouse** support for all UI elements
+- **Lightning Fast** TUI with ≤6ms frame times, **low latency** input
+  handling and smooth **animated scrolling**
+
+- Intuitive UI with **tabs**, **splits**, **scrollbars** and **palettes**
+  with full **mouse** support for all UI elements
+
 - Support for more than **70 programming languages**, **zero
   configuration** needed, via **tree-sitter** powered syntax highlighting
-- **Language Server Protocol** pre configured support for most language servers
+
+- **Language Server Protocol** pre configured support for most language
+  servers with support for inline auto completion, symbol lookup, goto
+  definition, highlight references, hover and more
+
 - Powerful **multi-cursor** editing and integrated **clipboard history**
+
 - Powerful configurable keybinding system that supports **modal** and
   **non-modal** editing styles
+
 - Multiple pre-configured **keybinding modes**
     - Flow Control - GUI IDE style bindings (similar to vscode)
     - Emacs
     - Vim
     - Helix
     - User created
+
 - Hybrid rope/piece-table buffer system, edit **very large files** with
   **thousands of cursors**
+
 - Infinite **undo** (at least until you run out of ram)
-- Full **unicode** support, including support for the kitty text sizing protocol
-- Plenty of **themes** included and support for vscode themes via the flow-themes project
-- Runs on **Linux, FreeBSD, MacOS, Windows and Android** (under termux) with
-  easy **cross-compilation** to all supported targets
+
+- Full **unicode** support, including support for the kitty text sizing
+  protocol
+
+- Plenty of **themes** included and support for vscode themes via the
+  flow-themes project
+
+- Runs on **Linux, FreeBSD, MacOS, Windows and Android** (under termux)
+  with easy **cross-compilation** to all supported targets
 
 
 ## Requirements
 
 - A modern terminal with **24bit color** and, ideally, **kitty keyboard
-  protocol** support. **Kitty**, **Foot** and **Ghostty** are the recommended
-  terminals at this time. **Zellij** also works well. Most other terminals will
-  work, but likely with reduced functionality.
-- **NerdFont** support. Either via terminal font fallback or a patched font.
+  protocol** support. **Kitty**, **Foot** and **Ghostty** are the
+  recommended terminals at this time. **Zellij** also works well. Most
+  other terminals will work, but likely with reduced functionality.
+
+- **NerdFont** support. Either via terminal font fallback or a patched
+  font.
+
 - A **UTF-8** locale
 
 
@@ -57,7 +75,6 @@ team.
 
 ### In Development
 
-- LSP completion support
 - Persistent undo/redo
 - File watcher integration
 
