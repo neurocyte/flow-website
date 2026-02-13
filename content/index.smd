@@ -8,9 +8,14 @@
 
 ## a programmer's text editor
 
-Flow Control is under active development, but very stable.
+### Release 0.7.0 is out now!
 
-[]($video.siteAsset('video/flow-control.mp4').controls(true))
+Featuring **inline auto completion**, **splits**, **centered view**, **git
+diffs & blames**, **symbols palette**, **highlight references**, and lots
+more! See the [release notes](/devlog/2026/#2026-02-13T09:21:56+01:00) in
+our devlog for the full list of new features.
+
+[]($video.asset('devlog/2026/2026-02-13_flow-0.7.0_teaser.mp4').controls(true))
 
 
 ## 🚀 Features
