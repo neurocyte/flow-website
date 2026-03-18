@@ -16,6 +16,19 @@ You can [subscribe to this page via
 RSS]($link.page('devlog').alternative('rss')) and find more devlog entries
 in the [archive](/devlog/).
 
+
+## [tree-sitter 0.26.7 update]($section.id("2026-03-18T14:05:52+01:00"))
+
+I've updated tree-sitter to the latest release, 0.26.7. We were quite far
+behind, so this gives us better compatibility with newer tree-sitter
+parsers. The supported tree-sitter parser ABI in flow is now version 15 (up
+from 14 previously). The minium version stays the same at 13.
+
+This should unblock a few of the language support requests in the feature
+request queue. Also, I've updated all the existing parsers and added dlang
+and LLVM IR support.
+
+
 # [Release 0.7.0 🎉]($section.id("2026-02-13T09:21:56+01:00"))
 
 We kick off the new Year with a major release!
