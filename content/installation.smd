@@ -50,11 +50,10 @@ Install the GUI, but leave the desktop alone:
 curl -fsSL https://flow-control.dev/install | sh -s -- --no-integrate
 ```
 
-Install the installer for easy updating of flow:
+The installer also writes an `update-flow` script next to the binaries, which
+re-runs the install with the same options. Run it to update:
 
 ```
-sudo curl -fsSL -o /usr/local/bin/update-flow https://flow-control.dev/install
-sudo chmod +x /usr/local/bin/update-flow
 update-flow
 ```
 
