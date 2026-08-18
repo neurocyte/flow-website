@@ -66,7 +66,7 @@ We have some tips for [Android](/docs/platform/android/)
 []($section.id("windows"))
 ##  Windows
 
-For Windows the installer scripts are a little different.
+For Windows the installer script is a little different.
 
 Fetch and install the latest release to `%AppData%/Roaming/flow/bin`:
 
@@ -74,20 +74,46 @@ Fetch and install the latest release to `%AppData%/Roaming/flow/bin`:
 Invoke-RestMethod "https://flow-control.dev/install.ps1" | Invoke-Expression
 ```
 
+One script installs every variant. Since it is piped into `Invoke-Expression`
+it cannot take parameters, so the choices are made with environment variables.
+
 Install the latest nightly build:
 
 ```
-Invoke-RestMethod "https://flow-control.dev/install-nightly.ps1" | Invoke-Expression
+$env:NIGHTLY = 1
+Invoke-RestMethod "https://flow-control.dev/install.ps1" | Invoke-Expression
 ```
 
 Install the latest nightly build with pdb debug symbol files:
 
 ```
-Invoke-RestMethod "https://flow-control.dev/install-debug.ps1" | Invoke-Expression
+$env:DEBUG = 1
+Invoke-RestMethod "https://flow-control.dev/install.ps1" | Invoke-Expression
 ```
 
+The Windows installer also installs the GUI, `flow-gui.exe`, and adds a Start
+Menu shortcut for it. Install without the GUI:
+
+```
+$env:NO_GUI = 1
+Invoke-RestMethod "https://flow-control.dev/install.ps1" | Invoke-Expression
+```
+
+or keep the GUI and skip only the Start Menu shortcut:
+
+```
+$env:NO_INTEGRATE = 1
+Invoke-RestMethod "https://flow-control.dev/install.ps1" | Invoke-Expression
+```
+
+`DEBUG` implies `NIGHTLY`, as debug builds are only published for nightlies,
+and `NO_GUI` implies `NO_INTEGRATE`. If you save the script to a file instead
+of piping it, the same choices are switches: `-Nightly`, `-Debug`, `-NoGui`
+and `-NoIntegrate`.
+
 The Windows installer will also install itself as `update-flow.ps1` so you can
-just run `update-flow` in a terminal to update to the latest release or nightly.
+just run `update-flow` in a terminal to update. It repeats the install with the
+options you chose, so updating a nightly stays on nightlies.
 
 
 []($section.id("source"))
