@@ -38,6 +38,13 @@ See all available options for the installer script:
 curl -fsSL https://flow-control.dev/install | sh -s -- --help
 ```
 
+By default the GUI, `flow-gui`, is installed as well and integrated with the
+desktop: on Linux and FreeBSD that is a desktop entry and an icon, on MacOS an
+app bundle. The MacOS install puts both binaries inside
+`/Applications/Flow Control.app`, or `~/Applications/Flow Control.app` when
+`/Applications` is not writable, and links them into the install destination,
+so `flow` on the command line and Flow Control in Finder are the same install.
+
 Install without the GUI:
 
 ```
