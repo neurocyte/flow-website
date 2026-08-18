@@ -9,6 +9,8 @@ verify=${VERIFY:-0}
 local=${LOCAL:-0}
 use_sudo=${USE_SUDO:-0}
 force_update=${FORCE_UPDATE:-0}
+no_gui=${NO_GUI:-0}
+no_integrate=${NO_INTEGRATE:-0}
 
 usage() {
     echo "Options:"
@@ -20,6 +22,8 @@ usage() {
     echo "  -V, --verify              Verify gpg signature"
     echo "  -l, --local               Verify gpg signature with local keychain"
     echo "  -F, --force               Force re-install even if flow is up-to-date"
+    echo "  -G, --no-gui              Do not install flow-gui (implies --no-integrate)"
+    echo "  -I, --no-integrate        Do not integrate flow-gui with the desktop"
     exit 1
 }
 
@@ -53,6 +57,14 @@ while true; do
         force_update=1
         shift 1
         ;;
+    -G | --no-gui)
+        no_gui=1
+        shift 1
+        ;;
+    -I | --no-integrate)
+        no_integrate=1
+        shift 1
+        ;;
     -h | --help)
         usage
         ;;
@@ -71,14 +83,26 @@ while true; do
     esac
 done
 
+if [ "$no_gui" -eq 1 ]; then
+    no_integrate=1
+fi
+
 have_term=0
 if [ -t 0 ]; then
     have_term=1
 fi
 
 need_sudo=""
-if [ ! -w "$install_dir" ]; then
-    need_sudo="$install_dir"
+probe_dir="$install_dir"
+while [ ! -e "$probe_dir" ]; do
+    parent=$(dirname "$probe_dir")
+    if [ "$parent" = "$probe_dir" ]; then
+        break
+    fi
+    probe_dir="$parent"
+done
+if [ ! -w "$probe_dir" ]; then
+    need_sudo="$probe_dir"
 fi
 
 if [ -z "$need_sudo" ] && [ -e "$install_dir/flow" ]; then
@@ -251,14 +275,129 @@ if [ "$verify" -eq 1 ]; then
     fi
 fi
 
-echo "installing $title to $install_dir/flow..."
+unpack="$tmp_path/unpack"
+mkdir -p "$unpack"
 if [ "$ext" = "tar.gz" ]; then
-    $SUDOCMD tar -xzf "$tmp_path/$filename.$ext" -C "$install_dir"
+    tar -xzf "$tmp_path/$filename.$ext" -C "$unpack"
 else
-    $SUDOCMD unzip -o "$tmp_path/$filename.$ext" -d "$install_dir"
+    unzip -oq "$tmp_path/$filename.$ext" -d "$unpack"
 fi
 
-$SUDOCMD chmod +x "$install_dir/flow"
+exe=""
+if [ "$os" = "windows" ]; then
+    exe=".exe"
+fi
+
+if [ ! -e "$unpack/flow$exe" ]; then
+    echo "downloaded archive does not contain flow$exe"
+    exit 1
+fi
+
+have_gui=0
+if [ "$no_gui" -eq 0 ]; then
+    if [ -e "$unpack/flow-gui$exe" ]; then
+        have_gui=1
+    else
+        echo "note: this build does not include flow-gui"
+        no_integrate=1
+    fi
+fi
+
+install_binaries() {
+    $SUDOCMD mkdir -p "$install_dir"
+    $SUDOCMD cp "$unpack/flow$exe" "$install_dir/flow$exe"
+    $SUDOCMD chmod +x "$install_dir/flow$exe"
+    if [ "$have_gui" -eq 1 ]; then
+        $SUDOCMD cp "$unpack/flow-gui$exe" "$install_dir/flow-gui$exe"
+        $SUDOCMD chmod +x "$install_dir/flow-gui$exe"
+    fi
+}
+
+integrate_macos() {
+    bundle="$unpack/contrib/bundle"
+    [ -d "$bundle" ] || return 1
+
+    # prefer a bundle that is already installed
+    app_root=""
+    for candidate in "/Applications" "$HOME/Applications"; do
+        if [ -d "$candidate/Flow Control.app" ] && [ -w "$candidate" ]; then
+            app_root="$candidate"
+            break
+        fi
+    done
+    if [ -z "$app_root" ]; then
+        app_root="/Applications"
+        [ -w "$app_root" ] || app_root="$HOME/Applications"
+    fi
+    for other in "/Applications" "$HOME/Applications"; do
+        if [ "$other" != "$app_root" ] && [ -d "$other/Flow Control.app" ]; then
+            echo "WARNING: another installation exists at $other/Flow Control.app"
+        fi
+    done
+
+    app="$app_root/Flow Control.app"
+
+    mkdir -p "$app/Contents/MacOS"
+    cp -R "$bundle/." "$app/"
+    cp "$unpack/flow" "$unpack/flow-gui" "$app/Contents/MacOS/"
+    chmod +x "$app/Contents/MacOS/flow" "$app/Contents/MacOS/flow-gui"
+    sed "s/@VERSION@/${version#v}/g" "$bundle/Contents/Info.plist" >"$app/Contents/Info.plist"
+
+    $SUDOCMD mkdir -p "$install_dir"
+    $SUDOCMD ln -sf "$app/Contents/MacOS/flow" "$install_dir/flow"
+    $SUDOCMD ln -sf "$app/Contents/MacOS/flow-gui" "$install_dir/flow-gui"
+
+    lsregister=/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
+    [ -x "$lsregister" ] && "$lsregister" -f "$app" >/dev/null 2>&1
+
+    echo "installed $app"
+    echo "linked $install_dir/flow -> $app/Contents/MacOS/flow"
+    return 0
+}
+
+integrate_desktop() {
+    share="$unpack/contrib/share"
+    [ -d "$share" ] || return 1
+
+    case "$install_dir" in
+    "$HOME"/*)
+        data_dir="${XDG_DATA_HOME:-$HOME/.local/share}"
+        data_sudo=""
+        ;;
+    *)
+        data_dir="${install_dir%/bin}/share"
+        data_sudo="$SUDOCMD"
+        ;;
+    esac
+
+    $data_sudo mkdir -p "$data_dir"
+    $data_sudo cp -R "$share/." "$data_dir/"
+    sed "s|^Exec=.*|Exec=$install_dir/flow-gui %F|" \
+        "$share/applications/flow-control.desktop" |
+        $data_sudo tee "$data_dir/applications/flow-control.desktop" >/dev/null
+
+    command -v update-desktop-database >/dev/null 2>&1 &&
+        $data_sudo update-desktop-database "$data_dir/applications" >/dev/null 2>&1
+    command -v gtk-update-icon-cache >/dev/null 2>&1 &&
+        $data_sudo gtk-update-icon-cache -qtf "$data_dir/icons/hicolor" >/dev/null 2>&1
+
+    echo "installed $data_dir/applications/flow-control.desktop"
+    return 0
+}
+
+echo "installing $title to $install_dir/flow..."
+
+if [ "$no_integrate" -eq 0 ] && [ "$os" = "macos" ]; then
+    if ! integrate_macos; then
+        echo "note: this build carries no macos bundle resources, installing binaries only"
+        install_binaries
+    fi
+else
+    install_binaries
+    if [ "$no_integrate" -eq 0 ] && [ "$os" != "windows" ]; then
+        integrate_desktop || echo "note: this build carries no desktop entry, skipping desktop integration"
+    fi
+fi
 
 if [ "$add_alias" -eq 1 ]; then
     if [ "$(readlink "$install_dir/f")" = "$install_dir/flow" ]; then

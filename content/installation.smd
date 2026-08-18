@@ -38,6 +38,18 @@ See all available options for the installer script:
 curl -fsSL https://flow-control.dev/install | sh -s -- --help
 ```
 
+Install without the GUI:
+
+```
+curl -fsSL https://flow-control.dev/install | sh -s -- --no-gui
+```
+
+Install the GUI, but leave the desktop alone:
+
+```
+curl -fsSL https://flow-control.dev/install | sh -s -- --no-integrate
+```
+
 Install the installer for easy updating of flow:
 
 ```
