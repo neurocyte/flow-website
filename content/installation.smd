@@ -59,9 +59,16 @@ curl -fsSL https://flow-control.dev/install | sh -s -- --no-integrate
 
 Downloads are verified against the gpg key published at
 [flow-control.dev/public.gpg](https://flow-control.dev/public.gpg), pinned to
-fingerprint `4E6C F723 4FFC 4E14 5310 74F9 8EB1 E1BB 660E 3FB9`. This is not
-optional: without `gpg` the installer stops and asks you to install it, rather
-than continuing unverified.
+fingerprint `4E6C F723 4FFC 4E14 5310 74F9 8EB1 E1BB 660E 3FB9`. Verification
+uses `gpgv`, gnupg's signature verification tool, and is not optional: without
+it the installer stops and asks you to install it rather than continuing
+unverified.
+
+Most distributions ship `gpgv` as a package of its own, which is worth knowing
+because installing `gnupg` does not always bring it with it. MacOS ships
+neither, so install gnupg first with [homebrew](https://brew.sh),
+[macports](https://www.macports.org), [nix](https://nixos.org) or
+[gpgtools](https://gpgtools.org).
 
 Piping the installer into `sh` runs it before anything has checked it, so the
 script itself is only as trustworthy as the TLS connection that fetched it. To
@@ -71,12 +78,12 @@ key you already have, and only then run it:
 ```
 curl -fsSL -O https://flow-control.dev/install
 curl -fsSL -O https://flow-control.dev/install.sig
-gpg --no-default-keyring --keyring /path/to/public.gpg --verify install.sig install
+gpgv --keyring /path/to/public.gpg install.sig install
 sh install --key /path/to/public.gpg
 ```
 
 Check that the signature is from
-`4E6C F723 4FFC 4E14 5310 74F9 8EB1 E1BB 660E 3FB9`; `gpg` reports a good
+`4E6C F723 4FFC 4E14 5310 74F9 8EB1 E1BB 660E 3FB9`; `gpgv` reports a good
 signature from any key in the keyring it is given, so the fingerprint it names
 is the part that matters. `--key` then makes the installer verify the download
 against the same local key instead of the published one.
@@ -100,8 +107,10 @@ update-flow
 ```
 
 `update-flow` verifies the installer it downloads before running it, and
-refuses to run one that is not signed by the pinned key, unless you run
-`update-flow --no-verify`.
+refuses to run one that is not signed by the pinned key. It also refuses if
+`gpgv` has gone missing since the install, so that removing gnupg cannot turn a
+verified install into an unverified update. Both refusals can be overridden for
+a single run with `update-flow --no-verify`.
 
 At the top of the installer are variables to pre-answer the installation
 questions. Configure them to your liking.

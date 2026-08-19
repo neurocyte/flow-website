@@ -12,8 +12,8 @@ zine release
 gpg --local-user 4E6CF7234FFC4E14531074F98EB1E1BB660E3FB9 \
     --detach-sign --armor --yes --output public/install.sig public/install
 
-gpg --no-default-keyring --keyring public/public.gpg --status-fd 1 --batch \
-    --verify public/install.sig public/install |
+gpgv --keyring public/public.gpg --status-fd 1 \
+    public/install.sig public/install |
     grep -q "^\[GNUPG:\] VALIDSIG .* 4E6CF7234FFC4E14531074F98EB1E1BB660E3FB9$"
 
 rsync -avx --delete public/ flow-control.dev:/srv/flow-control.dev/html

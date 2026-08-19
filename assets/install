@@ -258,16 +258,19 @@ trap cleanup EXIT
 
 # ---- signature verification -------------------------------------------------
 #
-# gpg --verify exits 0 for any good signature by any key in the keyring, so the
-# key is pinned by matching the primary key fingerprint in the status output.
-# VALIDSIG's last field is the primary key even when a subkey made the
-# signature, which is what makes this survive a future signing subkey.
+# We use gpgv. It verifies against just the keyring it is given, with no
+# keyring management and no trust model, and does not apply user
+# configuration.
+#
+# it exits 0 for any good signature by any key in that keyring, so the key is
+# pinned by matching the fingerprint in the status output. VALIDSIG's last
+# field is the primary key even when a subkey made the signature, which is
+# what makes this survive a future signing subkey.
 verify_sig() {
     verify_file=$1
     verify_sig_file=$2
-    gpg --homedir "$tmp_path/gpg" --no-options --no-default-keyring \
-        --keyring "$key_path" --status-fd 1 --batch \
-        --verify "$verify_sig_file" "$verify_file" 2>/dev/null |
+    gpgv --keyring "$key_path" --status-fd 1 \
+        "$verify_sig_file" "$verify_file" 2>/dev/null |
         grep -q "^\[GNUPG:\] VALIDSIG .* $key_fingerprint\$"
 }
 
@@ -280,22 +283,26 @@ warn_unverified() {
     echo
 }
 
-# verification is mandatory unless it was explicitly turned off. a missing gpg
-# is an error rather than a reason to continue unverified, so that removing gpg
-# cannot silently downgrade an install
+# verification is mandatory unless it was explicitly turned off. a missing
+# gpgv is an error rather than a reason to continue unverified, so that
+# removing it cannot silently downgrade an install
 if [ "$no_verify" -eq 1 ]; then
     warn_unverified
-elif ! command -v gpg >/dev/null 2>&1; then
-    echo "error: gpg is required to verify the download, but was not found"
+elif ! command -v gpgv >/dev/null 2>&1; then
+    echo "error: gpgv is required to verify the download, but was not found"
     echo
-    echo "install gnupg and try again, or pass --no-verify to install without"
-    echo "checking signatures"
+    echo "gpgv is gnupg's signature verification tool. most distributions ship"
+    echo "it as a \"gpgv\" package; on macos install gnupg with homebrew,"
+    echo "macports, nix or gpgtools.org"
+    echo
+    echo "then try again, or pass --no-verify to install without checking"
+    echo "signatures"
     exit 1
 fi
 
 # the key is fetched, compared and stored even when this install is not
 # verifying, so that update-flow has something to verify against. comparing
-# and storing need curl and cmp, not gpg
+# and storing need curl and cmp, not gpgv
 key_path=""
 stored_key="$state_dir/public.gpg"
 if [ -n "$keyfile" ]; then
@@ -324,11 +331,6 @@ else
         exit 1
     fi
     key_path="$tmp_path/public.gpg"
-fi
-
-if [ "$no_verify" -eq 0 ]; then
-    mkdir -p "$tmp_path/gpg"
-    chmod 700 "$tmp_path/gpg"
 fi
 
 echo "downloading $title... to $tmp_path"
@@ -534,11 +536,15 @@ if [ "$no_verify" -eq 1 ]; then
     echo "########################################################################"
     echo
 else
-    if ! command -v gpg >/dev/null 2>&1; then
-        echo "error: gpg is required to verify the installer, but was not found"
+    if ! command -v gpgv >/dev/null 2>&1; then
+        echo "error: gpgv is required to verify the installer, but was not found"
         echo
-        echo "install gnupg and try again, or re-run with --no-verify to update"
-        echo "without checking signatures"
+        echo "gpgv is gnupg's signature verification tool. most distributions ship"
+        echo "it as a \"gpgv\" package; on macos install gnupg with homebrew,"
+        echo "macports, nix or gpgtools.org"
+        echo
+        echo "then try again, or re-run with --no-verify to update without"
+        echo "checking signatures"
         exit 1
     fi
 
@@ -550,11 +556,8 @@ else
 
     curl -fsSL https://flow-control.dev/install.sig -o "$tmp/install.sig"
 
-    mkdir -p "$tmp/gpg"
-    chmod 700 "$tmp/gpg"
-    if ! gpg --homedir "$tmp/gpg" --no-options --no-default-keyring \
-        --keyring "$keyring" --status-fd 1 --batch \
-        --verify "$tmp/install.sig" "$tmp/install" 2>/dev/null |
+    if ! gpgv --keyring "$keyring" --status-fd 1 \
+        "$tmp/install.sig" "$tmp/install" 2>/dev/null |
         grep -q "^\[GNUPG:\] VALIDSIG .* $fingerprint$"; then
         echo "error: the installer at flow-control.dev is not signed by $fingerprint"
         echo "refusing to run it"
