@@ -10,7 +10,7 @@ force_update=${FORCE_UPDATE:-0}
 no_gui=${NO_GUI:-0}
 no_integrate=${NO_INTEGRATE:-0}
 keyfile=${KEYFILE:-}
-require_verify=${REQUIRE_VERIFY:-0}
+no_verify=${NO_VERIFY:-0}
 
 # fingerprint of the key that signs flow releases and this script
 key_fingerprint="4E6CF7234FFC4E14531074F98EB1E1BB660E3FB9"
@@ -26,6 +26,7 @@ usage() {
     echo "  -d <path>, --dest <path>  Set install destination (default /usr/local/bin)"
     echo "  -k <file>, --key <file>   Verify with a local public key file instead"
     echo "                            of the one published on flow-control.dev"
+    echo "      --no-verify           Install without verifying signatures"
     echo "  -F, --force               Force re-install even if flow is up-to-date"
     echo "  -G, --no-gui              Do not install flow-gui (implies --no-integrate)"
     echo "  -I, --no-integrate        Do not integrate flow-gui with the desktop"
@@ -53,6 +54,10 @@ while true; do
     -k | --key)
         keyfile=$2
         shift 2
+        ;;
+    --no-verify)
+        no_verify=1
+        shift 1
         ;;
     -F | --force)
         force_update=1
@@ -269,58 +274,61 @@ verify_sig() {
 warn_unverified() {
     echo
     echo "########################################################################"
-    echo "# WARNING: gpg was not found, so nothing was verified.                 #"
-    echo "# The download was trusted on the strength of TLS alone.               #"
-    echo "# Install gnupg and re-run to check signatures.                        #"
+    echo "# WARNING: signature verification is disabled.                         #"
+    echo "# Nothing was checked; the download is trusted on TLS alone.           #"
     echo "########################################################################"
     echo
 }
 
-have_gpg=0
-if command -v gpg >/dev/null 2>&1; then
-    have_gpg=1
+# verification is mandatory unless it was explicitly turned off. a missing gpg
+# is an error rather than a reason to continue unverified, so that removing gpg
+# cannot silently downgrade an install
+if [ "$no_verify" -eq 1 ]; then
+    warn_unverified
+elif ! command -v gpg >/dev/null 2>&1; then
+    echo "error: gpg is required to verify the download, but was not found"
+    echo
+    echo "install gnupg and try again, or pass --no-verify to install without"
+    echo "checking signatures"
+    exit 1
 fi
 
-if [ "$have_gpg" -eq 0 ]; then
-    if [ "$require_verify" -eq 1 ]; then
-        echo "error: gpg not found, but this install was set up to require verification"
-        echo "install gnupg, or re-run the installer from https://flow-control.dev/install"
+# the key is fetched, compared and stored even when this install is not
+# verifying, so that update-flow has something to verify against. comparing
+# and storing need curl and cmp, not gpg
+key_path=""
+stored_key="$state_dir/public.gpg"
+if [ -n "$keyfile" ]; then
+    if [ ! -e "$keyfile" ]; then
+        echo "error: key file \"$keyfile\" not found"
         exit 1
     fi
-    warn_unverified
+    key_path="$keyfile"
+    if [ "$no_verify" -eq 0 ]; then
+        echo "verifying with $key_path"
+    fi
+else
+    curl -fL "$key_url" -o "$tmp_path/public.gpg"
+    # a key that has changed since the last install is treated like a changed
+    # ssh host key: stop, and let the user decide what happened
+    if [ -e "$stored_key" ] && ! cmp -s "$stored_key" "$tmp_path/public.gpg"; then
+        echo "error: the public key at $key_url does not match $stored_key"
+        echo
+        echo "the signing key has changed since flow was last installed. this is"
+        echo "expected after a key rotation, but it is also what a compromised"
+        echo "download would look like. verify the new key before continuing:"
+        echo
+        echo "  gpg --show-keys --with-fingerprint $stored_key"
+        echo
+        echo "then remove $stored_key to accept the new key."
+        exit 1
+    fi
+    key_path="$tmp_path/public.gpg"
 fi
 
-key_path=""
-if [ "$have_gpg" -eq 1 ]; then
+if [ "$no_verify" -eq 0 ]; then
     mkdir -p "$tmp_path/gpg"
     chmod 700 "$tmp_path/gpg"
-    stored_key="$state_dir/public.gpg"
-
-    if [ -n "$keyfile" ]; then
-        if [ ! -e "$keyfile" ]; then
-            echo "error: key file \"$keyfile\" not found"
-            exit 1
-        fi
-        key_path="$keyfile"
-        echo "verifying with $key_path"
-    else
-        curl -fL "$key_url" -o "$tmp_path/public.gpg"
-        # a key that has changed since the last install is treated like a
-        # changed ssh host key: stop, and let the user decide what happened
-        if [ -e "$stored_key" ] && ! cmp -s "$stored_key" "$tmp_path/public.gpg"; then
-            echo "error: the public key at $key_url does not match $stored_key"
-            echo
-            echo "the signing key has changed since flow was last installed. this is"
-            echo "expected after a key rotation, but it is also what a compromised"
-            echo "download would look like. verify the new key before continuing:"
-            echo
-            echo "  gpg --show-keys --with-fingerprint $stored_key"
-            echo
-            echo "then remove $stored_key to accept the new key."
-            exit 1
-        fi
-        key_path="$tmp_path/public.gpg"
-    fi
 fi
 
 echo "downloading $title... to $tmp_path"
@@ -334,7 +342,7 @@ if [ "$filesize" -lt 16384 ]; then
     exit 1
 fi
 
-if [ "$have_gpg" -eq 1 ]; then
+if [ "$no_verify" -eq 0 ]; then
     curl -fL "$url.sig" -o "$tmp_path/$filename.$ext.sig" ||
         curl -fL "$url_gh.sig" -o "$tmp_path/$filename.$ext.sig"
     if verify_sig "$tmp_path/$filename.$ext" "$tmp_path/$filename.$ext.sig"; then
@@ -483,9 +491,9 @@ if [ "$add_alias" -eq 1 ]; then
     fi
 fi
 
-# keep the key we verified with, so that update-flow does not have to trust a
-# freshly downloaded one, and so that a changed key is noticed on the next run
-if [ "$have_gpg" -eq 1 ] && [ -z "$keyfile" ]; then
+# keep the key, so that update-flow does not have to trust a freshly downloaded
+# one, and so that a changed key is noticed on the next run
+if [ -z "$keyfile" ]; then
     mkdir -p "$state_dir"
     cp "$key_path" "$state_dir/public.gpg"
 fi
@@ -505,52 +513,55 @@ updater="$install_dir/update-flow"
         echo "keyring=\"$state_dir/public.gpg\""
     fi
     echo
-    echo "tmp=\$(mktemp -d \"\${TMPDIR:-/tmp}/flow-update.XXXXXXXXX\")"
-    echo "trap 'rm -rf \"\$tmp\"' EXIT"
-    echo "curl -fsSL https://flow-control.dev/install -o \"\$tmp/install\""
+    cat <<'UPDATER_BODY'
+# --no-verify does not persist: it has to be asked for on every update
+no_verify=0
+for arg in "$@"; do
+    case "$arg" in
+    --no-verify) no_verify=1 ;;
+    esac
+done
+
+tmp=$(mktemp -d "${TMPDIR:-/tmp}/flow-update.XXXXXXXXX")
+trap 'rm -rf "$tmp"' EXIT
+curl -fsSL https://flow-control.dev/install -o "$tmp/install"
+
+if [ "$no_verify" -eq 1 ]; then
     echo
-    if [ "$have_gpg" -eq 1 ]; then
-        # verification worked at install time, so failing it now is an error
-        cat <<'UPDATER_VERIFY'
-if ! command -v gpg >/dev/null 2>&1; then
-    echo "error: gpg not found, but flow was installed with signature verification"
-    echo "install gnupg, or re-install from https://flow-control.dev/install"
-    exit 1
-fi
-
-if [ ! -e "$keyring" ]; then
-    echo "error: $keyring is missing"
-    echo "re-install from https://flow-control.dev/install to restore it"
-    exit 1
-fi
-
-curl -fsSL https://flow-control.dev/install.sig -o "$tmp/install.sig"
-
-mkdir -p "$tmp/gpg"
-chmod 700 "$tmp/gpg"
-if ! gpg --homedir "$tmp/gpg" --no-options --no-default-keyring \
-    --keyring "$keyring" --status-fd 1 --batch \
-    --verify "$tmp/install.sig" "$tmp/install" 2>/dev/null |
-    grep -q "^\[GNUPG:\] VALIDSIG .* $fingerprint$"; then
-    echo "error: the installer at flow-control.dev is not signed by $fingerprint"
-    echo "refusing to run it"
-    exit 1
-fi
-
-export REQUIRE_VERIFY=1
-UPDATER_VERIFY
-    else
-        # nothing was verified at install time, so warn and carry on
-        cat <<'UPDATER_WARN'
-echo
-echo "########################################################################"
-echo "# WARNING: gpg was not found, so nothing was verified.                 #"
-echo "# The download was trusted on the strength of TLS alone.               #"
-echo "# Install gnupg and re-run to check signatures.                        #"
-echo "########################################################################"
-echo
-UPDATER_WARN
+    echo "########################################################################"
+    echo "# WARNING: signature verification is disabled.                         #"
+    echo "# Nothing was checked; the download is trusted on TLS alone.           #"
+    echo "########################################################################"
+    echo
+else
+    if ! command -v gpg >/dev/null 2>&1; then
+        echo "error: gpg is required to verify the installer, but was not found"
+        echo
+        echo "install gnupg and try again, or re-run with --no-verify to update"
+        echo "without checking signatures"
+        exit 1
     fi
+
+    if [ ! -e "$keyring" ]; then
+        echo "error: $keyring is missing"
+        echo "re-install from https://flow-control.dev/install to restore it"
+        exit 1
+    fi
+
+    curl -fsSL https://flow-control.dev/install.sig -o "$tmp/install.sig"
+
+    mkdir -p "$tmp/gpg"
+    chmod 700 "$tmp/gpg"
+    if ! gpg --homedir "$tmp/gpg" --no-options --no-default-keyring \
+        --keyring "$keyring" --status-fd 1 --batch \
+        --verify "$tmp/install.sig" "$tmp/install" 2>/dev/null |
+        grep -q "^\[GNUPG:\] VALIDSIG .* $fingerprint$"; then
+        echo "error: the installer at flow-control.dev is not signed by $fingerprint"
+        echo "refusing to run it"
+        exit 1
+    fi
+fi
+UPDATER_BODY
     echo
     if [ "$nightly" -eq 1 ]; then echo "export NIGHTLY=1"; fi
     if [ "$debug" -eq 1 ]; then echo "export DEBUG=1"; fi
