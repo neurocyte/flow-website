@@ -61,12 +61,25 @@ Downloads are verified against the gpg key published at
 [flow-control.dev/public.gpg](https://flow-control.dev/public.gpg), pinned to
 fingerprint `4E6C F723 4FFC 4E14 5310 74F9 8EB1 E1BB 660E 3FB9`. This is not
 optional: without `gpg` the installer stops and asks you to install it, rather
-than continuing unverified. To verify against a key you already have instead of
-the published one:
+than continuing unverified.
+
+Piping the installer into `sh` runs it before anything has checked it, so the
+script itself is only as trustworthy as the TLS connection that fetched it. To
+verify the installer too, download it and its signature, check them against a
+key you already have, and only then run it:
 
 ```
-curl -fsSL https://flow-control.dev/install | sh -s -- --key /path/to/public.gpg
+curl -fsSL -O https://flow-control.dev/install
+curl -fsSL -O https://flow-control.dev/install.sig
+gpg --no-default-keyring --keyring /path/to/public.gpg --verify install.sig install
+sh install --key /path/to/public.gpg
 ```
+
+Check that the signature is from
+`4E6C F723 4FFC 4E14 5310 74F9 8EB1 E1BB 660E 3FB9`; `gpg` reports a good
+signature from any key in the keyring it is given, so the fingerprint it names
+is the part that matters. `--key` then makes the installer verify the download
+against the same local key instead of the published one.
 
 The key is saved in `~/.local/state/flow` for later updates. If the published
 key ever stops matching the saved copy, the installer stops and asks you to
