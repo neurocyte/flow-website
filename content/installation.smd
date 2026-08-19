@@ -65,10 +65,10 @@ it the installer stops and asks you to install it rather than continuing
 unverified.
 
 Most distributions ship `gpgv` as a package of its own, which is worth knowing
-because installing `gnupg` does not always bring it with it. MacOS ships
-neither, so install gnupg first with [homebrew](https://brew.sh),
-[macports](https://www.macports.org), [nix](https://nixos.org) or
-[gpgtools](https://gpgtools.org).
+because installing `gnupg` does not always bring it with it. FreeBSD has it in
+`security/gnupg`, named `gpgv2`. MacOS ships neither, so install gnupg first
+with [homebrew](https://brew.sh), [macports](https://www.macports.org),
+[nix](https://nixos.org) or [gpgtools](https://gpgtools.org).
 
 Piping the installer into `sh` runs it before anything has checked it, so the
 script itself is only as trustworthy as the TLS connection that fetched it. To

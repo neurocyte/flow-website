@@ -269,9 +269,21 @@ trap cleanup EXIT
 verify_sig() {
     verify_file=$1
     verify_sig_file=$2
-    gpgv --keyring "$key_path" --status-fd 1 \
+    "$gpgv_bin" --keyring "$key_path" --status-fd 1 \
         "$verify_sig_file" "$verify_file" 2>/dev/null |
         grep -q "^\[GNUPG:\] VALIDSIG .* $key_fingerprint\$"
+}
+
+# freebsd's gnupg port installs it as gpgv2, so the name has to be resolved
+# rather than assumed
+find_gpgv() {
+    for candidate in gpgv gpgv2; do
+        if command -v "$candidate" >/dev/null 2>&1; then
+            echo "$candidate"
+            return 0
+        fi
+    done
+    return 1
 }
 
 warn_unverified() {
@@ -286,14 +298,15 @@ warn_unverified() {
 # verification is mandatory unless it was explicitly turned off. a missing
 # gpgv is an error rather than a reason to continue unverified, so that
 # removing it cannot silently downgrade an install
+gpgv_bin=""
 if [ "$no_verify" -eq 1 ]; then
     warn_unverified
-elif ! command -v gpgv >/dev/null 2>&1; then
+elif ! gpgv_bin=$(find_gpgv); then
     echo "error: gpgv is required to verify the download, but was not found"
     echo
     echo "gpgv is gnupg's signature verification tool. most distributions ship"
-    echo "it as a \"gpgv\" package; on macos install gnupg with homebrew,"
-    echo "macports, nix or gpgtools.org"
+    echo "it as a \"gpgv\" package; freebsd has it in security/gnupg as gpgv2;"
+    echo "on macos install gnupg with homebrew, macports, nix or gpgtools.org"
     echo
     echo "then try again, or pass --no-verify to install without checking"
     echo "signatures"
@@ -536,12 +549,20 @@ if [ "$no_verify" -eq 1 ]; then
     echo "########################################################################"
     echo
 else
-    if ! command -v gpgv >/dev/null 2>&1; then
+    # freebsd's gnupg port installs it as gpgv2, so resolve the name
+    gpgv_bin=""
+    for candidate in gpgv gpgv2; do
+        if command -v "$candidate" >/dev/null 2>&1; then
+            gpgv_bin=$candidate
+            break
+        fi
+    done
+    if [ -z "$gpgv_bin" ]; then
         echo "error: gpgv is required to verify the installer, but was not found"
         echo
         echo "gpgv is gnupg's signature verification tool. most distributions ship"
-        echo "it as a \"gpgv\" package; on macos install gnupg with homebrew,"
-        echo "macports, nix or gpgtools.org"
+        echo "it as a \"gpgv\" package; freebsd has it in security/gnupg as gpgv2;"
+        echo "on macos install gnupg with homebrew, macports, nix or gpgtools.org"
         echo
         echo "then try again, or re-run with --no-verify to update without"
         echo "checking signatures"
@@ -556,7 +577,7 @@ else
 
     curl -fsSL https://flow-control.dev/install.sig -o "$tmp/install.sig"
 
-    if ! gpgv --keyring "$keyring" --status-fd 1 \
+    if ! "$gpgv_bin" --keyring "$keyring" --status-fd 1 \
         "$tmp/install.sig" "$tmp/install" 2>/dev/null |
         grep -q "^\[GNUPG:\] VALIDSIG .* $fingerprint$"; then
         echo "error: the installer at flow-control.dev is not signed by $fingerprint"
