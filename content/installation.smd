@@ -57,12 +57,31 @@ Install the GUI, but leave the desktop alone:
 curl -fsSL https://flow-control.dev/install | sh -s -- --no-integrate
 ```
 
+Downloads are verified against the gpg key published at
+[flow-control.dev/public.gpg](https://flow-control.dev/public.gpg), pinned to
+fingerprint `4E6C F723 4FFC 4E14 5310 74F9 8EB1 E1BB 660E 3FB9`. This happens
+automatically whenever `gpg` is installed; if it is not, the installer prints a
+warning and continues, trusting TLS alone. To verify against a key you already
+have instead of the published one:
+
+```
+curl -fsSL https://flow-control.dev/install | sh -s -- --key /path/to/public.gpg
+```
+
+The key is saved in `~/.local/state/flow` for later updates. If the published
+key ever stops matching the saved copy, the installer stops and asks you to
+check it, in the same spirit as a changed ssh host key.
+
 The installer also writes an `update-flow` script next to the binaries, which
 re-runs the install with the same options. Run it to update:
 
 ```
 update-flow
 ```
+
+If the original install verified signatures, `update-flow` verifies the
+installer it downloads before running it, and refuses to run an installer that
+is not signed by the pinned key.
 
 At the top of the installer are variables to pre-answer the installation
 questions. Configure them to your liking.
