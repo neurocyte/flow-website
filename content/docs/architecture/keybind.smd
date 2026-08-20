@@ -21,11 +21,20 @@ exposes a list of commands available for you to use, and when you select
 a command, it's pasted in your current cursor position.
 
 Using the command palette `Ctrl+Shift+p` and typing **Edit key
-bindings**, takes you to a json file to extend flow, configuring
-keybindings to suit your needs. According to the mode you are in, your
-personal mode's file configuration will be opened. Explore the
-the file to discover how commands are bound to some combos, key presses
-and the different [imodes](#hierarchy) present.
+bindings**, creates and opens a json file where you can extend flow and
+configure keybindings to suit your needs. The file is named after the
+mode you are in (for example `flow.json`) and inherits from the built-in
+mode of the same name, so it starts almost empty: each
+[imode](#hierarchy) is an empty section for you to fill in. Keybindings
+you do not touch — including any added or changed by future updates of
+flow — are inherited automatically, and any imode you leave out entirely
+is inherited whole. To discover how the built-in commands are bound to
+combos and key presses, use the `ctrl+f2` palette or browse the built-in
+definitions under `src/keybind/builtin/`.
+
+In your file's `settings` section you will see
+`"inherit": "<<builtin>>"`; this is what links it to the built-in mode
+of the same name, and you normally leave it as-is.
 
 Command palette can also be reached left clicking on the current
 mode in the status bar.

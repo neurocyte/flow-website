@@ -33,10 +33,11 @@ flow --help                         # List of command line options
 | `Ctrl+Shift+P` or `Alt+x` | Command palette      |
 | `Ctrl+F2`                 | View all keybindings |
 
-Run the `Edit keybindings` command to save the current keybinding mode to a
-file and open it for editing. Save your customized keybinds under a new name
-in the same directory to create an entirely new keybinding mode. Keybinding
-changes will take effect on restart.
+Run the `Edit keybindings` command to customize the current keybinding mode. It
+opens a file in your `keys` directory (under the same name) that inherits from
+the built-in mode, so you can add, override, or remove individual keybindings
+while everything you do not touch - including keybindings added by future
+updates - is inherited automatically. Keybinding changes take effect on restart.
 
 
 []($section.id("configuration"))
