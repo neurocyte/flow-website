@@ -17,6 +17,17 @@ RSS]($link.page('devlog').alternative('rss')) and find more devlog entries
 in the [archive](/devlog/).
 
 
+## [tree-sitter query priorities and predicates]($section.id("2026-08-21T12:30:00+02:00"))
+
+Flow now correctly implements tree-sitter query priorities. Overlapping
+highlight matches are now ranked by query index and flow now honors the
+`(#set! priority N)` directive. We've added support for the most common
+predicates too, including #eq?, #any-of? #lua-match? and #match?. Along
+with a fix to how flow-themes was extracting scope targets, these changes
+should dramatically improve the overall quality of syntax highlighting in
+flow.
+
+
 ## [tree-sitter 0.26.7 update]($section.id("2026-03-18T14:05:52+01:00"))
 
 I've updated tree-sitter to the latest release, 0.26.7. We were quite far
