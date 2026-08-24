@@ -71,6 +71,19 @@ function Get-TagLineage($tag) {
     return "release"
 }
 
+function Install-File($src, $dst) {
+    $old = "$dst.old"
+    Remove-Item $old -Force -ErrorAction SilentlyContinue
+    try {
+        Copy-Item $src $dst -Force -ErrorAction Stop
+        return
+    } catch {
+        if (-not (Test-Path $dst)) { throw }
+    }
+    Rename-Item -Path $dst -NewName (Split-Path $old -Leaf) -Force
+    Copy-Item $src $dst -Force
+}
+
 function Get-FlowVersion($exe) {
     $ErrorActionPreference = "Continue"
     $PSNativeCommandUseErrorActionPreference = $false
@@ -342,7 +355,14 @@ if (-not (Test-Path $install_dir)) {
     New-Item -ItemType Directory -Path $install_dir | Out-Null
 }
 
-Copy-Item (Join-Path $unpack "*") $install_dir -Recurse -Force
+foreach ($item in Get-ChildItem $unpack -Recurse) {
+    $target = Join-Path $install_dir $item.FullName.Substring($unpack.Length + 1)
+    if ($item.PSIsContainer) {
+        if (-not (Test-Path $target)) { New-Item -ItemType Directory -Path $target | Out-Null }
+    } else {
+        Install-File $item.FullName $target
+    }
+}
 
 if (-not $NoIntegrate) {
     $gui = Join-Path $install_dir "flow-gui.exe"

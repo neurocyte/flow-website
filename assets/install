@@ -29,6 +29,19 @@ shquote() {
     printf "'%s'" "$(printf '%s' "$1" | sed "s/'/'\\''/g")"
 }
 
+install_file() {
+    _src=$1
+    _dst=$2
+    _sudo=$3
+    _staged="$_dst.new.$$"
+    if ! $_sudo cp "$_src" "$_staged" || ! $_sudo chmod +x "$_staged"; then
+        $_sudo rm -f "$_staged"
+        echo "error: failed to stage $_dst"
+        exit 1
+    fi
+    $_sudo mv -f "$_staged" "$_dst"
+}
+
 # order two flow tags. releases are "vM.m.p"; nightlies are "vM.m.p-<count>-g<hash>"
 version_cmp() {
     awk -v a="$1" -v b="$2" '
@@ -503,11 +516,9 @@ fi
 
 install_binaries() {
     $SUDOCMD mkdir -p "$install_dir"
-    $SUDOCMD cp "$unpack/flow$exe" "$install_dir/flow$exe"
-    $SUDOCMD chmod +x "$install_dir/flow$exe"
+    install_file "$unpack/flow$exe" "$install_dir/flow$exe" "$SUDOCMD"
     if [ "$have_gui" -eq 1 ]; then
-        $SUDOCMD cp "$unpack/flow-gui$exe" "$install_dir/flow-gui$exe"
-        $SUDOCMD chmod +x "$install_dir/flow-gui$exe"
+        install_file "$unpack/flow-gui$exe" "$install_dir/flow-gui$exe" "$SUDOCMD"
     fi
 }
 
@@ -537,8 +548,8 @@ integrate_macos() {
 
     mkdir -p "$app/Contents/MacOS"
     cp -R "$bundle/." "$app/"
-    cp "$unpack/flow" "$unpack/flow-gui" "$app/Contents/MacOS/"
-    chmod +x "$app/Contents/MacOS/flow" "$app/Contents/MacOS/flow-gui"
+    install_file "$unpack/flow" "$app/Contents/MacOS/flow" ""
+    install_file "$unpack/flow-gui" "$app/Contents/MacOS/flow-gui" ""
     sed "s/@VERSION@/${version#v}/g" "$bundle/Contents/Info.plist" >"$app/Contents/Info.plist"
 
     $SUDOCMD mkdir -p "$install_dir"
