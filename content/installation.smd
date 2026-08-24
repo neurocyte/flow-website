@@ -178,13 +178,65 @@ Invoke-RestMethod "https://flow-control.dev/install.ps1" | Invoke-Expression
 `DEBUG` implies `NIGHTLY`, as debug builds are only published for nightlies,
 and `NO_GUI` implies `NO_INTEGRATE`. If you save the script to a file instead
 of piping it, the same choices are switches: `-Nightly`, `-Debug`, `-NoGui`,
-`-NoIntegrate`, `-Force` and `-Dest <path>`.
+`-NoIntegrate`, `-Force`, `-Dest <path>`, `-NoVerify` and `-KeyFile <file>`.
 
-The Windows installer will also install itself as `update-flow.ps1` so you can
-just run `update-flow` in a terminal to update. It repeats the install with the
-options you chose, so updating a nightly stays on nightlies and a custom
-destination keeps updating in place. `FORCE_UPDATE` is the exception: it applies
-to the run you ask for and is not carried into later updates.
+Downloads are verified against the gpg key published at
+[flow-control.dev/public.gpg](https://flow-control.dev/public.gpg), pinned to
+fingerprint `4E6C F723 4FFC 4E14 5310 74F9 8EB1 E1BB 660E 3FB9`. Verification
+uses `gpgv`, gnupg's signature verification tool, and is not optional: without
+it the installer stops and asks you to install it rather than continuing
+unverified.
+
+Windows does not ship gnupg, so install it first:
+
+```
+winget install GnuPG.GnuPG
+```
+
+then open a new terminal, so that `gpgv` is on your `PATH`.
+
+Piping the installer into `Invoke-Expression` runs it before anything has
+checked it, so the script itself is only as trustworthy as the TLS connection
+that fetched it. To verify the installer too, download it and its signature,
+check them against a key you already have, and only then run it:
+
+```
+Invoke-WebRequest "https://flow-control.dev/install.ps1" -OutFile install.ps1
+Invoke-WebRequest "https://flow-control.dev/install.ps1.sig" -OutFile install.ps1.sig
+gpgv --keyring C:\path\to\public.gpg install.ps1.sig install.ps1
+.\install.ps1 -KeyFile C:\path\to\public.gpg
+```
+
+Check that the signature is from
+`4E6C F723 4FFC 4E14 5310 74F9 8EB1 E1BB 660E 3FB9`; `gpgv` reports a good
+signature from any key in the keyring it is given, so the fingerprint it names
+is the part that matters. `-KeyFile`, or `$env:KEYFILE`, then makes the
+installer verify the download against the same local key instead of the
+published one.
+
+The key is saved in `%AppData%\flow` for later updates. If the published key
+ever stops matching the saved copy, the installer stops and asks you to check
+it, in the same spirit as a changed ssh host key.
+
+You can disable verification if you really want, but only by explicitly
+asking:
+
+```
+$env:NO_VERIFY = 1
+Invoke-RestMethod "https://flow-control.dev/install.ps1" | Invoke-Expression
+```
+
+The Windows installer also writes an `update-flow.ps1` next to the binaries, so
+you can just run `update-flow` in a terminal to update. It repeats the install
+with the options you chose, so updating a nightly stays on nightlies and a
+custom destination keeps updating in place. `FORCE_UPDATE` is the exception: it
+applies to the run you ask for and is not carried into later updates.
+
+`update-flow` verifies the installer it downloads before running it, and refuses
+to run one that is not signed by the pinned key. It also refuses if `gpgv` has
+gone missing since the install, so that removing gnupg cannot turn a verified
+install into an unverified update. Both refusals can be overridden for a single
+run with `update-flow -NoVerify`.
 
 
 []($section.id("source"))

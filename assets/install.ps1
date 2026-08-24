@@ -4,6 +4,8 @@ param(
     [switch]$NoGui,
     [switch]$NoIntegrate,
     [switch]$Force,
+    [switch]$NoVerify,
+    [string]$KeyFile,
     [string]$Dest
 )
 
@@ -14,10 +16,17 @@ if ($env:DEBUG -and $env:DEBUG -ne "0") { $Debug = $true }
 if ($env:NO_GUI -and $env:NO_GUI -ne "0") { $NoGui = $true }
 if ($env:NO_INTEGRATE -and $env:NO_INTEGRATE -ne "0") { $NoIntegrate = $true }
 if ($env:FORCE_UPDATE -and $env:FORCE_UPDATE -ne "0") { $Force = $true }
+if ($env:NO_VERIFY -and $env:NO_VERIFY -ne "0") { $NoVerify = $true }
+if ($env:KEYFILE) { $KeyFile = $env:KEYFILE }
 if ($env:DEST) { $Dest = $env:DEST }
 # debug builds are only published for nightlies
 if ($Debug) { $Nightly = $true }
 if ($NoGui) { $NoIntegrate = $true }
+
+# fingerprint of the key that signs flow releases and this script
+$key_fingerprint = "4E6CF7234FFC4E14531074F98EB1E1BB660E3FB9"
+$key_url = "https://flow-control.dev/public.gpg"
+$state_dir = "$env:APPDATA\flow"
 
 function Stop-Install($message) {
     Write-Host $message
@@ -38,10 +47,15 @@ function Get-Download($uri, $out) {
         Invoke-WebRequest -Uri $uri -OutFile $out -ErrorAction Stop
         return $true
     } catch {
-        # a failed download can leave a truncated file behind
         Remove-Item $out -Force -ErrorAction SilentlyContinue
         return $false
     }
+}
+
+function Test-Signature($file, $sigfile) {
+    $PSNativeCommandUseErrorActionPreference = $false
+    $status = & $gpgv_bin --keyring $key_path --status-fd 1 $sigfile $file 2>$null
+    return [bool]($status | Select-String -Quiet -Pattern "^\[GNUPG:\] VALIDSIG .* $($key_fingerprint)$")
 }
 
 if ($Nightly) {
@@ -100,16 +114,78 @@ if ($Debug) {
 }
 $filename = "$filename.zip"
 
-$stage = Join-Path $env:TEMP "flow-install-$([System.Guid]::NewGuid().ToString('N'))"
-New-Item -ItemType Directory -Path $stage | Out-Null
-$archive = Join-Path $stage $filename
+$gpgv_bin = ""
+if ($NoVerify) {
+    Write-Host ""
+    Write-Host "########################################################################"
+    Write-Host "# WARNING: signature verification is disabled.                         #"
+    Write-Host "# Nothing was checked; the download is trusted on TLS alone.           #"
+    Write-Host "########################################################################"
+    Write-Host ""
+} else {
+    $gpgv_bin = (Get-Command gpgv -CommandType Application -ErrorAction SilentlyContinue |
+        Select-Object -First 1).Source
+    if (-not $gpgv_bin) {
+        Stop-Install @"
+error: gpgv is required to verify the download, but was not found
+
+gpgv is gnupg's signature verification tool. install gnupg with
+
+    winget install GnuPG.GnuPG
+
+then open a new terminal so that gpgv is on PATH, and try again, or set
+`$env:NO_VERIFY = 1 to install without checking signatures
+"@
+        return
+    }
+}
+
+$tmp = Join-Path $env:TEMP "flow-install-$([System.Guid]::NewGuid().ToString('N'))"
+New-Item -ItemType Directory -Path $tmp | Out-Null
+$unpack = Join-Path $tmp "unpack"
+New-Item -ItemType Directory -Path $unpack | Out-Null
+$archive = Join-Path $tmp $filename
+
+try {
+
+$key_path = ""
+$stored_key = Join-Path $state_dir "public.gpg"
+if ($KeyFile) {
+    if (-not (Test-Path $KeyFile)) {
+        Stop-Install "error: key file `"$KeyFile`" not found"
+        return
+    }
+    $key_path = $KeyFile
+    if (-not $NoVerify) { Write-Host "verifying with $key_path" }
+} else {
+    $fetched_key = Join-Path $tmp "public.gpg"
+    if (-not (Get-Download $key_url $fetched_key)) {
+        Stop-Install "failed to download the public key from $key_url"
+        return
+    }
+    if ((Test-Path $stored_key) -and
+        (Get-FileHash $stored_key).Hash -ne (Get-FileHash $fetched_key).Hash) {
+        Stop-Install @"
+error: the public key at $key_url does not match $stored_key
+
+the signing key has changed since flow was last installed. this is
+expected after a key rotation, but it is also what a compromised
+download would look like. verify the new key before continuing:
+
+  gpg --show-keys --with-fingerprint "$stored_key"
+
+then remove $stored_key to accept the new key.
+"@
+        return
+    }
+    $key_path = $fetched_key
+}
 
 $url = "https://codeberg.org/$repo/releases/download/$version/$filename"
 $url_gh = "https://github.com/$repo/releases/download/$version/$filename"
 
 Write-Host "downloading $title..."
 if (-not (Get-Download $url $archive) -and -not (Get-Download $url_gh $archive)) {
-    Remove-Item $stage -Recurse -Force -ErrorAction SilentlyContinue
     Stop-Install "failed to download $filename from codeberg or github"
     return
 }
@@ -117,16 +193,36 @@ if (-not (Get-Download $url $archive) -and -not (Get-Download $url_gh $archive))
 # sanity check
 $filesize = (Get-Item $archive).Length
 if ($filesize -lt 16384) {
-    Remove-Item $stage -Recurse -Force -ErrorAction SilentlyContinue
     Stop-Install "downloaded file appears to be invalid (size: $filesize bytes)"
     return
 }
 
-echo "installing $title to $install_dir ..."
-Expand-Archive -Path $archive -DestinationPath $stage -Force
-Remove-Item $archive
+if (-not $NoVerify) {
+    $sigfile = "$archive.sig"
+    if (-not (Get-Download "$url.sig" $sigfile) -and -not (Get-Download "$url_gh.sig" $sigfile)) {
+        Stop-Install "failed to download $filename.sig from codeberg or github"
+        return
+    }
+    if (Test-Signature $archive $sigfile) {
+        Write-Host "good signature from $key_fingerprint"
+    } else {
+        Stop-Install @"
+error: signature verification failed for $filename
+the download does not carry a valid signature from $key_fingerprint
+"@
+        return
+    }
+}
 
-$staged_gui = Join-Path $stage "flow-gui.exe"
+echo "installing $title to $install_dir ..."
+Expand-Archive -Path $archive -DestinationPath $unpack -Force
+
+if (-not (Test-Path (Join-Path $unpack "flow.exe"))) {
+    Stop-Install "downloaded archive does not contain flow.exe"
+    return
+}
+
+$staged_gui = Join-Path $unpack "flow-gui.exe"
 if ($NoGui) {
     Remove-Item $staged_gui -Force -ErrorAction SilentlyContinue
 } elseif (-not (Test-Path $staged_gui)) {
@@ -139,8 +235,7 @@ if (-not (Test-Path $install_dir)) {
     New-Item -ItemType Directory -Path $install_dir | Out-Null
 }
 
-Copy-Item (Join-Path $stage "*") $install_dir -Recurse -Force
-Remove-Item $stage -Recurse -Force
+Copy-Item (Join-Path $unpack "*") $install_dir -Recurse -Force
 
 if (-not $NoIntegrate) {
     $gui = Join-Path $install_dir "flow-gui.exe"
@@ -154,21 +249,99 @@ if (-not $NoIntegrate) {
     Write-Host "created start menu shortcut $shortcut_path"
 }
 
+if (-not $KeyFile) {
+    New-Item -ItemType Directory -Path $state_dir -Force | Out-Null
+    Copy-Item $key_path $stored_key -Force
+}
+
+} finally {
+    Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue
+}
+
 echo "installing $title_updater to $install_dir\update-flow.ps1 ..."
-Invoke-WebRequest -Uri "https://flow-control.dev/install.ps1" -OutFile "$install_dir\install.ps1"
-# update-flow repeats this install with the same options, so that updating a
-# nightly does not silently switch to a release. -Force is deliberately not
-# repeated: a one-off force should not make every future update re-download
+Remove-Item "$install_dir\install.ps1" -Force -ErrorAction SilentlyContinue
+# update-flow repeats this install with the same options
 $switches = @()
-if ($Nightly) { $switches += "-Nightly" }
-if ($Debug) { $switches += "-Debug" }
-if ($NoGui) { $switches += "-NoGui" } elseif ($NoIntegrate) { $switches += "-NoIntegrate" }
-$switches += "-Dest `"$install_dir`""
-$updater_script = @"
+if ($Nightly) { $switches += "Nightly = `$true" }
+if ($Debug) { $switches += "Debug = `$true" }
+if ($NoGui) { $switches += "NoGui = `$true" } elseif ($NoIntegrate) { $switches += "NoIntegrate = `$true" }
+if ($KeyFile) { $switches += "KeyFile = `"$KeyFile`"" }
+$switch_literal = "@{ " + ($switches -join "; ") + " }"
+$updater_keyring = if ($KeyFile) { $KeyFile } else { $stored_key }
+$updater_head = @"
 # generated by the flow installer
-& "`$PSScriptRoot\install.ps1" $($switches -join ' ')
+`$fingerprint = "$key_fingerprint"
+`$keyring = "$updater_keyring"
+`$install_dir = "$install_dir"
+`$switches = $switch_literal
 "@
-Set-Content -Path "$install_dir\update-flow.ps1" -Value $updater_script
+$updater_body = @'
+$ErrorActionPreference = "Stop"
+
+# -NoVerify does not persist: it has to be asked for on every update
+$no_verify = $false
+foreach ($arg in $args) { if ($arg -eq "-NoVerify") { $no_verify = $true } }
+if ($env:NO_VERIFY -and $env:NO_VERIFY -ne "0") { $no_verify = $true }
+
+$tmp = Join-Path $env:TEMP "flow-update-$([System.Guid]::NewGuid().ToString('N'))"
+New-Item -ItemType Directory -Path $tmp | Out-Null
+try {
+    Invoke-WebRequest -Uri "https://flow-control.dev/install.ps1" -OutFile "$tmp\install.ps1"
+
+    if ($no_verify) {
+        Write-Host ""
+        Write-Host "########################################################################"
+        Write-Host "# WARNING: signature verification is disabled.                         #"
+        Write-Host "# Nothing was checked; the download is trusted on TLS alone.           #"
+        Write-Host "########################################################################"
+        Write-Host ""
+    } else {
+        $gpgv_bin = (Get-Command gpgv -CommandType Application -ErrorAction SilentlyContinue |
+            Select-Object -First 1).Source
+        if (-not $gpgv_bin) {
+            Write-Host "error: gpgv is required to verify the installer, but was not found"
+            Write-Host ""
+            Write-Host "gpgv is gnupg's signature verification tool. install gnupg with"
+            Write-Host ""
+            Write-Host "    winget install GnuPG.GnuPG"
+            Write-Host ""
+            Write-Host "then open a new terminal so that gpgv is on PATH, and try again, or"
+            Write-Host "re-run with -NoVerify to update without checking signatures"
+            exit 1
+        }
+
+        if (-not (Test-Path $keyring)) {
+            Write-Host "error: $keyring is missing"
+            Write-Host "re-install from https://flow-control.dev/install.ps1 to restore it"
+            exit 1
+        }
+
+        try {
+            Invoke-WebRequest -Uri "https://flow-control.dev/install.ps1.sig" `
+                -OutFile "$tmp\install.ps1.sig" -ErrorAction Stop
+        } catch {
+            Write-Host "error: could not fetch the installer signature from"
+            Write-Host "https://flow-control.dev/install.ps1.sig"
+            Write-Host "refusing to run an unverified installer"
+            exit 1
+        }
+
+        $PSNativeCommandUseErrorActionPreference = $false
+        $status = & $gpgv_bin --keyring $keyring --status-fd 1 `
+            "$tmp\install.ps1.sig" "$tmp\install.ps1" 2>$null
+        if (-not ($status | Select-String -Quiet -Pattern "^\[GNUPG:\] VALIDSIG .* $($fingerprint)$")) {
+            Write-Host "error: the installer at flow-control.dev is not signed by $fingerprint"
+            Write-Host "refusing to run it"
+            exit 1
+        }
+    }
+
+    & "$tmp\install.ps1" @switches -Dest $install_dir @args
+} finally {
+    Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue
+}
+'@
+Set-Content -Path "$install_dir\update-flow.ps1" -Value ($updater_head + "`n" + $updater_body)
 
 echo "$title installed successfully to $install_dir"
 
