@@ -160,14 +160,31 @@ $env:NO_INTEGRATE = 1
 Invoke-RestMethod "https://flow-control.dev/install.ps1" | Invoke-Expression
 ```
 
+Install somewhere else than `%AppData%/Roaming/flow/bin`:
+
+```
+$env:DEST = "C:\tools\flow"
+Invoke-RestMethod "https://flow-control.dev/install.ps1" | Invoke-Expression
+```
+
+The installer stops early when the installed build is already the latest one.
+Re-install it anyway:
+
+```
+$env:FORCE_UPDATE = 1
+Invoke-RestMethod "https://flow-control.dev/install.ps1" | Invoke-Expression
+```
+
 `DEBUG` implies `NIGHTLY`, as debug builds are only published for nightlies,
 and `NO_GUI` implies `NO_INTEGRATE`. If you save the script to a file instead
-of piping it, the same choices are switches: `-Nightly`, `-Debug`, `-NoGui`
-and `-NoIntegrate`.
+of piping it, the same choices are switches: `-Nightly`, `-Debug`, `-NoGui`,
+`-NoIntegrate`, `-Force` and `-Dest <path>`.
 
 The Windows installer will also install itself as `update-flow.ps1` so you can
 just run `update-flow` in a terminal to update. It repeats the install with the
-options you chose, so updating a nightly stays on nightlies.
+options you chose, so updating a nightly stays on nightlies and a custom
+destination keeps updating in place. `FORCE_UPDATE` is the exception: it applies
+to the run you ask for and is not carried into later updates.
 
 
 []($section.id("source"))
