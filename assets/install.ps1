@@ -11,8 +11,16 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-if ($env:NIGHTLY -and $env:NIGHTLY -ne "0") { $Nightly = $true }
-if ($env:DEBUG -and $env:DEBUG -ne "0") { $Debug = $true }
+if ($env:FLOW_NIGHTLY -and $env:FLOW_NIGHTLY -ne "0") { $Nightly = $true }
+if ($env:FLOW_NIGHTLY_DEBUG -and $env:FLOW_NIGHTLY_DEBUG -ne "0") { $Debug = $true }
+if ($env:NIGHTLY -and $env:NIGHTLY -ne "0") {
+    Write-Host "warning: NIGHTLY is deprecated, use FLOW_NIGHTLY instead"
+    $Nightly = $true
+}
+if ($env:DEBUG -and $env:DEBUG -ne "0") {
+    Write-Host "warning: DEBUG is deprecated, use FLOW_NIGHTLY_DEBUG instead"
+    $Debug = $true
+}
 if ($env:NO_GUI -and $env:NO_GUI -ne "0") { $NoGui = $true }
 if ($env:NO_INTEGRATE -and $env:NO_INTEGRATE -ne "0") { $NoIntegrate = $true }
 if ($env:FORCE_UPDATE -and $env:FORCE_UPDATE -ne "0") { $Force = $true }

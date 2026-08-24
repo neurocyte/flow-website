@@ -3,14 +3,23 @@ set -e
 
 install_dir="${PREFIX:-/usr/local}/bin"
 add_alias=${ALIAS:-0}
-nightly=${NIGHTLY:-0}
-debug=${DEBUG:-0}
+nightly=${FLOW_NIGHTLY:-0}
+debug=${FLOW_NIGHTLY_DEBUG:-0}
 use_sudo=${USE_SUDO:-0}
 force_update=${FORCE_UPDATE:-0}
 no_gui=${NO_GUI:-0}
 no_integrate=${NO_INTEGRATE:-0}
 keyfile=${KEYFILE:-}
 no_verify=${NO_VERIFY:-0}
+
+if [ -n "${NIGHTLY:-}" ] && [ "${NIGHTLY:-0}" != "0" ]; then
+    echo "warning: NIGHTLY is deprecated, use FLOW_NIGHTLY instead"
+    nightly=1
+fi
+if [ -n "${DEBUG:-}" ] && [ "${DEBUG:-0}" != "0" ]; then
+    echo "warning: DEBUG is deprecated, use FLOW_NIGHTLY_DEBUG instead"
+    debug=1
+fi
 
 # fingerprint of the key that signs flow releases and this script
 key_fingerprint="4E6CF7234FFC4E14531074F98EB1E1BB660E3FB9"
@@ -587,8 +596,8 @@ else
 fi
 UPDATER_BODY
     echo
-    if [ "$nightly" -eq 1 ]; then echo "export NIGHTLY=1"; fi
-    if [ "$debug" -eq 1 ]; then echo "export DEBUG=1"; fi
+    if [ "$nightly" -eq 1 ]; then echo "export FLOW_NIGHTLY=1"; fi
+    if [ "$debug" -eq 1 ]; then echo "export FLOW_NIGHTLY_DEBUG=1"; fi
     if [ "$add_alias" -eq 1 ]; then echo "export ALIAS=1"; fi
     if [ "$want_no_gui" -eq 1 ]; then echo "export NO_GUI=1"; fi
     if [ "$want_no_integrate" -eq 1 ]; then echo "export NO_INTEGRATE=1"; fi
