@@ -38,4 +38,5 @@ for installer in install install.ps1; do
         grep -q "^\[GNUPG:\] VALIDSIG .* 4E6CF7234FFC4E14531074F98EB1E1BB660E3FB9$"
 done
 
-rsync -avx --delete public/ flow-control.dev:/srv/flow-control.dev/html
+rsync -avx --delete --exclude "version-latest*" \
+    public/ flow-control.dev:/srv/flow-control.dev/html
