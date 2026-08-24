@@ -88,6 +88,13 @@ signature from any key in the keyring it is given, so the fingerprint it names
 is the part that matters. `--key` then makes the installer verify the download
 against the same local key instead of the published one.
 
+Which version gets installed is decided by a small manifest at
+[flow-control.dev/version-latest](https://flow-control.dev/version-latest), or
+`version-latest-nightly` for nightlies, holding nothing but the release tag. It
+is signed with the same key, so a release mirror cannot answer with an older
+tag than the one that was actually published. The installer refuses to proceed
+if that manifest is missing or does not verify.
+
 The key is saved in `~/.local/state/flow` for later updates. If the published
 key ever stops matching the saved copy, the installer stops and asks you to
 check it, in the same spirit as a changed ssh host key.
@@ -178,8 +185,8 @@ Invoke-RestMethod "https://flow-control.dev/install.ps1" | Invoke-Expression
 `FLOW_NIGHTLY_DEBUG` implies `FLOW_NIGHTLY`, as debug builds are only published
 for nightlies, and `NO_GUI` implies `NO_INTEGRATE`. If you save the script to a
 file instead of piping it, the same choices are switches: `-Nightly`, `-Debug`,
-`-NoGui`, `-NoIntegrate`, `-Force`, `-Dest <path>`, `-NoVerify` and
-`-KeyFile <file>`.
+`-NoGui`, `-NoIntegrate`, `-Force`, `-Dest <path>`, `-NoVerify`,
+`-KeyFile <file>` and `-AllowDowngrade`.
 
 Downloads are verified against the gpg key published at
 [flow-control.dev/public.gpg](https://flow-control.dev/public.gpg), pinned to
@@ -214,6 +221,13 @@ signature from any key in the keyring it is given, so the fingerprint it names
 is the part that matters. `-KeyFile`, or `$env:KEYFILE`, then makes the
 installer verify the download against the same local key instead of the
 published one.
+
+Which version gets installed is decided by a small manifest at
+[flow-control.dev/version-latest](https://flow-control.dev/version-latest), or
+`version-latest-nightly` for nightlies, holding nothing but the release tag. It
+is signed with the same key, so a release mirror cannot answer with an older
+tag than the one that was actually published. The installer refuses to proceed
+if that manifest is missing or does not verify.
 
 The key is saved in `%AppData%\flow` for later updates. If the published key
 ever stops matching the saved copy, the installer stops and asks you to check

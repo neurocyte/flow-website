@@ -4,6 +4,7 @@ param(
     [switch]$NoGui,
     [switch]$NoIntegrate,
     [switch]$Force,
+    [switch]$AllowDowngrade,
     [switch]$NoVerify,
     [string]$KeyFile,
     [string]$Dest
@@ -26,6 +27,7 @@ if ($env:DEBUG -and $env:DEBUG -ne "0") {
 if ($env:NO_GUI -and $env:NO_GUI -ne "0") { $NoGui = $true }
 if ($env:NO_INTEGRATE -and $env:NO_INTEGRATE -ne "0") { $NoIntegrate = $true }
 if ($env:FORCE_UPDATE -and $env:FORCE_UPDATE -ne "0") { $Force = $true }
+if ($env:ALLOW_DOWNGRADE -and $env:ALLOW_DOWNGRADE -ne "0") { $AllowDowngrade = $true }
 if ($env:NO_VERIFY -and $env:NO_VERIFY -ne "0") { $NoVerify = $true }
 if ($env:KEYFILE) { $KeyFile = $env:KEYFILE }
 if ($env:DEST) { $Dest = $env:DEST }
@@ -41,6 +43,32 @@ $state_dir = "$env:APPDATA\flow"
 # quote a value for safe inclusion in the generated update-flow.ps1
 function Format-PSLiteral($value) {
     return "'" + ($value -replace "'", "''") + "'"
+}
+
+# order two flow tags. releases are "vM.m.p"; nightlies are "vM.m.p-<count>-g<hash>"
+function Get-VersionKey($tag) {
+    if ($tag -notmatch '^v?([0-9]+)(?:\.([0-9]+))?(?:\.([0-9]+))?(?:-([0-9]+)-g[0-9a-fA-F]+)?$') {
+        return $null
+    }
+    return , @([int]"0$($matches[1])", [int]"0$($matches[2])",
+               [int]"0$($matches[3])", [int]"0$($matches[4])")
+}
+
+# -1 older, 0 same, 1 newer, $null when either tag cannot be ordered
+function Compare-FlowVersion($a, $b) {
+    $ka = Get-VersionKey $a
+    $kb = Get-VersionKey $b
+    if ($null -eq $ka -or $null -eq $kb) { return $null }
+    for ($i = 0; $i -lt 4; $i++) {
+        if ($ka[$i] -lt $kb[$i]) { return -1 }
+        if ($ka[$i] -gt $kb[$i]) { return 1 }
+    }
+    return 0
+}
+
+function Get-TagLineage($tag) {
+    if ($tag -match '-[0-9]+-g[0-9a-fA-F]+$') { return "nightly" }
+    return "release"
 }
 
 function Get-FlowVersion($exe) {
@@ -62,14 +90,6 @@ function Stop-Install($message) {
     Write-Host $message
     $global:LASTEXITCODE = 1
     if ($PSCommandPath) { exit 1 }
-}
-
-function Get-LatestTag($uri) {
-    try {
-        $release = Invoke-RestMethod -Uri $uri -ErrorAction Stop
-        if ($release.tag_name) { return $release.tag_name }
-    } catch { }
-    return $null
 }
 
 function Get-Download($uri, $out) {
@@ -106,48 +126,6 @@ if ($Dest) {
     $install_dir = "$env:APPDATA\flow\bin"
 }
 
-$version = Get-LatestTag "https://codeberg.org/api/v1/repos/$repo/releases/latest"
-if (-not $version) { $version = Get-LatestTag "https://api.github.com/repos/$repo/releases/latest" }
-if (-not $version) { $version = Get-LatestTag "https://git.flow-control.dev/api/v1/repos/$repo/releases/latest" }
-if (-not $version) {
-    Stop-Install "failed to fetch $title latest version from codeberg, github or flow-control.dev"
-    return
-}
-
-# the tag comes from an unauthenticated api
-if ($version -notmatch '^[A-Za-z0-9._+-]+$') {
-    Stop-Install "refusing to use an implausible release tag: $version"
-    return
-}
-
-$title_updater = "$title updater"
-
-$existing_flow = Join-Path -Path $install_dir -ChildPath "flow.exe"
-if (-not $Force -and (Test-Path $existing_flow)) {
-    $existing_version = Get-FlowVersion $existing_flow
-    if ($existing_version -and $version -eq $existing_version) {
-        Write-Host "$title is up-to-date (version $version @ $install_dir)"
-        return
-    }
-}
-
-$title = "$title $version"
-
-switch ($env:PROCESSOR_ARCHITECTURE) {
-    "AMD64"  { $arch = "x86_64" }
-    "ARM64"  { $arch = "aarch64" }
-    default  {
-        Stop-Install "unknown architecture: $($env:PROCESSOR_ARCHITECTURE)"
-        return
-    }
-}
-
-$filename = "flow-$version-windows-$arch"
-if ($Debug) {
-    $filename = "$filename-debug"
-}
-$filename = "$filename.zip"
-
 $gpgv_bin = ""
 if ($NoVerify) {
     Write-Host ""
@@ -176,9 +154,6 @@ then open a new terminal so that gpgv is on PATH, and try again, or set
 
 $tmp = Join-Path $env:TEMP "flow-install-$([System.Guid]::NewGuid().ToString('N'))"
 New-Item -ItemType Directory -Path $tmp | Out-Null
-$unpack = Join-Path $tmp "unpack"
-New-Item -ItemType Directory -Path $unpack | Out-Null
-$archive = Join-Path $tmp $filename
 
 try {
 
@@ -214,6 +189,86 @@ then remove $stored_key to accept the new key.
     }
     $key_path = $fetched_key
 }
+
+# signed version manifest
+$manifest = if ($Nightly) { "version-latest-nightly" } else { "version-latest" }
+$manifest_url = "https://flow-control.dev/$manifest"
+$manifest_path = Join-Path $tmp $manifest
+
+if (-not (Get-Download $manifest_url $manifest_path)) {
+    Stop-Install "failed to fetch the version manifest from $manifest_url"
+    return
+}
+
+if (-not $NoVerify) {
+    if (-not (Get-Download "$manifest_url.sig" "$manifest_path.sig")) {
+        Stop-Install "failed to fetch the version manifest signature from $manifest_url.sig"
+        return
+    }
+    if (-not (Test-Signature $manifest_path "$manifest_path.sig")) {
+        Stop-Install @"
+error: $manifest_url is not signed by $key_fingerprint
+refusing to trust the version it names
+"@
+        return
+    }
+}
+
+$version = "$(Get-Content $manifest_path -Raw)".Trim()
+if (-not $version) {
+    Stop-Install "the version manifest at $manifest_url is empty"
+    return
+}
+
+if ($version -notmatch '^[A-Za-z0-9._+-]+$') {
+    Stop-Install "refusing to use an implausible release tag: $version"
+    return
+}
+
+$title_updater = "$title updater"
+
+$existing_flow = Join-Path -Path $install_dir -ChildPath "flow.exe"
+$existing_version = $null
+if (Test-Path $existing_flow) { $existing_version = Get-FlowVersion $existing_flow }
+
+if (-not $AllowDowngrade -and $existing_version -and
+    (Get-TagLineage $version) -eq (Get-TagLineage $existing_version)) {
+    $order = Compare-FlowVersion $version $existing_version
+    if ($null -ne $order -and $order -lt 0) {
+        Stop-Install @"
+error: $version is older than the installed $existing_version
+
+run with -AllowDowngrade to downgrade
+"@
+        return
+    }
+}
+
+if (-not $Force -and $existing_version -and $version -eq $existing_version) {
+    Write-Host "$title is up-to-date (version $version @ $install_dir)"
+    return
+}
+
+$title = "$title $version"
+
+switch ($env:PROCESSOR_ARCHITECTURE) {
+    "AMD64"  { $arch = "x86_64" }
+    "ARM64"  { $arch = "aarch64" }
+    default  {
+        Stop-Install "unknown architecture: $($env:PROCESSOR_ARCHITECTURE)"
+        return
+    }
+}
+
+$filename = "flow-$version-windows-$arch"
+if ($Debug) {
+    $filename = "$filename-debug"
+}
+$filename = "$filename.zip"
+
+$unpack = Join-Path $tmp "unpack"
+New-Item -ItemType Directory -Path $unpack | Out-Null
+$archive = Join-Path $tmp $filename
 
 $url = "https://codeberg.org/$repo/releases/download/$version/$filename"
 $url_gh = "https://github.com/$repo/releases/download/$version/$filename"
