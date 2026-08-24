@@ -72,13 +72,20 @@ function Get-TagLineage($tag) {
 }
 
 function Install-File($src, $dst) {
-    $old = "$dst.old"
-    Remove-Item $old -Force -ErrorAction SilentlyContinue
+    $dir = Split-Path $dst
+    $leaf = Split-Path $dst -Leaf
+    Get-ChildItem -Path $dir -Filter "$leaf.old*" -ErrorAction SilentlyContinue |
+        Remove-Item -Force -ErrorAction SilentlyContinue
     try {
         Copy-Item $src $dst -Force -ErrorAction Stop
         return
     } catch {
         if (-not (Test-Path $dst)) { throw }
+    }
+    # several builds can be held at once, so the rename has to be random
+    $old = "$dst.old"
+    if (Test-Path $old) {
+        $old = "$dst.old.$([System.Guid]::NewGuid().ToString('N').Substring(0, 8))"
     }
     Rename-Item -Path $dst -NewName (Split-Path $old -Leaf) -Force
     Copy-Item $src $dst -Force
