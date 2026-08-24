@@ -195,7 +195,7 @@ if [ "$debug" -eq 1 ]; then
 fi
 
 if [ "$force_update" -eq 0 ] && [ -e "$install_dir/flow" ]; then
-    current_version=$(flow --version 2>/dev/null | grep version: | cut -f2 -d ' ')
+    current_version=$("$install_dir/flow" --version 2>/dev/null | grep version: | cut -f2 -d ' ')
     if [ "$current_version" = "$version" ]; then
         echo "flow is up-to-date (version $version @ $install_dir/flow)"
         exit 0
