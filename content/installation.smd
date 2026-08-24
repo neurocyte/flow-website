@@ -134,14 +134,14 @@ it cannot take parameters, so the choices are made with environment variables.
 Install the latest nightly build:
 
 ```
-$env:NIGHTLY = 1
+$env:FLOW_NIGHTLY = 1
 Invoke-RestMethod "https://flow-control.dev/install.ps1" | Invoke-Expression
 ```
 
 Install the latest nightly build with pdb debug symbol files:
 
 ```
-$env:DEBUG = 1
+$env:FLOW_NIGHTLY_DEBUG = 1
 Invoke-RestMethod "https://flow-control.dev/install.ps1" | Invoke-Expression
 ```
 
@@ -175,10 +175,11 @@ $env:FORCE_UPDATE = 1
 Invoke-RestMethod "https://flow-control.dev/install.ps1" | Invoke-Expression
 ```
 
-`DEBUG` implies `NIGHTLY`, as debug builds are only published for nightlies,
-and `NO_GUI` implies `NO_INTEGRATE`. If you save the script to a file instead
-of piping it, the same choices are switches: `-Nightly`, `-Debug`, `-NoGui`,
-`-NoIntegrate`, `-Force`, `-Dest <path>`, `-NoVerify` and `-KeyFile <file>`.
+`FLOW_NIGHTLY_DEBUG` implies `FLOW_NIGHTLY`, as debug builds are only published
+for nightlies, and `NO_GUI` implies `NO_INTEGRATE`. If you save the script to a
+file instead of piping it, the same choices are switches: `-Nightly`, `-Debug`,
+`-NoGui`, `-NoIntegrate`, `-Force`, `-Dest <path>`, `-NoVerify` and
+`-KeyFile <file>`.
 
 Downloads are verified against the gpg key published at
 [flow-control.dev/public.gpg](https://flow-control.dev/public.gpg), pinned to
