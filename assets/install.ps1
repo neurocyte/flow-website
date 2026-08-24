@@ -96,6 +96,13 @@ if (-not $version) {
     Stop-Install "failed to fetch $title latest version from codeberg, github or flow-control.dev"
     return
 }
+
+# the tag comes from an unauthenticated api
+if ($version -notmatch '^[A-Za-z0-9._+-]+$') {
+    Stop-Install "refusing to use an implausible release tag: $version"
+    return
+}
+
 $title_updater = "$title updater"
 
 $existing_flow = Join-Path -Path $install_dir -ChildPath "flow.exe"

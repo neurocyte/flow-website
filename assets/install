@@ -202,6 +202,15 @@ version=$(curl -s https://codeberg.org/api/v1/repos/$repo/releases/latest | jq -
         }
     }
 }
+
+# the tag comes from an unauthenticated api
+case "$version" in
+*[!A-Za-z0-9._+-]*)
+    echo "refusing to use an implausible release tag: $version"
+    exit 1
+    ;;
+esac
+
 title="$title $version"
 
 if [ "$debug" -eq 1 ]; then
