@@ -8,6 +8,25 @@ fi
 
 zine release
 
+# add installer version
+installer_version=$(git rev-list --count HEAD)
+if [ -z "$installer_version" ] || [ "$installer_version" -le 0 ]; then
+    echo "deploy: could not determine the installer version" >&2
+    exit 1
+fi
+
+sed "s/^installer_version=0\$/installer_version=$installer_version/" \
+    public/install >public/install.versioned
+mv public/install.versioned public/install
+
+sed "s/^\\\$installer_version = 0\$/\$installer_version = $installer_version/" \
+    public/install.ps1 >public/install.ps1.versioned
+mv public/install.ps1.versioned public/install.ps1
+
+# double check that the versioning worked
+grep -q "^installer_version=$installer_version\$" public/install
+grep -q "^\\\$installer_version = $installer_version\$" public/install.ps1
+
 # sign the installers
 for installer in install install.ps1; do
     gpg --local-user 4E6CF7234FFC4E14531074F98EB1E1BB660E3FB9 \
