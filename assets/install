@@ -410,6 +410,21 @@ if [ ! -e "$unpack/flow$exe" ]; then
     exit 1
 fi
 
+chmod +x "$unpack/flow$exe" 2>/dev/null || true
+unpacked_version=$("$unpack/flow$exe" --version 2>/dev/null | grep version: | cut -f2 -d ' ')
+if [ -z "$unpacked_version" ]; then
+    echo "error: could not determine the version of the downloaded flow$exe"
+    echo
+    echo "it did not run, or it does not report a version. refusing to"
+    echo "install something that cannot be identified"
+    exit 1
+fi
+if [ "$unpacked_version" != "$version" ]; then
+    echo "error: the archive for $version contains $unpacked_version instead"
+    echo "refusing to install"
+    exit 1
+fi
+
 have_gui=0
 if [ "$no_gui" -eq 0 ]; then
     if [ -e "$unpack/flow-gui$exe" ]; then

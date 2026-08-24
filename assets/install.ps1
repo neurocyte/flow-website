@@ -41,6 +41,21 @@ function Format-PSLiteral($value) {
     return "'" + ($value -replace "'", "''") + "'"
 }
 
+function Get-FlowVersion($exe) {
+    $ErrorActionPreference = "Continue"
+    $PSNativeCommandUseErrorActionPreference = $false
+    try {
+        $out = & $exe --version 2>$null | Out-String
+    } catch {
+        # blocked by antivirus, missing a runtime, not executable at all
+        return $null
+    }
+    foreach ($line in $out -split "[\r\n]+") {
+        if ($line -match '^\s*version:\s*(.+?)\s*$') { return $matches[1] }
+    }
+    return $null
+}
+
 function Stop-Install($message) {
     Write-Host $message
     $global:LASTEXITCODE = 1
@@ -107,14 +122,10 @@ $title_updater = "$title updater"
 
 $existing_flow = Join-Path -Path $install_dir -ChildPath "flow.exe"
 if (-not $Force -and (Test-Path $existing_flow)) {
-    $existing_version_output = & $existing_flow --version 2>&1 | Out-String
-    $existing_version_lines = $existing_version_output -split "[\r\n]+" | Where-Object { $_ -match '^\s*version:\s*(.+?)\s*$' }
-    if ($existing_version_lines -and $matches) {
-        $existing_version = $matches[1]
-        if ($version -eq $existing_version) {
-            Write-Host "$title is up-to-date (version $version @ $install_dir)"
-            return
-        }
+    $existing_version = Get-FlowVersion $existing_flow
+    if ($existing_version -and $version -eq $existing_version) {
+        Write-Host "$title is up-to-date (version $version @ $install_dir)"
+        return
     }
 }
 
@@ -240,6 +251,24 @@ Expand-Archive -Path $archive -DestinationPath $unpack -Force
 
 if (-not (Test-Path (Join-Path $unpack "flow.exe"))) {
     Stop-Install "downloaded archive does not contain flow.exe"
+    return
+}
+
+$unpacked_version = Get-FlowVersion (Join-Path $unpack "flow.exe")
+if (-not $unpacked_version) {
+    Stop-Install @"
+error: could not determine the version of the downloaded flow.exe
+
+it did not run, or it does not report a version. refusing to install
+something that cannot be identified
+"@
+    return
+}
+if ($unpacked_version -ne $version) {
+    Stop-Install @"
+error: the archive for $version contains $unpacked_version instead
+refusing to install
+"@
     return
 }
 
