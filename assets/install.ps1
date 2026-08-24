@@ -53,6 +53,7 @@ function Get-Download($uri, $out) {
 }
 
 function Test-Signature($file, $sigfile) {
+    $ErrorActionPreference = "Continue"
     $PSNativeCommandUseErrorActionPreference = $false
     $status = & $gpgv_bin --keyring $key_path --status-fd 1 $sigfile $file 2>$null
     return [bool]($status | Select-String -Quiet -Pattern "^\[GNUPG:\] VALIDSIG .* $($key_fingerprint)$")
@@ -326,10 +327,13 @@ try {
             exit 1
         }
 
-        $PSNativeCommandUseErrorActionPreference = $false
-        $status = & $gpgv_bin --keyring $keyring --status-fd 1 `
-            "$tmp\install.ps1.sig" "$tmp\install.ps1" 2>$null
-        if (-not ($status | Select-String -Quiet -Pattern "^\[GNUPG:\] VALIDSIG .* $($fingerprint)$")) {
+        function Test-Installer($file, $sigfile) {
+            $ErrorActionPreference = "Continue"
+            $PSNativeCommandUseErrorActionPreference = $false
+            $status = & $gpgv_bin --keyring $keyring --status-fd 1 $sigfile $file 2>$null
+            return [bool]($status | Select-String -Quiet -Pattern "^\[GNUPG:\] VALIDSIG .* $($fingerprint)$")
+        }
+        if (-not (Test-Installer "$tmp\install.ps1" "$tmp\install.ps1.sig")) {
             Write-Host "error: the installer at flow-control.dev is not signed by $fingerprint"
             Write-Host "refusing to run it"
             exit 1
