@@ -174,6 +174,7 @@ then open a new terminal so that gpgv is on PATH, and try again, or set
 
 $tmp = Join-Path $env:TEMP "flow-install-$([System.Guid]::NewGuid().ToString('N'))"
 New-Item -ItemType Directory -Path $tmp | Out-Null
+$tmp = (Get-Item $tmp).FullName
 
 try {
 
