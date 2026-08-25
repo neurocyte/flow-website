@@ -378,7 +378,7 @@ if (-not $NoIntegrate) {
     $shortcut_path = Join-Path $programs "Flow Control.lnk"
     $shortcut = (New-Object -ComObject WScript.Shell).CreateShortcut($shortcut_path)
     $shortcut.TargetPath = $gui
-    $shortcut.WorkingDirectory = $install_dir
+    $shortcut.WorkingDirectory = "%USERPROFILE%"
     $shortcut.Description = "Flow Control"
     $shortcut.Save()
     Write-Host "created start menu shortcut $shortcut_path"
