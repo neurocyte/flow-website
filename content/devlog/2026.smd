@@ -17,6 +17,26 @@ RSS]($link.page('devlog').alternative('rss')) and find more devlog entries
 in the [archive](/devlog/).
 
 
+## [Lots of new languages]($section.id("2026-10-15T23:02:44+02:00"))
+
+I've worked through the language support requests and pull requests that
+had piled up across GitHub, Codeberg and git.flow-control.dev. Flow now
+highlights 25 more languages:
+
+- AsciiDoc, BibTeX, Cap'n Proto, Device Tree, Fortran, Graphviz DOT
+- Godot resources and shaders (to go with GDScript), HEEx, Idris, just
+- MediaWiki, Mojo, Pascal/Delphi, Prolog, Roc, SCSS, Svelte, SVG
+- SuperMD (now separate from markdown), Thrift, TSX, Unison
+- WebAssembly Text (wat), WGSL
+
+I've also updated the Kotlin, Elixir, LaTeX, Ziggy and SuperHTML parsers
+and queries that many of the file types use. Most of these come with a
+default language server and/or formatter.
+
+Thanks to everyone who sent pull requests for this: Boris Petrov,
+zetashift, Cypher, Alex Zhavnerchik and koru.
+
+
 ## [tree-sitter query priorities and predicates]($section.id("2026-08-21T12:30:00+02:00"))
 
 Flow now correctly implements tree-sitter query priorities. Overlapping
