@@ -17,6 +17,44 @@ RSS]($link.page('devlog').alternative('rss')) and find more devlog entries
 in the [archive](/devlog/).
 
 
+## [Remote control]($section.id("2026-10-17T00:14:47+02:00"))
+
+Today's free time coding addiction brings the last piece of the flow remote
+control puzzle: a unix socket client/server control interface that allows
+lots of new party tricks.
+
+First of all, you can now run `flow [{file}...]` inside a flow terminal and
+it will operate on the outer flow. You open files just like you normally
+would, but they open in the outer flow. By default the command waits until
+you close the file again, so it works as your `$EDITOR` exactly as you would
+expect (try `git commit`). While it waits, flow takes focus away from the
+terminal and unmaximizes the panel, and puts everything back when you are
+done. `--no-wait` returns immediately, and `--focus`/`--no-focus` override
+the focus handling.
+
+[]($video.asset('2026-10-17_remote_control_git_commit.mp4').controls(true))
+
+Second, you can run `flow --exec "commands"` to execute commands in the
+outer flow. `--exec` commands now run as a little script: each command waits
+for the previous one to succeed, and the script stops (with an error exit
+code) at the first failure. This applies to a plain `flow --exec` too. There
+is also a new `flow --exec-file {script}` option that does exactly the same
+thing, but with the commands stored in a file, in a slightly prettier and
+simpler format: one `command_name {json_value}...` per line, with `#`
+comments. There is a new `flow-script` file type to go with it, and a small
+demo in `contrib/demo.flow`. Use `navigate_file_link "file:line:col"` to
+open files from a script.
+
+[]($image.asset('2026-10-17_flow_script.png'))
+
+To go along with all of this, there are options to control where (and if)
+flow creates its socket (`--server {path|name|disable}`), and how another
+flow should connect (`--connect {path|name|disable}`). By default every flow
+gets its own socket in the state directory, and flow sets FLOW_SOCKET for
+its terminals and for the shell commands it runs, so this also works from
+tasks and from outside the integrated terminal.
+
+
 ## [Lots of new languages]($section.id("2026-10-15T23:02:44+02:00"))
 
 I've worked through the language support requests and pull requests that
