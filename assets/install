@@ -250,8 +250,7 @@ if [ -z "$tmp_path" ] || [ "$tmp_path" = "/" ]; then
 fi
 
 cleanup() {
-    rm -Rf "$tmp_path"
-    echo "removed temporary directory $tmp_path"
+    rm -Rf "$tmp_path" || echo "failed to remove temporary directory $tmp_path"
 }
 
 die() {
