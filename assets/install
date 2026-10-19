@@ -336,7 +336,7 @@ if [ -n "$keyfile" ]; then
         echo "verifying with $key_path"
     fi
 else
-    curl -fL "$key_url" -o "$tmp_path/public.gpg"
+    curl -fsSL "$key_url" -o "$tmp_path/public.gpg"
     # a key that has changed since the last install is treated like a changed
     # ssh host key: stop, and let the user decide what happened
     if [ -e "$stored_key" ] && ! cmp -s "$stored_key" "$tmp_path/public.gpg"; then
