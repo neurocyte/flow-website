@@ -718,10 +718,15 @@ fi
 UPDATER_BODY
     echo
     if [ "$nightly" -eq 1 ]; then echo "export FLOW_NIGHTLY=1"; fi
+    if [ "$nightly" -eq 0 ] || [ "$nightly" -eq 2 ]; then echo "export FLOW_NIGHTLY=2"; fi
     if [ "$debug" -eq 1 ]; then echo "export FLOW_NIGHTLY_DEBUG=1"; fi
+    if [ "$debug" -eq 0 ] || [ "$debug" -eq 2 ]; then echo "export FLOW_NIGHTLY_DEBUG=2"; fi
     if [ "$add_alias" -eq 1 ]; then echo "export ALIAS=1"; fi
+    if [ "$add_alias" -eq 0 ] || [ "$add_alias" -eq 2 ]; then echo "export ALIAS=2"; fi
     if [ "$want_no_gui" -eq 1 ]; then echo "export NO_GUI=1"; fi
+    if [ "$want_no_gui" -eq 0 ] || [ "$want_no_gui" -eq 2 ]; then echo "export NO_GUI=2"; fi
     if [ "$want_no_integrate" -eq 1 ]; then echo "export NO_INTEGRATE=1"; fi
+    if [ "$want_no_integrate" -eq 0 ] || [ "$want_no_integrate" -eq 2 ]; then echo "export NO_INTEGRATE=2"; fi
     if [ -n "$keyfile" ]; then echo "export KEYFILE=$(shquote "$keyfile")"; fi
     echo "exec sh \"\$tmp/install\" --dest $(shquote "$install_dir") \"\$@\""
 } | $SUDOCMD tee "$updater" >/dev/null
