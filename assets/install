@@ -101,12 +101,24 @@ while true; do
         add_alias=1
         shift 1
         ;;
+    --no-alias)
+        add_alias=2
+        shift 1
+        ;;
     -n | --nightly)
         nightly=1
         shift 1
         ;;
+    --no-nightly)
+        nightly=2
+        shift 1
+        ;;
     -D | --debug)
         debug=1
+        shift 1
+        ;;
+    --no-debug)
+        debug=2
         shift 1
         ;;
     -d | --dest)
@@ -121,6 +133,10 @@ while true; do
         no_verify=1
         shift 1
         ;;
+    --verify)
+        no_verify=0
+        shift 1
+        ;;
     -F | --force)
         force_update=1
         shift 1
@@ -133,8 +149,16 @@ while true; do
         no_gui=1
         shift 1
         ;;
+    --gui)
+        no_gui=0
+        shift 1
+        ;;
     -I | --no-integrate)
         no_integrate=1
+        shift 1
+        ;;
+    --integrate)
+        no_integrate=0
         shift 1
         ;;
     -h | --help)
