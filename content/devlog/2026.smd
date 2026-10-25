@@ -17,6 +17,17 @@ RSS]($link.page('devlog').alternative('rss')) and find more devlog entries
 in the [archive](/devlog/).
 
 
+## [Markdown in completions and hover]($section.id("2026-10-25T21:58:18+01:00"))
+
+Completion documentation and hover info now render markdown. Flow asks
+language servers for markdown and shows headings, emphasis, lists, block
+quotes, tables and code blocks in the info box and the info panel. Code
+blocks get flow's own tree-sitter highlighting in the theme colors, and
+links become clickable OSC 8 hyperlinks in terminals that support them.
+Long code lines wrap by default; set `info_code_overflow "clip"` to cut
+them instead.
+
+
 ## [Remote control]($section.id("2026-10-17T00:14:47+02:00"))
 
 Today's free time coding addiction brings the last piece of the flow remote
