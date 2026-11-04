@@ -416,10 +416,6 @@ esac
 
 title="$title $version"
 
-if [ "$debug" -eq 1 ]; then
-    title="$title (debug)"
-fi
-
 current_version=""
 if [ -e "$install_dir/flow" ]; then
     current_version=$("$install_dir/flow" --version 2>/dev/null | grep version: | cut -f2 -d ' ')
@@ -464,14 +460,25 @@ ext="tar.gz"
 if [ "$os" = "windows" ]; then
     ext="zip"
 fi
+# newer builds include debug info and have no separate "-debug" asset
 if [ "$debug" -eq 1 ]; then
-    filename="$filename-debug"
+    dbg_url="https://codeberg.org/$repo/releases/download/$version/$filename-debug.$ext.sig"
+    dbg_url_gh="https://github.com/$repo/releases/download/$version/$filename-debug.$ext.sig"
+    dbg_sig="$tmp_path/$filename-debug.$ext.sig"
+    if curl -fsSL "$dbg_url" -o "$dbg_sig" 2>/dev/null ||
+        curl -fsSL "$dbg_url_gh" -o "$dbg_sig" 2>/dev/null; then
+        filename="$filename-debug"
+        title="$title (debug)"
+    else
+        rm -f "$dbg_sig"
+        echo "note: $version has no separate debug build, the regular build includes debug info"
+    fi
 fi
 url="https://codeberg.org/$repo/releases/download/$version/$filename.$ext"
 url_gh="https://github.com/$repo/releases/download/$version/$filename.$ext"
 
 # fetch signature first
-if [ "$no_verify" -eq 0 ]; then
+if [ "$no_verify" -eq 0 ] && [ ! -s "$tmp_path/$filename.$ext.sig" ]; then
     curl -fsSL "$url.sig" -o "$tmp_path/$filename.$ext.sig" ||
         curl -fL "$url_gh.sig" -o "$tmp_path/$filename.$ext.sig"
 fi

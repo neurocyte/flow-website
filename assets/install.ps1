@@ -136,10 +136,6 @@ if ($Nightly) {
     $repo = "neurocyte/flow"
     $title = "flow"
 }
-if ($Debug) {
-    $title = "$title (debug)"
-}
-
 if ($Dest) {
     $install_dir = $Dest
 } else {
@@ -282,8 +278,19 @@ switch ($env:PROCESSOR_ARCHITECTURE) {
 }
 
 $filename = "flow-$version-windows-$arch"
+# newer builds include debug info and have no separate "-debug" asset
+$sig_ready = $false
 if ($Debug) {
-    $filename = "$filename-debug"
+    $dbg_sig = Join-Path $tmp "$filename-debug.zip.sig"
+    $dbg_url = "https://codeberg.org/$repo/releases/download/$version/$filename-debug.zip.sig"
+    $dbg_url_gh = "https://github.com/$repo/releases/download/$version/$filename-debug.zip.sig"
+    if ((Get-Download $dbg_url $dbg_sig) -or (Get-Download $dbg_url_gh $dbg_sig)) {
+        $filename = "$filename-debug"
+        $title = "$title (debug)"
+        $sig_ready = $true
+    } else {
+        Write-Host "note: $version has no separate debug build, the regular build includes debug info"
+    }
 }
 $filename = "$filename.zip"
 
@@ -309,7 +316,7 @@ if ($filesize -lt 16384) {
 
 if (-not $NoVerify) {
     $sigfile = "$archive.sig"
-    if (-not (Get-Download "$url.sig" $sigfile) -and -not (Get-Download "$url_gh.sig" $sigfile)) {
+    if (-not $sig_ready -and -not (Get-Download "$url.sig" $sigfile) -and -not (Get-Download "$url_gh.sig" $sigfile)) {
         Stop-Install "failed to download $filename.sig from codeberg or github"
         return
     }
