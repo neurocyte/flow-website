@@ -781,3 +781,13 @@ $SUDOCMD chmod +x "$updater"
 echo "installed $updater"
 
 echo "$title installed successfully to $install_dir/flow"
+
+found_flow=$(command -v flow 2>/dev/null || true)
+if [ "$found_flow" != "$install_dir/flow" ]; then
+    echo
+    if [ -z "$found_flow" ]; then
+        echo "WARNING: $install_dir is not in your PATH"
+    else
+        echo "WARNING: flow in your PATH is $found_flow, not $install_dir/flow"
+    fi
+fi
