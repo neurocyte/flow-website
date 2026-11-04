@@ -187,6 +187,9 @@ fi
 want_no_gui=$no_gui
 want_no_integrate=$no_integrate
 
+[ "$no_gui" -eq 2 ] && no_gui=0
+[ "$no_integrate" -eq 2 ] && no_integrate=0
+
 have_term=0
 if [ -t 0 ]; then
     have_term=1
@@ -430,12 +433,25 @@ if [ "$allow_downgrade" -eq 0 ] && [ -n "$current_version" ] &&
     exit 1
 fi
 
+gui_stale=0
+if [ "$no_gui" -eq 0 ] && [ -e "$install_dir/flow-gui" ]; then
+    current_gui_version=$("$install_dir/flow-gui" --version 2>/dev/null | grep version: | cut -f2 -d ' ')
+    if [ "$current_gui_version" != "$version" ]; then
+        gui_stale=1
+    fi
+fi
+
 if [ "$force_update" -eq 0 ] && [ -n "$current_version" ]; then
-    if [ "$current_version" = "$version" ]; then
+    if [ "$current_version" = "$version" ] && [ "$gui_stale" -eq 0 ]; then
         echo "flow is up-to-date (version $version @ $install_dir/flow)"
         exit 0
     fi
-    echo "updating flow from $current_version to $version"
+    if [ "$current_version" != "$version" ]; then
+        echo "updating flow from $current_version to $version"
+    fi
+    if [ "$gui_stale" -eq 1 ]; then
+        echo "updating flow-gui from ${current_gui_version:-unknown} to $version"
+    fi
 fi
 
 if [ "$use_sudo" -eq 0 ] && [ -n "$need_sudo" ]; then
