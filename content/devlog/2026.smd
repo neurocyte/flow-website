@@ -17,6 +17,27 @@ RSS]($link.page('devlog').alternative('rss')) and find more devlog entries
 in the [archive](/devlog/).
 
 
+## [EditorConfig support]($section.id("2026-11-05T22:59:20+01:00"))
+
+Flow now supports [EditorConfig](https://editorconfig.org). Many thanks to
+n0n, who sent the first implementation as a pull request. When you open a
+file, flow reads the `.editorconfig` files in its directory and in the
+parent directories, and applies `indent_style`, `indent_size`, `tab_width`,
+`end_of_line`, `trim_trailing_whitespace` and `insert_final_newline`.
+
+Flow also watches these files, up to the nearest file with `root = true`,
+or else up to the project directory. If you change, add or remove one, the
+new values apply to the open files immediately.
+
+The save transforms are general editor features now, so you can use them
+without EditorConfig too. Set `trim_trailing_whitespace_on_save` and
+`final_newline_on_save` (`"keep"`, `"insert"` or `"remove"`) in your
+config, or change them for the current file with
+`toggle_trim_trailing_whitespace_on_save` and `set_final_newline_on_save`.
+
+If you would rather not have any of this, set `enable_editorconfig false`.
+
+
 ## [Markdown in completions and hover]($section.id("2026-10-25T21:58:18+01:00"))
 
 Completion documentation and hover info now render markdown. Flow asks
