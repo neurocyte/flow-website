@@ -17,6 +17,26 @@ RSS]($link.page('devlog').alternative('rss')) and find more devlog entries
 in the [archive](/devlog/).
 
 
+## [Smooth scrolling]($section.id("2026-11-12T21:12:38+01:00"))
+
+Flow's GUI renderer now supports pixel smooth scrolling (for delta scroll
+capable devices). This works in the editor, the info panel, the terminal
+scrollback, the file list, the palettes and the completion dropdown.
+
+Set easing with `scroll_animation_curve`. If you prefer whole rows, set
+`scroll_motion "cells"`. The timing stays the same.
+
+Touchpad scrolling is also more sensitive now. `scroll_delta_multiplier`
+(default `4.0`) scales the touchpad distance, and `scroll_pixels_per_step`
+(default `40`) sets how many pixels make one step in views that still scroll
+by steps.
+
+Kinetic scrolling (the content keeps moving after your fingers leave the
+touchpad) comes later.
+
+[]($video.asset('2026-11-12_smooth_scrolling.mp4').controls(true))
+
+
 ## [EditorConfig support]($section.id("2026-11-05T22:59:20+01:00"))
 
 Flow now supports [EditorConfig](https://editorconfig.org). Many thanks to
